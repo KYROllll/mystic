@@ -10,6 +10,16 @@ const {
   useRef
 } = React;
 
+// ── Brand ───────────────────────────────────────────────────────────────────
+const BRAND = {
+  he: 'אור ודרך',
+  ru: 'Свет и путь',
+  focus: 'ייעוץ רוחני · קלפי טארוט · ניקוי רוחני',
+  focusRu: 'Эзотерические консультации и духовные практики',
+  langs: 'עברית · רוסית · קווקזית',
+  langsRu: 'на русском и иврите'
+};
+
 // ── Tweak defaults (persisted by the host on disk) ───────────────────────────
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "palette": ["#0d0a1a", "#d4af6f", "#f0e6d2"],
@@ -268,9 +278,7 @@ function StarField({
 }
 
 // ── Nav ──────────────────────────────────────────────────────────────────────
-function Nav({
-  name
-}) {
+function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
@@ -325,11 +333,17 @@ function Nav({
   }, /*#__PURE__*/React.createElement("a", {
     href: "#top",
     className: "nav-brand display",
-    onClick: close
+    onClick: close,
+    "aria-label": `${BRAND.he} — ${BRAND.ru}`
   }, /*#__PURE__*/React.createElement(SmallStar, {
     size: 14,
     opacity: 0.85
-  }), /*#__PURE__*/React.createElement("span", null, name)), /*#__PURE__*/React.createElement("ul", {
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "brand-he"
+  }, BRAND.he), /*#__PURE__*/React.createElement("span", {
+    className: "brand-ru latin",
+    dir: "ltr"
+  }, BRAND.ru)), /*#__PURE__*/React.createElement("ul", {
     className: "nav-links"
   }, items.map(it => /*#__PURE__*/React.createElement("li", {
     key: it.id
@@ -338,7 +352,7 @@ function Nav({
   }, it.label)))), /*#__PURE__*/React.createElement("a", {
     href: "#contact",
     className: "nav-cta"
-  }, /*#__PURE__*/React.createElement("span", null, "\u05EA\u05D9\u05D0\u05D5\u05DD \u05E7\u05E8\u05D9\u05D0\u05D4")), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("span", null, "\u05EA\u05D9\u05D0\u05D5\u05DD \u05D9\u05D9\u05E2\u05D5\u05E5")), /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: `nav-burger ${menuOpen ? 'is-open' : ''}`,
     "aria-label": menuOpen ? 'סגירת תפריט' : 'פתיחת תפריט',
@@ -358,14 +372,14 @@ function Nav({
     href: "#contact",
     className: "btn btn-primary btn-block",
     onClick: close
-  }, "\u05E7\u05D1\u05D9\u05E2\u05EA \u05E7\u05E8\u05D9\u05D0\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA"), /*#__PURE__*/React.createElement("p", {
-    className: "nav-mobile-fine latin"
-  }, "\u2014 Aperi Cor Tuum \u2014")));
+  }, "\u05E7\u05D1\u05D9\u05E2\u05EA \u05D9\u05D9\u05E2\u05D5\u05E5 \u05D0\u05D9\u05E9\u05D9"), /*#__PURE__*/React.createElement("p", {
+    className: "nav-mobile-fine latin",
+    dir: "ltr"
+  }, BRAND.focusRu)));
 }
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
 function Hero({
-  name,
   tagline,
   layout
 }) {
@@ -380,19 +394,21 @@ function Hero({
     size: 10,
     opacity: 0.7
   }), /*#__PURE__*/React.createElement("span", {
-    className: "latin"
-  }, "\u2014 Tarot & Spiritual Guidance \u2014"), /*#__PURE__*/React.createElement(SmallStar, {
+    className: "latin",
+    dir: "ltr"
+  }, BRAND.focusRu), /*#__PURE__*/React.createElement(SmallStar, {
     size: 10,
     opacity: 0.7
   })), /*#__PURE__*/React.createElement("h1", {
     className: "hero-title display reveal reveal-delay-1"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "hero-title-line"
-  }, "\u05E7\u05E8\u05D9\u05D0\u05D4 \u05D1\u05E7\u05DC\u05E4\u05D9"), /*#__PURE__*/React.createElement("span", {
+    className: "hero-title-line latin",
+    dir: "ltr"
+  }, BRAND.ru), /*#__PURE__*/React.createElement("span", {
     className: "hero-title-emph"
-  }, "\u05D8\u05D0\u05E8\u05D5\u05D8")), /*#__PURE__*/React.createElement("p", {
+  }, BRAND.he)), /*#__PURE__*/React.createElement("p", {
     className: "hero-name display reveal reveal-delay-2"
-  }, name), /*#__PURE__*/React.createElement("div", {
+  }, BRAND.focus), /*#__PURE__*/React.createElement("div", {
     className: "hero-divider reveal reveal-delay-2"
   }, /*#__PURE__*/React.createElement(Divider, null)), /*#__PURE__*/React.createElement("p", {
     className: "hero-sub reveal reveal-delay-3"
@@ -401,7 +417,7 @@ function Hero({
   }, /*#__PURE__*/React.createElement("a", {
     href: "#contact",
     className: "btn btn-primary"
-  }, /*#__PURE__*/React.createElement("span", null, "\u05E7\u05D1\u05D9\u05E2\u05EA \u05E7\u05E8\u05D9\u05D0\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA"), /*#__PURE__*/React.createElement("svg", {
+  }, /*#__PURE__*/React.createElement("span", null, "\u05E7\u05D1\u05D9\u05E2\u05EA \u05D9\u05D9\u05E2\u05D5\u05E5 \u05D0\u05D9\u05E9\u05D9"), /*#__PURE__*/React.createElement("svg", {
     viewBox: "0 0 14 10",
     width: "14",
     height: "10",
@@ -419,11 +435,11 @@ function Hero({
     className: "btn btn-ghost"
   }, "\u05E9\u05DC\u05D9\u05E4\u05EA \u05E7\u05DC\u05E3 \u05D4\u05D9\u05D5\u05DD")), /*#__PURE__*/React.createElement("div", {
     className: "hero-meta reveal reveal-delay-4"
-  }, /*#__PURE__*/React.createElement("span", null, "\u05DE\u05E2\u05E0\u05D4 \u05D0\u05D9\u05E9\u05D9"), /*#__PURE__*/React.createElement("i", {
+  }, /*#__PURE__*/React.createElement("span", null, "28 \u05E9\u05E0\u05D5\u05EA \u05E0\u05D9\u05E1\u05D9\u05D5\u05DF"), /*#__PURE__*/React.createElement("i", {
     className: "dot"
-  }), /*#__PURE__*/React.createElement("span", null, "\u05D3\u05D9\u05E1\u05E7\u05E8\u05D8\u05D9\u05D5\u05EA \u05DE\u05DC\u05D0\u05D4"), /*#__PURE__*/React.createElement("i", {
+  }), /*#__PURE__*/React.createElement("span", null, BRAND.langs), /*#__PURE__*/React.createElement("i", {
     className: "dot"
-  }), /*#__PURE__*/React.createElement("span", null, "28 \u05E9\u05E0\u05D5\u05EA \u05E0\u05D9\u05E1\u05D9\u05D5\u05DF"))), /*#__PURE__*/React.createElement("a", {
+  }), /*#__PURE__*/React.createElement("span", null, "\u05DE\u05E2\u05E0\u05D4 \u05D0\u05D9\u05E9\u05D9 \u05D5\u05D3\u05D9\u05E1\u05E7\u05E8\u05D8\u05D9"))), /*#__PURE__*/React.createElement("a", {
     href: "#about",
     className: "scroll-hint",
     "aria-label": "\u05D2\u05DC\u05D9\u05DC\u05D4"
@@ -650,12 +666,16 @@ function About({
   })), /*#__PURE__*/React.createElement("div", {
     className: "portrait-caption display"
   }, /*#__PURE__*/React.createElement("span", null, name), /*#__PURE__*/React.createElement("span", {
-    className: "latin caption-sub"
-  }, "\u2014 Tarot Reader \u2014"))), /*#__PURE__*/React.createElement("div", {
+    className: "latin caption-sub",
+    dir: "ltr"
+  }, "\u2014 Tarot & Spiritual Guidance \u2014"))), /*#__PURE__*/React.createElement("div", {
     className: "about-text"
   }, /*#__PURE__*/React.createElement("p", {
     className: "lede"
-  }, "\u05DB\u05D1\u05E8 28 \u05E9\u05E0\u05D4 \u05D0\u05E0\u05D9 \u05DE\u05DC\u05D5\u05D5\u05D4 \u05D0\u05E0\u05E9\u05D9\u05DD \u05D1\u05DE\u05E1\u05E2 \u05D0\u05DC \u05EA\u05D5\u05DA \u05E2\u05E6\u05DE\u05DD \u2014 \u05D3\u05E8\u05DA \u05DE\u05D9\u05E1\u05D8\u05D9\u05E7\u05D4 \u05E8\u05D5\u05D7\u05E0\u05D9\u05EA, \u05E4\u05EA\u05D9\u05D7\u05D4 \u05D1\u05DE\u05D9\u05DD \u05E7\u05D3\u05D5\u05E9\u05D9\u05DD, \u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8, \u05E7\u05E8\u05D9\u05D0\u05D4 \u05D1\u05DB\u05E3 \u05D4\u05D9\u05D3 \u05D5\u05E7\u05E4\u05D4, \u05D5\u05D4\u05D0\u05D6\u05E0\u05D4 \u05E2\u05DE\u05D5\u05E7\u05D4 \u05DC\u05DC\u05D1."), /*#__PURE__*/React.createElement("p", null, "\u05D0\u05E0\u05D9 \u05DE\u05E2\u05E0\u05D9\u05E7\u05D4 \u05DE\u05E2\u05E0\u05D4 \u05DE\u05E7\u05D9\u05E3 \u05D4\u05DB\u05D5\u05DC\u05DC \u05E4\u05EA\u05D9\u05D7\u05EA \u05DE\u05D6\u05DC, \u05D4\u05D2\u05E0\u05D4 \u05DE\u05E2\u05D9\u05DF \u05D4\u05E8\u05E2 \u05D5\u05DB\u05D9\u05E9\u05D5\u05E4\u05D9\u05DD, \u05D1\u05E8\u05DB\u05D4 \u05DC\u05E4\u05E8\u05D9\u05D5\u05DF \u05D5\u05D9\u05DC\u05D5\u05D3\u05D4, \u05D8\u05D9\u05E4\u05D5\u05DC\u05D9 \u05E8\u05D9\u05D9\u05E7\u05D9 \u05DC\u05D0\u05D9\u05D6\u05D5\u05DF \u05D0\u05E0\u05E8\u05D2\u05D8\u05D9, \u05D5\u05D4\u05DB\u05D5\u05D5\u05E0\u05D4 \u05D5\u05D9\u05D9\u05E2\u05D5\u05E5 \u05DE\u05E7\u05E6\u05D5\u05E2\u05D9 \u05D5\u05E8\u05D5\u05D7\u05E0\u05D9 \u05DC\u05E4\u05EA\u05D9\u05D7\u05EA \u05E2\u05E1\u05E7 \u05D1\u05D2\u05D9\u05E9\u05D4 \u05DE\u05D7\u05D6\u05E7\u05EA \u05D5\u05EA\u05D5\u05DE\u05DB\u05EA \u05E9\u05DE\u05E9\u05D9\u05D2\u05D4 \u05EA\u05D5\u05E6\u05D0\u05D5\u05EA."), /*#__PURE__*/React.createElement("p", null, "\u05D4\u05D9\u05D9\u05E2\u05D5\u05E5 \u05D5\u05D4\u05E7\u05E8\u05D9\u05D0\u05D5\u05EA \u05DE\u05EA\u05E7\u05D9\u05D9\u05DE\u05D9\u05DD \u05D1\u05DE\u05E8\u05D7\u05D1 \u05D1\u05D8\u05D5\u05D7 \u05D5\u05D0\u05D9\u05E0\u05D8\u05D9\u05DE\u05D9 \u2014 \u05D1\u05E4\u05D2\u05D9\u05E9\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA \u05D0\u05D5 \u05D1\u05E9\u05D9\u05D7\u05D4 \u05D8\u05DC\u05E4\u05D5\u05E0\u05D9\u05EA. \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA \u05E0\u05D9\u05EA\u05DF \u05D1\u05E9\u05E4\u05D5\u05EA: \u05E2\u05D1\u05E8\u05D9\u05EA, \u05E8\u05D5\u05E1\u05D9\u05EA \u05D5\u05E7\u05D5\u05D5\u05E7\u05D6\u05D9\u05EA."), /*#__PURE__*/React.createElement("ul", {
+  }, "\u05D0\u05D5\u05E8 \u05D5\u05D3\u05E8\u05DA \u2014 \u05D9\u05D9\u05E2\u05D5\u05E5 \u05E8\u05D5\u05D7\u05E0\u05D9, \u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8 \u05D5\u05E0\u05D9\u05E7\u05D5\u05D9 \u05E8\u05D5\u05D7\u05E0\u05D9. \u05DB\u05D1\u05E8 28 \u05E9\u05E0\u05D4 \u05D0\u05E0\u05D9 \u05DE\u05DC\u05D5\u05D5\u05D4 \u05D0\u05E0\u05E9\u05D9\u05DD \u05D1\u05DE\u05E1\u05E2 \u05D0\u05DC \u05EA\u05D5\u05DA \u05E2\u05E6\u05DE\u05DD, \u05D1\u05D3\u05E8\u05DA \u05E9\u05DC \u05D0\u05D5\u05E8, \u05D1\u05D4\u05D9\u05E8\u05D5\u05EA \u05D5\u05E8\u05D5\u05D2\u05E2."), /*#__PURE__*/React.createElement("p", null, "\u05D0\u05E0\u05D9 \u05DE\u05E2\u05E0\u05D9\u05E7\u05D4 \u05D9\u05D9\u05E2\u05D5\u05E5 \u05E8\u05D5\u05D7\u05E0\u05D9 \u05D0\u05D9\u05E9\u05D9, \u05E7\u05E8\u05D9\u05D0\u05D4 \u05D1\u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8, \u05E0\u05D9\u05E7\u05D5\u05D9 \u05E8\u05D5\u05D7\u05E0\u05D9 \u05D5\u05D4\u05D2\u05E0\u05D4 \u05DE\u05E2\u05D9\u05DF \u05D4\u05E8\u05E2, \u05D8\u05D9\u05E4\u05D5\u05DC\u05D9 \u05E8\u05D9\u05D9\u05E7\u05D9 \u05DC\u05D0\u05D9\u05D6\u05D5\u05DF \u05D0\u05E0\u05E8\u05D2\u05D8\u05D9, \u05D5\u05D4\u05DB\u05D5\u05D5\u05E0\u05D4 \u05E8\u05D5\u05D7\u05E0\u05D9\u05EA \u05D5\u05E2\u05E1\u05E7\u05D9\u05EA \u05DC\u05E4\u05EA\u05D9\u05D7\u05EA \u05E2\u05E1\u05E7 \u2014 \u05D1\u05D2\u05D9\u05E9\u05D4 \u05DE\u05D7\u05D6\u05E7\u05EA, \u05D1\u05D5\u05E0\u05D4 \u05D5\u05EA\u05D5\u05DE\u05DB\u05EA \u05E9\u05DE\u05E9\u05D9\u05D2\u05D4 \u05EA\u05D5\u05E6\u05D0\u05D5\u05EA."), /*#__PURE__*/React.createElement("p", null, "\u05D4\u05DE\u05E4\u05D2\u05E9\u05D9\u05DD \u05DE\u05EA\u05E7\u05D9\u05D9\u05DE\u05D9\u05DD \u05D1\u05DE\u05E8\u05D7\u05D1 \u05D1\u05D8\u05D5\u05D7 \u05D5\u05D0\u05D9\u05E0\u05D8\u05D9\u05DE\u05D9 \u2014 \u05D1\u05E4\u05D2\u05D9\u05E9\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA \u05D0\u05D5 \u05D1\u05E9\u05D9\u05D7\u05D4 \u05D8\u05DC\u05E4\u05D5\u05E0\u05D9\u05EA. \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA \u05E0\u05D9\u05EA\u05DF \u05D1\u05D0\u05D5\u05E4\u05DF \u05DE\u05E7\u05E6\u05D5\u05E2\u05D9 \u05D1\u05E9\u05E4\u05D5\u05EA: \u05E2\u05D1\u05E8\u05D9\u05EA, \u05E8\u05D5\u05E1\u05D9\u05EA \u05D5\u05E7\u05D5\u05D5\u05E7\u05D6\u05D9\u05EA."), /*#__PURE__*/React.createElement("p", {
+    className: "about-ru latin",
+    dir: "ltr"
+  }, "\u042D\u0437\u043E\u0442\u0435\u0440\u0438\u0447\u0435\u0441\u043A\u0438\u0435 \u043A\u043E\u043D\u0441\u0443\u043B\u044C\u0442\u0430\u0446\u0438\u0438 \u0438 \u0434\u0443\u0445\u043E\u0432\u043D\u044B\u0435 \u043F\u0440\u0430\u043A\u0442\u0438\u043A\u0438 \u2014 \u043D\u0430 \u0440\u0443\u0441\u0441\u043A\u043E\u043C \u0438 \u0438\u0432\u0440\u0438\u0442\u0435."), /*#__PURE__*/React.createElement("ul", {
     className: "credentials"
   }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
     className: "cred-num display"
@@ -676,34 +696,34 @@ function About({
 const SERVICES = [{
   icon: 'mystic',
   tag: 'קריאה וראייה',
-  title: 'מיסטיקה רוחנית',
-  duration: 'פתיחה מלאה',
-  subtitle: 'מים קדושים · טארוט · כף יד וקפה',
+  title: 'קלפי טארוט',
+  duration: 'קריאה אישית',
+  subtitle: 'קלפים · תמונה · כף יד וקפה',
   price: 'מחיר בפרטי',
-  topicValue: 'מיסטיקה רוחנית — מים קדושים, טארוט, כף יד וקפה',
-  desc: 'פתיחה במים קדושים, טארוט + קלפים + תמונה, קריאת בכף היד וקפה. חיבור מעמיק לקבלת בהירות, מענה לשאלות הלב והכוונה מדויקת.',
-  features: ['פתיחה במים קדושים', 'טארוט + קלפים + תמונה', 'קריאת בכף היד וקפה', 'ראייה אינטואיטיבית ומענה מעמיק']
+  topicValue: 'קלפי טארוט — קריאה אישית בקלפים',
+  desc: 'קריאה בקלפי טארוט, פריסת קלפים עם תמונה, קריאת כף יד וקפה. חיבור מעמיק לקבלת בהירות, מענה לשאלות הלב והכוונה מדויקת.',
+  features: ['קריאה בקלפי טארוט', 'פריסת קלפים עם תמונה', 'קריאת כף היד וקפה', 'ראייה אינטואיטיבית ומענה מעמיק']
 }, {
   icon: 'hamsa',
-  tag: 'הכי מבוקש',
-  title: 'פתיחת מזל, הגנה ורייקי',
+  tag: 'טיהור והגנה',
+  title: 'ניקוי רוחני והגנה',
   duration: 'טיהור וברכה',
-  subtitle: 'הסרת עין הרע · פריון · רייקי',
+  subtitle: 'מים קדושים · עין הרע · רייקי',
   price: 'מחיר בפרטי',
-  topicValue: 'פתיחת מזל, הגנה מעין הרע וכישופים, פריון ורייקי',
-  desc: 'פתיחת מזל, הגנה מעין הרע וכישופים, ברכה וליווי לפריון וילודה, וטיפולי רייקי לשחרור חסימות ואיזון אנרגטי עמוק.',
-  features: ['פתיחת מזל והסרת חסימות', 'הגנה מעין הרע וכישופים', 'ברכה וליווי לפריון וילודה', 'טיפולי רייקי ואיזון אנרגטי'],
+  topicValue: 'ניקוי רוחני והגנה — מים קדושים, עין הרע ורייקי',
+  desc: 'ניקוי רוחני במים קדושים, הסרת עין הרע וכישופים, ברכה וליווי לפריון וילודה, וטיפולי רייקי לשחרור חסימות ואיזון אנרגטי עמוק.',
+  features: ['ניקוי רוחני ופתיחה במים קדושים', 'הגנה והסרת עין הרע וכישופים', 'ברכה וליווי לפריון וילודה', 'טיפולי רייקי ואיזון אנרגטי'],
   featured: true
 }, {
   icon: 'star',
   tag: '28 שנות ניסיון',
-  title: 'הכוונה וייעוץ לפתיחת עסק',
+  title: 'ייעוץ רוחני ועסקי',
   duration: 'ייעוץ ממוקד תוצאות',
   subtitle: 'עברית · רוסית · קווקזית',
   price: 'מחיר בפרטי',
-  topicValue: 'הכוונה וייעוץ לפתיחת עסק (28 שנות ניסיון)',
-  desc: 'שיחת ייעוץ מקצועית ורוחנית לפתיחת עסק בליווי 28 שנות ניסיון. גישה מחזקת, בונה ותומכת, שמשיגה תוצאות. שירות בעברית, רוסית וקווקזית.',
-  features: ['28 שנות ניסיון בליווי עסקי והצלחה', 'שיחת ייעוץ מקצועית ורוחנית', 'גישה מחזקת, בונה ותומכת שמשיגה תוצאות', 'דוברת עברית, רוסית וקווקזית']
+  topicValue: 'ייעוץ רוחני ועסקי (28 שנות ניסיון)',
+  desc: 'שיחת ייעוץ מקצועית ורוחנית לפתיחת עסק, ליווי אישי והכוונה בדרך — עם 28 שנות ניסיון. גישה מחזקת, בונה ותומכת, שמשיגה תוצאות.',
+  features: ['28 שנות ניסיון בליווי ובהצלחה', 'שיחת ייעוץ מקצועית ורוחנית', 'גישה מחזקת, בונה ותומכת שמשיגה תוצאות', 'דוברת עברית, רוסית וקווקזית']
 }];
 function ServiceIcon({
   type
@@ -809,7 +829,10 @@ function Services({
     className: "section-title display"
   }, "\u05D4\u05E9\u05D9\u05E8\u05D5\u05EA\u05D9\u05DD \u05E9\u05DC\u05D9"), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("p", {
     className: "section-sub"
-  }, "\u05DE\u05D2\u05D5\u05D5\u05DF \u05E9\u05D9\u05E8\u05D5\u05EA\u05D9\u05DD \u05D5\u05E7\u05E8\u05D9\u05D0\u05D5\u05EA \u05E8\u05D5\u05D7\u05E0\u05D9\u05D5\u05EA \u05D1\u05D4\u05EA\u05D0\u05DE\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA \u2014 \u05E4\u05EA\u05D9\u05D7\u05D4 \u05D1\u05DE\u05D9\u05DD, \u05D8\u05D0\u05E8\u05D5\u05D8, \u05E4\u05EA\u05D9\u05D7\u05EA \u05DE\u05D6\u05DC, \u05D4\u05D2\u05E0\u05D4 \u05D5\u05D9\u05D9\u05E2\u05D5\u05E5 \u05E2\u05E1\u05E7\u05D9 \u05DE\u05D1\u05D5\u05E1\u05E1 28 \u05E9\u05E0\u05D5\u05EA \u05E0\u05D9\u05E1\u05D9\u05D5\u05DF.")), /*#__PURE__*/React.createElement("div", {
+  }, "\u05D9\u05D9\u05E2\u05D5\u05E5 \u05E8\u05D5\u05D7\u05E0\u05D9, \u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8 \u05D5\u05E0\u05D9\u05E7\u05D5\u05D9 \u05E8\u05D5\u05D7\u05E0\u05D9 \u2014 \u05D1\u05D4\u05EA\u05D0\u05DE\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA, \u05D1\u05E2\u05D1\u05E8\u05D9\u05EA, \u05E8\u05D5\u05E1\u05D9\u05EA \u05D5\u05E7\u05D5\u05D5\u05E7\u05D6\u05D9\u05EA."), /*#__PURE__*/React.createElement("p", {
+    className: "section-sub-ru latin",
+    dir: "ltr"
+  }, BRAND.focusRu)), /*#__PURE__*/React.createElement("div", {
     className: "services-grid"
   }, SERVICES.map((s, i) => /*#__PURE__*/React.createElement("article", {
     key: i,
@@ -1030,7 +1053,7 @@ function Contact({
   const [form, setForm] = useState({
     name: '',
     phone: '',
-    topic: selectedTopic || 'מיסטיקה רוחנית — מים קדושים, טארוט, כף יד וקפה',
+    topic: selectedTopic || 'קלפי טארוט — קריאה אישית בקלפים',
     message: ''
   });
 
@@ -1047,7 +1070,7 @@ function Contact({
   const submit = e => {
     e.preventDefault();
     if (!form.name || !form.phone) return;
-    const messageLines = ['שלום מרים, פנייה חדשה מאתר האינטרנט:', `• שם מלא: ${form.name}`, `• טלפון: ${form.phone}`, `• שירות מבוקש: ${form.topic}`];
+    const messageLines = [`שלום מרים, פנייה חדשה מאתר ${BRAND.he}:`, `• שם מלא: ${form.name}`, `• טלפון: ${form.phone}`, `• שירות מבוקש: ${form.topic}`];
     if (form.message && form.message.trim()) {
       messageLines.push(`• פרטים / שאלות: ${form.message.trim()}`);
     }
@@ -1068,7 +1091,7 @@ function Contact({
     className: "section-eyebrow latin"
   }, "\u2014 V \u2014"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title display"
-  }, "\u05EA\u05D9\u05D0\u05D5\u05DD \u05E7\u05E8\u05D9\u05D0\u05D4"), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("p", {
+  }, "\u05EA\u05D9\u05D0\u05D5\u05DD \u05D9\u05D9\u05E2\u05D5\u05E5"), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("p", {
     className: "section-sub"
   }, "\u05D4\u05E9\u05D0\u05D9\u05E8\u05D9 \u05E4\u05E8\u05D8\u05D9\u05DD \u05D5\u05D0\u05D7\u05D6\u05D5\u05E8 \u05D0\u05DC\u05D9\u05D9\u05DA \u05D1\u05EA\u05D5\u05DA 24 \u05E9\u05E2\u05D5\u05EA. \u05D0\u05DD \u05D6\u05D4 \u05D3\u05D7\u05D5\u05E3 \u2014 \u05D0\u05E4\u05E9\u05E8 \u05D2\u05DD \u05D1\u05D8\u05DC\u05E4\u05D5\u05DF.")), /*#__PURE__*/React.createElement("div", {
     className: "contact-grid"
@@ -1153,7 +1176,7 @@ function Contact({
       ...form,
       topic: e.target.value
     })
-  }, /*#__PURE__*/React.createElement("option", null, "\u05DE\u05D9\u05E1\u05D8\u05D9\u05E7\u05D4 \u05E8\u05D5\u05D7\u05E0\u05D9\u05EA \u2014 \u05DE\u05D9\u05DD \u05E7\u05D3\u05D5\u05E9\u05D9\u05DD, \u05D8\u05D0\u05E8\u05D5\u05D8, \u05DB\u05E3 \u05D9\u05D3 \u05D5\u05E7\u05E4\u05D4"), /*#__PURE__*/React.createElement("option", null, "\u05E4\u05EA\u05D9\u05D7\u05EA \u05DE\u05D6\u05DC, \u05D4\u05D2\u05E0\u05D4 \u05DE\u05E2\u05D9\u05DF \u05D4\u05E8\u05E2 \u05D5\u05DB\u05D9\u05E9\u05D5\u05E4\u05D9\u05DD, \u05E4\u05E8\u05D9\u05D5\u05DF \u05D5\u05E8\u05D9\u05D9\u05E7\u05D9"), /*#__PURE__*/React.createElement("option", null, "\u05D4\u05DB\u05D5\u05D5\u05E0\u05D4 \u05D5\u05D9\u05D9\u05E2\u05D5\u05E5 \u05DC\u05E4\u05EA\u05D9\u05D7\u05EA \u05E2\u05E1\u05E7 (28 \u05E9\u05E0\u05D5\u05EA \u05E0\u05D9\u05E1\u05D9\u05D5\u05DF)"), /*#__PURE__*/React.createElement("option", null, "\u05D0\u05D7\u05E8 \u2014 \u05D0\u05E1\u05D1\u05D9\u05E8 \u05D1\u05D4\u05D5\u05D3\u05E2\u05D4"))), /*#__PURE__*/React.createElement("label", {
+  }, /*#__PURE__*/React.createElement("option", null, "\u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8 \u2014 \u05E7\u05E8\u05D9\u05D0\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA \u05D1\u05E7\u05DC\u05E4\u05D9\u05DD"), /*#__PURE__*/React.createElement("option", null, "\u05E0\u05D9\u05E7\u05D5\u05D9 \u05E8\u05D5\u05D7\u05E0\u05D9 \u05D5\u05D4\u05D2\u05E0\u05D4 \u2014 \u05DE\u05D9\u05DD \u05E7\u05D3\u05D5\u05E9\u05D9\u05DD, \u05E2\u05D9\u05DF \u05D4\u05E8\u05E2 \u05D5\u05E8\u05D9\u05D9\u05E7\u05D9"), /*#__PURE__*/React.createElement("option", null, "\u05D9\u05D9\u05E2\u05D5\u05E5 \u05E8\u05D5\u05D7\u05E0\u05D9 \u05D5\u05E2\u05E1\u05E7\u05D9 (28 \u05E9\u05E0\u05D5\u05EA \u05E0\u05D9\u05E1\u05D9\u05D5\u05DF)"), /*#__PURE__*/React.createElement("option", null, "\u05D0\u05D7\u05E8 \u2014 \u05D0\u05E1\u05D1\u05D9\u05E8 \u05D1\u05D4\u05D5\u05D3\u05E2\u05D4"))), /*#__PURE__*/React.createElement("label", {
     className: "form-field"
   }, /*#__PURE__*/React.createElement("span", {
     className: "form-label"
@@ -1174,9 +1197,7 @@ function Contact({
 }
 
 // ── Footer ───────────────────────────────────────────────────────────────────
-function Footer({
-  name
-}) {
+function Footer() {
   return /*#__PURE__*/React.createElement("footer", {
     className: "footer"
   }, /*#__PURE__*/React.createElement("div", {
@@ -1185,11 +1206,19 @@ function Footer({
     className: "footer-brand display"
   }, /*#__PURE__*/React.createElement(SmallStar, {
     size: 12
-  }), /*#__PURE__*/React.createElement("span", null, name), /*#__PURE__*/React.createElement(SmallStar, {
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "brand-he"
+  }, BRAND.he), /*#__PURE__*/React.createElement(SmallStar, {
     size: 12
   })), /*#__PURE__*/React.createElement("p", {
+    className: "footer-brand-ru latin",
+    dir: "ltr"
+  }, BRAND.ru), /*#__PURE__*/React.createElement("p", {
     className: "footer-tag"
-  }, "\u05E7\u05E8\u05D9\u05D0\u05D4 \u05D1\u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8 \xB7 \u05DC\u05D9\u05D5\u05D5\u05D9 \u05E8\u05D5\u05D7\u05E0\u05D9 \xB7 \u05E9\u05D9\u05D7\u05D4 \u05DE\u05D4\u05DC\u05D1"), /*#__PURE__*/React.createElement(Divider, {
+  }, "\u05D9\u05D9\u05E2\u05D5\u05E5 \u05E8\u05D5\u05D7\u05E0\u05D9 \xB7 \u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8 \xB7 \u05E0\u05D9\u05E7\u05D5\u05D9 \u05E8\u05D5\u05D7\u05E0\u05D9 \u05D5\u05D4\u05D2\u05E0\u05D4"), /*#__PURE__*/React.createElement("p", {
+    className: "footer-tag footer-tag-ru latin",
+    dir: "ltr"
+  }, BRAND.focusRu, " \xB7 ", BRAND.langsRu), /*#__PURE__*/React.createElement(Divider, {
     width: 180
   }), /*#__PURE__*/React.createElement("p", {
     className: "footer-fine"
@@ -1199,7 +1228,7 @@ function Footer({
 // ── App ──────────────────────────────────────────────────────────────────────
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [selectedTopic, setSelectedTopic] = useState('מיסטיקה רוחנית — מים קדושים, טארוט, כף יד וקפה');
+  const [selectedTopic, setSelectedTopic] = useState('קלפי טארוט — קריאה אישית בקלפים');
   const handleSelectService = topic => {
     setSelectedTopic(topic);
     const contactEl = document.getElementById('contact');
@@ -1214,7 +1243,7 @@ function App() {
   // can be edited from the panel and survives reload
   const [details, setDetails] = useState({
     name: 'מרים',
-    tagline: 'מסע של הקשבה אל הקלפים, הלב והעולם. מרחב רך לפגוש את עצמך במלוא הכבוד.',
+    tagline: 'מרחב של אור, בהירות ורוגע — ייעוץ רוחני אישי, קריאה בקלפים וניקוי אנרגטי, בעברית, רוסית וקווקזית.',
     phone: '053-964-6269'
   });
 
@@ -1239,10 +1268,7 @@ function App() {
     density: t.starDensity,
     animated: t.animatedStars,
     showMoon: t.showMoon
-  }), /*#__PURE__*/React.createElement(Nav, {
-    name: details.name
-  }), /*#__PURE__*/React.createElement(Hero, {
-    name: details.name,
+  }), /*#__PURE__*/React.createElement(Nav, null), /*#__PURE__*/React.createElement(Hero, {
     tagline: details.tagline,
     layout: t.heroLayout
   }), /*#__PURE__*/React.createElement(About, {
@@ -1253,9 +1279,7 @@ function App() {
     name: details.name,
     phone: details.phone,
     selectedTopic: selectedTopic
-  }), /*#__PURE__*/React.createElement(Footer, {
-    name: details.name
-  }), details.phone && /*#__PURE__*/React.createElement("a", {
+  }), /*#__PURE__*/React.createElement(Footer, null), details.phone && /*#__PURE__*/React.createElement("a", {
     href: `https://wa.me/${details.phone.replace(/[^\d]/g, '').replace(/^0/, '972')}`,
     target: "_blank",
     rel: "noopener",

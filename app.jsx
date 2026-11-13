@@ -4,6 +4,16 @@
 
 const { useState, useEffect, useMemo, useRef } = React;
 
+// ── Brand ───────────────────────────────────────────────────────────────────
+const BRAND = {
+  he: 'אור ודרך',
+  ru: 'Свет и путь',
+  focus: 'ייעוץ רוחני · קלפי טארוט · ניקוי רוחני',
+  focusRu: 'Эзотерические консультации и духовные практики',
+  langs: 'עברית · רוסית · קווקזית',
+  langsRu: 'на русском и иврите',
+};
+
 // ── Tweak defaults (persisted by the host on disk) ───────────────────────────
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "palette": ["#0d0a1a", "#d4af6f", "#f0e6d2"],
@@ -141,7 +151,7 @@ function StarField({ density, animated, showMoon }) {
 }
 
 // ── Nav ──────────────────────────────────────────────────────────────────────
-function Nav({ name }) {
+function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -180,9 +190,11 @@ function Nav({ name }) {
   return (
     <nav className={`nav ${scrolled || menuOpen ? 'nav-scrolled' : ''}`}>
       <div className="nav-inner">
-        <a href="#top" className="nav-brand display" onClick={close}>
+        <a href="#top" className="nav-brand display" onClick={close}
+           aria-label={`${BRAND.he} — ${BRAND.ru}`}>
           <SmallStar size={14} opacity={0.85} />
-          <span>{name}</span>
+          <span className="brand-he">{BRAND.he}</span>
+          <span className="brand-ru latin" dir="ltr">{BRAND.ru}</span>
         </a>
         <ul className="nav-links">
           {items.map((it) => (
@@ -190,7 +202,7 @@ function Nav({ name }) {
           ))}
         </ul>
         <a href="#contact" className="nav-cta">
-          <span>תיאום קריאה</span>
+          <span>תיאום ייעוץ</span>
         </a>
         <button
           type="button"
@@ -213,31 +225,31 @@ function Nav({ name }) {
           ))}
         </ul>
         <a href="#contact" className="btn btn-primary btn-block" onClick={close}>
-          קביעת קריאה אישית
+          קביעת ייעוץ אישי
         </a>
-        <p className="nav-mobile-fine latin">— Aperi Cor Tuum —</p>
+        <p className="nav-mobile-fine latin" dir="ltr">{BRAND.focusRu}</p>
       </div>
     </nav>
   );
 }
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
-function Hero({ name, tagline, layout }) {
+function Hero({ tagline, layout }) {
   return (
     <header id="top" className={`hero hero-${layout}`}>
       <div className="hero-content">
         <div className="hero-eyebrow reveal">
           <SmallStar size={10} opacity={0.7} />
-          <span className="latin">— Tarot &amp; Spiritual Guidance —</span>
+          <span className="latin" dir="ltr">{BRAND.focusRu}</span>
           <SmallStar size={10} opacity={0.7} />
         </div>
 
         <h1 className="hero-title display reveal reveal-delay-1">
-          <span className="hero-title-line">קריאה בקלפי</span>
-          <span className="hero-title-emph">טארוט</span>
+          <span className="hero-title-line latin" dir="ltr">{BRAND.ru}</span>
+          <span className="hero-title-emph">{BRAND.he}</span>
         </h1>
 
-        <p className="hero-name display reveal reveal-delay-2">{name}</p>
+        <p className="hero-name display reveal reveal-delay-2">{BRAND.focus}</p>
 
         <div className="hero-divider reveal reveal-delay-2">
           <Divider />
@@ -247,7 +259,7 @@ function Hero({ name, tagline, layout }) {
 
         <div className="hero-cta reveal reveal-delay-4">
           <a href="#contact" className="btn btn-primary">
-            <span>קביעת קריאה אישית</span>
+            <span>קביעת ייעוץ אישי</span>
             <svg viewBox="0 0 14 10" width="14" height="10" aria-hidden="true"
                  style={{ marginInlineStart: 8 }}>
               <path d="M 14 5 L 8 0 M 14 5 L 8 10 M 14 5 L 0 5" fill="none"
@@ -258,11 +270,11 @@ function Hero({ name, tagline, layout }) {
         </div>
 
         <div className="hero-meta reveal reveal-delay-4">
-          <span>מענה אישי</span>
-          <i className="dot" />
-          <span>דיסקרטיות מלאה</span>
-          <i className="dot" />
           <span>28 שנות ניסיון</span>
+          <i className="dot" />
+          <span>{BRAND.langs}</span>
+          <i className="dot" />
+          <span>מענה אישי ודיסקרטי</span>
         </div>
       </div>
 
@@ -437,21 +449,25 @@ function About({ name }) {
           </div>
           <div className="portrait-caption display">
             <span>{name}</span>
-            <span className="latin caption-sub">— Tarot Reader —</span>
+            <span className="latin caption-sub" dir="ltr">— Tarot &amp; Spiritual Guidance —</span>
           </div>
         </div>
         <div className="about-text">
           <p className="lede">
-            כבר 28 שנה אני מלווה אנשים במסע אל תוך עצמם —
-            דרך מיסטיקה רוחנית, פתיחה במים קדושים, קלפי טארוט, קריאה בכף היד וקפה, והאזנה עמוקה ללב.
+            אור ודרך — ייעוץ רוחני, קלפי טארוט וניקוי רוחני.
+            כבר 28 שנה אני מלווה אנשים במסע אל תוך עצמם, בדרך של אור, בהירות ורוגע.
           </p>
           <p>
-            אני מעניקה מענה מקיף הכולל פתיחת מזל, הגנה מעין הרע וכישופים, ברכה לפריון וילודה,
-            טיפולי רייקי לאיזון אנרגטי, והכוונה וייעוץ מקצועי ורוחני לפתיחת עסק בגישה מחזקת ותומכת שמשיגה תוצאות.
+            אני מעניקה ייעוץ רוחני אישי, קריאה בקלפי טארוט, ניקוי רוחני והגנה מעין הרע,
+            טיפולי רייקי לאיזון אנרגטי, והכוונה רוחנית ועסקית לפתיחת עסק —
+            בגישה מחזקת, בונה ותומכת שמשיגה תוצאות.
           </p>
           <p>
-            הייעוץ והקריאות מתקיימים במרחב בטוח ואינטימי — בפגישה אישית או בשיחה טלפונית.
-            השירות ניתן בשפות: עברית, רוסית וקווקזית.
+            המפגשים מתקיימים במרחב בטוח ואינטימי — בפגישה אישית או בשיחה טלפונית.
+            השירות ניתן באופן מקצועי בשפות: עברית, רוסית וקווקזית.
+          </p>
+          <p className="about-ru latin" dir="ltr">
+            Эзотерические консультации и духовные практики — на русском и иврите.
           </p>
           <ul className="credentials">
             <li>
@@ -478,31 +494,31 @@ const SERVICES = [
   {
     icon: 'mystic',
     tag: 'קריאה וראייה',
-    title: 'מיסטיקה רוחנית',
-    duration: 'פתיחה מלאה',
-    subtitle: 'מים קדושים · טארוט · כף יד וקפה',
+    title: 'קלפי טארוט',
+    duration: 'קריאה אישית',
+    subtitle: 'קלפים · תמונה · כף יד וקפה',
     price: 'מחיר בפרטי',
-    topicValue: 'מיסטיקה רוחנית — מים קדושים, טארוט, כף יד וקפה',
-    desc: 'פתיחה במים קדושים, טארוט + קלפים + תמונה, קריאת בכף היד וקפה. חיבור מעמיק לקבלת בהירות, מענה לשאלות הלב והכוונה מדויקת.',
+    topicValue: 'קלפי טארוט — קריאה אישית בקלפים',
+    desc: 'קריאה בקלפי טארוט, פריסת קלפים עם תמונה, קריאת כף יד וקפה. חיבור מעמיק לקבלת בהירות, מענה לשאלות הלב והכוונה מדויקת.',
     features: [
-      'פתיחה במים קדושים',
-      'טארוט + קלפים + תמונה',
-      'קריאת בכף היד וקפה',
+      'קריאה בקלפי טארוט',
+      'פריסת קלפים עם תמונה',
+      'קריאת כף היד וקפה',
       'ראייה אינטואיטיבית ומענה מעמיק',
     ],
   },
   {
     icon: 'hamsa',
-    tag: 'הכי מבוקש',
-    title: 'פתיחת מזל, הגנה ורייקי',
+    tag: 'טיהור והגנה',
+    title: 'ניקוי רוחני והגנה',
     duration: 'טיהור וברכה',
-    subtitle: 'הסרת עין הרע · פריון · רייקי',
+    subtitle: 'מים קדושים · עין הרע · רייקי',
     price: 'מחיר בפרטי',
-    topicValue: 'פתיחת מזל, הגנה מעין הרע וכישופים, פריון ורייקי',
-    desc: 'פתיחת מזל, הגנה מעין הרע וכישופים, ברכה וליווי לפריון וילודה, וטיפולי רייקי לשחרור חסימות ואיזון אנרגטי עמוק.',
+    topicValue: 'ניקוי רוחני והגנה — מים קדושים, עין הרע ורייקי',
+    desc: 'ניקוי רוחני במים קדושים, הסרת עין הרע וכישופים, ברכה וליווי לפריון וילודה, וטיפולי רייקי לשחרור חסימות ואיזון אנרגטי עמוק.',
     features: [
-      'פתיחת מזל והסרת חסימות',
-      'הגנה מעין הרע וכישופים',
+      'ניקוי רוחני ופתיחה במים קדושים',
+      'הגנה והסרת עין הרע וכישופים',
       'ברכה וליווי לפריון וילודה',
       'טיפולי רייקי ואיזון אנרגטי',
     ],
@@ -511,14 +527,14 @@ const SERVICES = [
   {
     icon: 'star',
     tag: '28 שנות ניסיון',
-    title: 'הכוונה וייעוץ לפתיחת עסק',
+    title: 'ייעוץ רוחני ועסקי',
     duration: 'ייעוץ ממוקד תוצאות',
     subtitle: 'עברית · רוסית · קווקזית',
     price: 'מחיר בפרטי',
-    topicValue: 'הכוונה וייעוץ לפתיחת עסק (28 שנות ניסיון)',
-    desc: 'שיחת ייעוץ מקצועית ורוחנית לפתיחת עסק בליווי 28 שנות ניסיון. גישה מחזקת, בונה ותומכת, שמשיגה תוצאות. שירות בעברית, רוסית וקווקזית.',
+    topicValue: 'ייעוץ רוחני ועסקי (28 שנות ניסיון)',
+    desc: 'שיחת ייעוץ מקצועית ורוחנית לפתיחת עסק, ליווי אישי והכוונה בדרך — עם 28 שנות ניסיון. גישה מחזקת, בונה ותומכת, שמשיגה תוצאות.',
     features: [
-      '28 שנות ניסיון בליווי עסקי והצלחה',
+      '28 שנות ניסיון בליווי ובהצלחה',
       'שיחת ייעוץ מקצועית ורוחנית',
       'גישה מחזקת, בונה ותומכת שמשיגה תוצאות',
       'דוברת עברית, רוסית וקווקזית',
@@ -567,8 +583,9 @@ function Services({ onSelectService }) {
         <h2 className="section-title display">השירותים שלי</h2>
         <Divider />
         <p className="section-sub">
-          מגוון שירותים וקריאות רוחניות בהתאמה אישית — פתיחה במים, טארוט, פתיחת מזל, הגנה וייעוץ עסקי מבוסס 28 שנות ניסיון.
+          ייעוץ רוחני, קלפי טארוט וניקוי רוחני — בהתאמה אישית, בעברית, רוסית וקווקזית.
         </p>
+        <p className="section-sub-ru latin" dir="ltr">{BRAND.focusRu}</p>
       </div>
       <div className="services-grid">
         {SERVICES.map((s, i) => (
@@ -799,7 +816,7 @@ function Contact({ name, phone, selectedTopic }) {
   const [form, setForm] = useState({
     name: '',
     phone: '',
-    topic: selectedTopic || 'מיסטיקה רוחנית — מים קדושים, טארוט, כף יד וקפה',
+    topic: selectedTopic || 'קלפי טארוט — קריאה אישית בקלפים',
     message: '',
   });
 
@@ -815,7 +832,7 @@ function Contact({ name, phone, selectedTopic }) {
     if (!form.name || !form.phone) return;
 
     const messageLines = [
-      'שלום מרים, פנייה חדשה מאתר האינטרנט:',
+      `שלום מרים, פנייה חדשה מאתר ${BRAND.he}:`,
       `• שם מלא: ${form.name}`,
       `• טלפון: ${form.phone}`,
       `• שירות מבוקש: ${form.topic}`,
@@ -837,7 +854,7 @@ function Contact({ name, phone, selectedTopic }) {
     <section id="contact" className="section section-contact">
       <div className="section-head">
         <div className="section-eyebrow latin">— V —</div>
-        <h2 className="section-title display">תיאום קריאה</h2>
+        <h2 className="section-title display">תיאום ייעוץ</h2>
         <Divider />
         <p className="section-sub">
           השאירי פרטים ואחזור אלייך בתוך 24 שעות. אם זה דחוף — אפשר גם בטלפון.
@@ -900,9 +917,9 @@ function Contact({ name, phone, selectedTopic }) {
           <label className="form-field">
             <span className="form-label">סוג השירות</span>
             <select value={form.topic} onChange={(e) => setForm({ ...form, topic: e.target.value })}>
-              <option>מיסטיקה רוחנית — מים קדושים, טארוט, כף יד וקפה</option>
-              <option>פתיחת מזל, הגנה מעין הרע וכישופים, פריון ורייקי</option>
-              <option>הכוונה וייעוץ לפתיחת עסק (28 שנות ניסיון)</option>
+              <option>קלפי טארוט — קריאה אישית בקלפים</option>
+              <option>ניקוי רוחני והגנה — מים קדושים, עין הרע ורייקי</option>
+              <option>ייעוץ רוחני ועסקי (28 שנות ניסיון)</option>
               <option>אחר — אסביר בהודעה</option>
             </select>
           </label>
@@ -927,17 +944,21 @@ function Contact({ name, phone, selectedTopic }) {
 }
 
 // ── Footer ───────────────────────────────────────────────────────────────────
-function Footer({ name }) {
+function Footer() {
   return (
     <footer className="footer">
       <div className="footer-inner">
         <div className="footer-brand display">
           <SmallStar size={12} />
-          <span>{name}</span>
+          <span className="brand-he">{BRAND.he}</span>
           <SmallStar size={12} />
         </div>
+        <p className="footer-brand-ru latin" dir="ltr">{BRAND.ru}</p>
         <p className="footer-tag">
-          קריאה בקלפי טארוט · ליווי רוחני · שיחה מהלב
+          ייעוץ רוחני · קלפי טארוט · ניקוי רוחני והגנה
+        </p>
+        <p className="footer-tag footer-tag-ru latin" dir="ltr">
+          {BRAND.focusRu} · {BRAND.langsRu}
         </p>
         <Divider width={180} />
         <p className="footer-fine">
@@ -951,7 +972,7 @@ function Footer({ name }) {
 // ── App ──────────────────────────────────────────────────────────────────────
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [selectedTopic, setSelectedTopic] = useState('מיסטיקה רוחנית — מים קדושים, טארוט, כף יד וקפה');
+  const [selectedTopic, setSelectedTopic] = useState('קלפי טארוט — קריאה אישית בקלפים');
 
   const handleSelectService = (topic) => {
     setSelectedTopic(topic);
@@ -965,7 +986,7 @@ function App() {
   // can be edited from the panel and survives reload
   const [details, setDetails] = useState({
     name: 'מרים',
-    tagline: 'מסע של הקשבה אל הקלפים, הלב והעולם. מרחב רך לפגוש את עצמך במלוא הכבוד.',
+    tagline: 'מרחב של אור, בהירות ורוגע — ייעוץ רוחני אישי, קריאה בקלפים וניקוי אנרגטי, בעברית, רוסית וקווקזית.',
     phone: '053-964-6269',
   });
 
@@ -988,15 +1009,15 @@ function App() {
   return (
     <div className="site">
       <StarField density={t.starDensity} animated={t.animatedStars} showMoon={t.showMoon} />
-      <Nav name={details.name} />
-      <Hero name={details.name} tagline={details.tagline} layout={t.heroLayout} />
+      <Nav />
+      <Hero tagline={details.tagline} layout={t.heroLayout} />
       <About name={details.name} />
       <Services onSelectService={handleSelectService} />
       <Oracle />
       <Testimonials />
       <Contact name={details.name} phone={details.phone}
                selectedTopic={selectedTopic} />
-      <Footer name={details.name} />
+      <Footer />
 
       {details.phone && (
         <a

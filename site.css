@@ -1570,3 +1570,48 @@ a.contact-value:hover { color: var(--gold); }
   .orb-stage,
   .ring { animation: none !important; }
 }
+
+/* ── Bilingual brand marks (Hebrew / Russian) ────────────────────────────── */
+.brand-ru {
+  font-family: 'Cormorant Garamond', 'Frank Ruhl Libre', serif;
+  font-size: 13px;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  opacity: 0.9;
+  white-space: nowrap;
+}
+.section-sub-ru {
+  font-family: 'Cormorant Garamond', 'Frank Ruhl Libre', serif;
+  font-size: 16px;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  color: var(--gold);
+  opacity: 0.78;
+  margin: 12px 0 0;
+}
+.about-text .about-ru {
+  font-family: 'Cormorant Garamond', 'Frank Ruhl Libre', serif;
+  font-size: 16px;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+  opacity: 0.8;
+  border-inline-start: 1px solid var(--line);
+  padding-inline-start: 14px;
+  margin: 22px 0 0;
+}
+.footer-brand-ru {
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  opacity: 0.85;
+  margin: 0 0 10px;
+}
+.footer-tag-ru { margin: 0; font-size: 13px; opacity: 0.65; }
+
+@media (max-width: 480px) {
+  .nav-brand { font-size: 17px; }
+  .nav-brand .brand-ru { display: none; }
+  .section-sub-ru { font-size: 14px; }
+}
