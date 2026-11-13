@@ -315,20 +315,22 @@ function Nav() {
             <li key={it.id}><a href={`#${it.id}`}>{it.label}</a></li>
           ))}
         </ul>
-        <a href="#contact" className="nav-cta">
-          <span>{t.nav.cta}</span>
-        </a>
-        <LanguageSwitcher />
-        <button
-          type="button"
-          className={`nav-burger ${menuOpen ? 'is-open' : ''}`}
-          aria-label={menuOpen ? t.nav.menuClose : t.nav.menuOpen}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-          onClick={() => setMenuOpen((o) => !o)}
-        >
-          <span /><span /><span />
-        </button>
+        <div className="nav-tools">
+          <a href="#booking" className="nav-cta">
+            <span>{t.nav.cta}</span>
+          </a>
+          <LanguageSwitcher />
+          <button
+            type="button"
+            className={`nav-burger ${menuOpen ? 'is-open' : ''}`}
+            aria-label={menuOpen ? t.nav.menuClose : t.nav.menuOpen}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span /><span /><span />
+          </button>
+        </div>
       </div>
 
       <div id="mobile-menu" className={`nav-mobile ${menuOpen ? 'is-open' : ''}`} hidden={!menuOpen}>
@@ -339,7 +341,7 @@ function Nav() {
             </li>
           ))}
         </ul>
-        <a href="#contact" className="btn btn-primary btn-block" onClick={close}>
+        <a href="#booking" className="btn btn-primary btn-block" onClick={close}>
           {t.nav.book}
         </a>
         <p className={`nav-mobile-fine ${lang !== 'he' ? 'latin' : ''}`}
@@ -375,7 +377,7 @@ function Hero({ layout }) {
         <p className="hero-sub reveal reveal-delay-3" dir={dir}>{t.hero.tagline}</p>
 
         <div className="hero-cta reveal reveal-delay-4">
-          <a href="#contact" className="btn btn-primary">
+          <a href="#booking" className="btn btn-primary">
             <span>{t.hero.ctaPrimary}</span>
             <svg viewBox="0 0 14 10" width="14" height="10" aria-hidden="true"
                  style={{ marginInlineStart: 8 }}>
@@ -674,7 +676,7 @@ function Services({ onSelectService }) {
               ))}
             </ul>
             <a
-              href="#contact"
+              href="#booking"
               className="service-cta"
               onClick={(e) => {
                 if (onSelectService) {
@@ -929,7 +931,7 @@ function Contact({ phone, topicIndex }) {
           </div>
         </div>
 
-        <form className="contact-form" onSubmit={submit}>
+        <form id="booking" className="contact-form" onSubmit={submit}>
           <label className="form-field">
             <span className="form-label">{t.contact.name}</span>
             <input
@@ -1022,9 +1024,11 @@ function App() {
 
   const handleSelectService = (index) => {
     setTopicIndex(index);
-    const contactEl = document.getElementById('contact');
-    if (contactEl) {
-      contactEl.scrollIntoView({ behavior: 'smooth' });
+    // Land on the booking form itself, not the section heading above it, so the
+    // package selector and inputs are already on screen when the scroll ends.
+    const bookingEl = document.getElementById('booking');
+    if (bookingEl) {
+      bookingEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 

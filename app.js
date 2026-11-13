@@ -546,8 +546,10 @@ function Nav() {
     key: it.id
   }, /*#__PURE__*/React.createElement("a", {
     href: `#${it.id}`
-  }, it.label)))), /*#__PURE__*/React.createElement("a", {
-    href: "#contact",
+  }, it.label)))), /*#__PURE__*/React.createElement("div", {
+    className: "nav-tools"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "#booking",
     className: "nav-cta"
   }, /*#__PURE__*/React.createElement("span", null, t.nav.cta)), /*#__PURE__*/React.createElement(LanguageSwitcher, null), /*#__PURE__*/React.createElement("button", {
     type: "button",
@@ -556,7 +558,7 @@ function Nav() {
     "aria-expanded": menuOpen,
     "aria-controls": "mobile-menu",
     onClick: () => setMenuOpen(o => !o)
-  }, /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null))), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null)))), /*#__PURE__*/React.createElement("div", {
     id: "mobile-menu",
     className: `nav-mobile ${menuOpen ? 'is-open' : ''}`,
     hidden: !menuOpen
@@ -566,7 +568,7 @@ function Nav() {
     href: `#${it.id}`,
     onClick: close
   }, it.label)))), /*#__PURE__*/React.createElement("a", {
-    href: "#contact",
+    href: "#booking",
     className: "btn btn-primary btn-block",
     onClick: close
   }, t.nav.book), /*#__PURE__*/React.createElement("p", {
@@ -617,7 +619,7 @@ function Hero({
   }, t.hero.tagline), /*#__PURE__*/React.createElement("div", {
     className: "hero-cta reveal reveal-delay-4"
   }, /*#__PURE__*/React.createElement("a", {
-    href: "#contact",
+    href: "#booking",
     className: "btn btn-primary"
   }, /*#__PURE__*/React.createElement("span", null, t.hero.ctaPrimary), /*#__PURE__*/React.createElement("svg", {
     viewBox: "0 0 14 10",
@@ -1045,7 +1047,7 @@ function Services({
     d: "M 6 0 L 7 5 L 12 6 L 7 7 L 6 12 L 5 7 L 0 6 L 5 5 Z",
     fill: "var(--gold)"
   })), /*#__PURE__*/React.createElement("span", null, f)))), /*#__PURE__*/React.createElement("a", {
-    href: "#contact",
+    href: "#booking",
     className: "service-cta",
     onClick: e => {
       if (onSelectService) {
@@ -1313,6 +1315,7 @@ function Contact({
     className: "whatsapp-arrow",
     "aria-hidden": "true"
   }, dir === 'rtl' ? '←' : '→')))), /*#__PURE__*/React.createElement("form", {
+    id: "booking",
     className: "contact-form",
     onSubmit: submit
   }, /*#__PURE__*/React.createElement("label", {
@@ -1437,10 +1440,13 @@ function App() {
   }, [lang, meta.dir, dict]);
   const handleSelectService = index => {
     setTopicIndex(index);
-    const contactEl = document.getElementById('contact');
-    if (contactEl) {
-      contactEl.scrollIntoView({
-        behavior: 'smooth'
+    // Land on the booking form itself, not the section heading above it, so the
+    // package selector and inputs are already on screen when the scroll ends.
+    const bookingEl = document.getElementById('booking');
+    if (bookingEl) {
+      bookingEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
       });
     }
   };
