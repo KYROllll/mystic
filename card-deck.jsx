@@ -46,22 +46,25 @@ const TAROT_DECK = [
   { num: 'XX',   name: 'המשפט',         keywords: 'התעוררות · קריאה · חידוש',
     reading: 'קריאה גדולה מהדהדת בלבך. הקשיבי — הנשמה שלך זוכרת למה היא כאן.' },
   { num: 'XXI',  name: 'העולם',         keywords: 'סיום · שלמות · גמר',
-    reading: 'מעגל נסגר בשלום. גאי במסע — ומיד בעקבותיו מעגל חדש ורחב יותר ייפתח.' },
+    reading: 'מעגל נסגר בשלום. גאה במסע — ומיד בעקבותיו מעגל חדש ורחב יותר ייפתח.' },
 ];
 
 // SVG glyph drawn on each card back — concentric mystical sigil
 function CardBackArt() {
+  // Three backs are on screen at once — the gradient needs a unique id per
+  // instance or the last card's <defs> wins for all of them.
+  const gradId = `cb-grad-${React.useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   return (
     <svg viewBox="0 0 100 160" className="card-back-art" aria-hidden="true">
       <defs>
-        <linearGradient id="cb-grad" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%"  stopColor="var(--gold)" stopOpacity="0.55" />
           <stop offset="100%" stopColor="var(--gold)" stopOpacity="0.18" />
         </linearGradient>
       </defs>
       {/* Outer frame */}
       <rect x="5" y="5" width="90" height="150" rx="3" fill="none"
-            stroke="url(#cb-grad)" strokeWidth="0.6" />
+            stroke={`url(#${gradId})`} strokeWidth="0.6" />
       <rect x="8" y="8" width="84" height="144" rx="2" fill="none"
             stroke="var(--gold)" strokeOpacity="0.25" strokeWidth="0.3" />
       {/* Top decorative diamond */}
@@ -102,10 +105,11 @@ function CardBackArt() {
 
 // Card face — illustrated SVG glyph specific to each card, plus number & name
 function CardFaceArt({ num, name }) {
+  const glowId = `face-glow-${React.useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   return (
     <svg viewBox="0 0 100 160" className="card-face-art" aria-hidden="true">
       <defs>
-        <radialGradient id={`face-glow-${num}`} cx="50%" cy="50%" r="50%">
+        <radialGradient id={glowId} cx="50%" cy="50%" r="50%">
           <stop offset="0%"  stopColor="var(--gold)" stopOpacity="0.25" />
           <stop offset="100%" stopColor="var(--gold)" stopOpacity="0" />
         </radialGradient>
@@ -114,7 +118,7 @@ function CardFaceArt({ num, name }) {
             stroke="var(--gold)" strokeWidth="0.6" strokeOpacity="0.8" />
       <rect x="8" y="8" width="84" height="144" rx="2" fill="none"
             stroke="var(--gold)" strokeOpacity="0.3" strokeWidth="0.3" />
-      <circle cx="50" cy="80" r="36" fill={`url(#face-glow-${num})`} />
+      <circle cx="50" cy="80" r="36" fill={`url(#${glowId})`} />
       {/* Generic mystical glyph — sun, moon, star arrangement */}
       <g transform="translate(50 70)" fill="none" stroke="var(--gold)" strokeWidth="0.6">
         {/* Crescent moon */}

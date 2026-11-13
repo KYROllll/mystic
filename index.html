@@ -2,17 +2,53 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>מיסטיקה רוחנית · קריאה בקלפי טארוט</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>מיסטיקה רוחנית · קריאה בקלפי טארוט | מרים</title>
+  <meta name="description" content="קריאה בקלפי טארוט, פתיחה במים קדושים, פתיחת מזל, הגנה מעין הרע, ברכה לפריון וטיפולי רייקי. 28 שנות ניסיון, מענה אישי ודיסקרטי — בעברית, רוסית וקווקזית." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://mtrm8.github.io/mystic/" />
+  <meta name="theme-color" content="#0d0a1a" />
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="מיסטיקה רוחנית" />
+  <meta property="og:title" content="מיסטיקה רוחנית · קריאה בקלפי טארוט" />
+  <meta property="og:description" content="קריאה בקלפי טארוט, פתיחת מזל, הגנה מעין הרע, פריון ורייקי — 28 שנות ניסיון, מענה אישי ודיסקרטי." />
+  <meta property="og:url" content="https://mtrm8.github.io/mystic/" />
+  <meta property="og:locale" content="he_IL" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="מיסטיקה רוחנית · קריאה בקלפי טארוט" />
+  <meta name="twitter:description" content="קריאה בקלפי טארוט, פתיחת מזל, הגנה מעין הרע, פריון ורייקי — 28 שנות ניסיון." />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230d0a1a'/%3E%3Cpath d='M20 7a10 10 0 1 0 0 18 8 8 0 1 1 0-18Z' fill='%23d4af6f'/%3E%3Ccircle cx='24' cy='10' r='1.6' fill='%23d4af6f'/%3E%3C/svg%3E" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@200;300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Assistant:wght@200;300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="site.css" />
 
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "מיסטיקה רוחנית — מרים",
+    "description": "קריאה בקלפי טארוט, פתיחה במים קדושים, פתיחת מזל, הגנה מעין הרע, ברכה לפריון וילודה וטיפולי רייקי. 28 שנות ניסיון.",
+    "url": "https://mtrm8.github.io/mystic/",
+    "telephone": "+972539646269",
+    "priceRange": "₪₪",
+    "areaServed": { "@type": "Country", "name": "Israel" },
+    "knowsLanguage": ["he", "ru", "az"],
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+      "opens": "10:00",
+      "closes": "21:00"
+    }
+  }
+  </script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -38,6 +74,7 @@
       --gold-faint: rgba(212, 175, 111, 0.15);
       --rose: #c89aa8;
       --line: rgba(212, 175, 111, 0.22);
+      --display-font: 'Frank Ruhl Libre', serif;
     }
     .display { font-family: 'Frank Ruhl Libre', 'Cormorant Garamond', serif; }
     .body-font { font-family: 'Heebo', 'Assistant', sans-serif; }
@@ -75,13 +112,47 @@
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
+
+    /* Shown until React mounts, then removed by the app */
+    .boot {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      gap: 18px;
+      color: var(--gold);
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 15px;
+      letter-spacing: 0.3em;
+    }
+    .boot span {
+      width: 34px; height: 34px;
+      border: 0.5px solid var(--gold-soft);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spinSlow 1.4s linear infinite;
+    }
   </style>
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <div class="boot" aria-hidden="true"><span></span></div>
+  </div>
 
-  <script type="text/babel" src="tweaks-panel.jsx"></script>
-  <script type="text/babel" src="card-deck.jsx"></script>
-  <script type="text/babel" src="app.jsx"></script>
+  <noscript>
+    <div style="max-width:680px;margin:0 auto;padding:64px 24px;text-align:center;color:#f0e6d2;font-family:system-ui,sans-serif">
+      <h1 style="font-family:'Frank Ruhl Libre',serif;font-weight:300">מיסטיקה רוחנית · קריאה בקלפי טארוט</h1>
+      <p style="color:rgba(240,230,210,.72);line-height:1.8">
+        לתצוגת האתר יש להפעיל JavaScript בדפדפן.<br />
+        לתיאום קריאה: <a href="tel:+972539646269" style="color:#d4af6f">053-964-6269</a>
+      </p>
+    </div>
+  </noscript>
+
+  <!-- Precompiled from the .jsx sources by `npm run build`.
+       Plain scripts (not modules) so the page also works when opened directly from disk. -->
+  <script src="tweaks-panel.js"></script>
+  <script src="card-deck.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

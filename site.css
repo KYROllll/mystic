@@ -46,6 +46,33 @@
 
 .display { font-family: var(--display-font, 'Frank Ruhl Libre', serif); }
 
+/* Fixed header height compensation for in-page anchors */
+#top,
+#about,
+#services,
+#oracle,
+#voices,
+#contact { scroll-margin-top: 92px; }
+
+/* Visible keyboard focus, invisible for mouse users */
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ── Starfield background ───────────────────────────────────────────────── */
 .starfield {
   position: fixed;
@@ -125,6 +152,8 @@
   border-bottom: 0.5px solid var(--line);
 }
 .nav-inner {
+  position: relative;
+  z-index: 2;
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 56px;
@@ -132,6 +161,88 @@
   align-items: center;
   justify-content: space-between;
   gap: 32px;
+}
+
+/* ── Mobile menu ────────────────────────────────────────────────────────── */
+.nav-burger {
+  display: none;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0;
+  background: transparent;
+  border: 0.5px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.nav-burger:hover { border-color: var(--gold-soft); background: var(--gold-faint); }
+.nav-burger span {
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: var(--gold);
+  transition: transform 0.3s cubic-bezier(.2,.7,.2,1), opacity 0.2s ease;
+}
+.nav-burger.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-burger.is-open span:nth-child(2) { opacity: 0; }
+.nav-burger.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+.nav-mobile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  padding: 108px 32px 48px;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 28px;
+  overflow-y: auto;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(108, 65, 145, 0.28) 0%, transparent 65%),
+    rgba(13, 10, 26, 0.97);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  animation: sheetIn 0.35s cubic-bezier(.2,.7,.2,1) both;
+}
+.nav-mobile.is-open { display: flex; }
+.nav-mobile ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.nav-mobile li { border-bottom: 0.5px solid var(--line); }
+.nav-mobile li:first-child { border-top: 0.5px solid var(--line); }
+.nav-mobile a {
+  display: block;
+  padding: 20px 4px;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--display-font, 'Frank Ruhl Libre', serif);
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  transition: color 0.2s ease, padding-inline-start 0.25s ease;
+}
+.nav-mobile a:hover { color: var(--gold); padding-inline-start: 12px; }
+.nav-mobile .btn { margin-top: 8px; }
+.nav-mobile-fine {
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  opacity: 0.55;
+}
+@keyframes sheetIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 .nav-brand {
   display: flex;
@@ -238,6 +349,7 @@
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh;
   padding: 140px 56px 100px;
   display: flex;
   flex-direction: column;
@@ -792,7 +904,16 @@
   perspective: 1400px;
   flex-wrap: wrap;
   justify-content: center;
+  /* reserve room for the "קלף ראשון/שני/שלישי" hints that sit below each card */
+  padding-bottom: 44px;
 }
+.oracle-live {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 180px;
+}
+.oracle-live > * { width: 100%; }
 .tarot-card {
   position: relative;
   width: 180px;
@@ -1354,15 +1475,98 @@ a.contact-value:hover { color: var(--gold); }
 /* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 960px) {
   .section { padding: 80px 32px; }
-  .nav-inner { padding: 0 32px; }
+  .section-head { margin-bottom: 52px; }
+  .nav-inner { padding: 0 32px; gap: 16px; }
   .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .nav-burger { display: flex; }
   .about-grid,
   .contact-grid { grid-template-columns: 1fr; gap: 48px; }
-  .services-grid { grid-template-columns: 1fr; }
-  .credentials { grid-template-columns: 1fr; gap: 18px; }
-  .hero { padding: 120px 32px 80px; }
-  .moon-wrap { left: -5%; top: 5%; transform: scale(0.7); }
+  .about-portrait { max-width: 380px; margin: 0 auto; width: 100%; }
+  .services-grid { grid-template-columns: 1fr; gap: 20px; }
+  .service-title,
+  .service-desc { min-height: 0; }
+  .credentials {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 36px;
+    padding-top: 26px;
+  }
+  .cred-num { font-size: 30px; }
+  .hero { padding: 120px 32px 96px; }
+  .hero-meta { gap: 12px; font-size: 11px; }
+  .moon-wrap { left: -8%; top: 4%; opacity: 0.7; }
+  .moon-wrap svg { width: 130px; height: 130px; }
   .cards-row { gap: 16px; }
   .tarot-card { width: 130px; height: 210px; }
   .hero-split { padding-inline-start: 32px; }
+  .about-text .lede { font-size: 24px; }
+  .quote-mark { font-size: 150px; top: -30px; }
+  .footer { padding: 64px 32px 48px; }
+}
+
+@media (max-width: 640px) {
+  .section { padding: 64px 22px; }
+  .section-title { font-size: clamp(30px, 8vw, 40px); }
+  .section-sub { font-size: 15px; margin-top: 20px; }
+  .nav { padding: 16px 0; }
+  .nav-inner { padding: 0 22px; }
+  .nav-brand { font-size: 17px; }
+  .hero { padding: 104px 22px 88px; }
+  .hero-split { padding-inline-start: 22px; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 0.22em; gap: 10px; margin-bottom: 26px; }
+  .hero-sub { font-size: 15.5px; margin: 26px auto 36px; }
+  .hero-title { font-size: clamp(44px, 13vw, 68px); }
+  .hero-name { font-size: 20px; }
+  .hero-cta { gap: 12px; margin-bottom: 36px; }
+  .hero-cta .btn { flex: 1 1 100%; padding: 15px 24px; }
+  .scroll-hint { display: none; }
+  .credentials { grid-template-columns: 1fr; gap: 14px; }
+  .credentials li { flex-direction: row; align-items: baseline; gap: 12px; }
+  .cred-num { font-size: 26px; min-width: 34px; }
+  .service-card { padding: 40px 22px 28px; }
+  .service-meta { font-size: 12px; }
+  .cards-row { gap: 12px; padding-bottom: 40px; }
+  .tarot-card { width: 104px; height: 170px; }
+  .card-hint { font-size: 10.5px; letter-spacing: 0.14em; bottom: -30px; }
+  .oracle-stage { gap: 40px; }
+  .oracle-reveal { padding: 28px 22px; }
+  .reveal-title { font-size: 27px; }
+  .reveal-text { font-size: 15.5px; line-height: 1.8; }
+  .reveal-keys { font-size: 12px; letter-spacing: 0.12em; }
+  .voice-text { font-size: 19px; }
+  .voice-controls { margin-top: 28px; gap: 18px; }
+  .quote-mark { font-size: 110px; top: -20px; inset-inline-end: -6px; }
+  .contact-card { padding: 26px 22px 22px; }
+  .contact-value { font-size: 20px; }
+  .form-field input,
+  .form-field select,
+  .form-field textarea { font-size: 16px; } /* >=16px prevents iOS zoom-on-focus */
+  .footer { padding: 56px 22px 96px; }
+  .footer-fine { font-size: 10px; letter-spacing: 0.08em; line-height: 1.7; }
+  .moon-wrap { display: none; }
+}
+
+@media (max-width: 380px) {
+  .tarot-card { width: 92px; height: 150px; }
+  .cards-row { gap: 10px; }
+  .hero-meta { flex-direction: column; gap: 6px; }
+  .hero-meta .dot { display: none; }
+}
+
+/* ── Respect reduced-motion preferences ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .scroll-hint { animation: none; }
+  .orbit-track,
+  .orb-ring,
+  .orb-stage,
+  .ring { animation: none !important; }
 }

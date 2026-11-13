@@ -1,0 +1,14 @@
+{
+  "name": "mystic",
+  "version": "1.0.0",
+  "private": true,
+  "description": "מיסטיקה רוחנית — static Hebrew RTL site. Edit *.jsx, then run `npm run build`.",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "python3 -m http.server 8000"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-react": "^7.27.1"
+  }
+}

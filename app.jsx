@@ -143,11 +143,31 @@ function StarField({ density, animated, showMoon }) {
 // ── Nav ──────────────────────────────────────────────────────────────────────
 function Nav({ name }) {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Close the mobile sheet on Escape, on viewport growth, and lock body scroll
+  // while it is open so the page behind it doesn't drift.
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false); };
+    const onResize = () => { if (window.innerWidth > 960) setMenuOpen(false); };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('resize', onResize);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [menuOpen]);
+
   const items = [
     { id: 'about',    label: 'אודות' },
     { id: 'services', label: 'שירותים' },
@@ -155,10 +175,12 @@ function Nav({ name }) {
     { id: 'voices',   label: 'מילות לקוחות' },
     { id: 'contact',  label: 'יצירת קשר' },
   ];
+  const close = () => setMenuOpen(false);
+
   return (
-    <nav className={`nav ${scrolled ? 'nav-scrolled' : ''}`}>
+    <nav className={`nav ${scrolled || menuOpen ? 'nav-scrolled' : ''}`}>
       <div className="nav-inner">
-        <a href="#top" className="nav-brand display">
+        <a href="#top" className="nav-brand display" onClick={close}>
           <SmallStar size={14} opacity={0.85} />
           <span>{name}</span>
         </a>
@@ -170,6 +192,30 @@ function Nav({ name }) {
         <a href="#contact" className="nav-cta">
           <span>תיאום קריאה</span>
         </a>
+        <button
+          type="button"
+          className={`nav-burger ${menuOpen ? 'is-open' : ''}`}
+          aria-label={menuOpen ? 'סגירת תפריט' : 'פתיחת תפריט'}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          <span /><span /><span />
+        </button>
+      </div>
+
+      <div id="mobile-menu" className={`nav-mobile ${menuOpen ? 'is-open' : ''}`} hidden={!menuOpen}>
+        <ul>
+          {items.map((it) => (
+            <li key={it.id}>
+              <a href={`#${it.id}`} onClick={close}>{it.label}</a>
+            </li>
+          ))}
+        </ul>
+        <a href="#contact" className="btn btn-primary btn-block" onClick={close}>
+          קביעת קריאה אישית
+        </a>
+        <p className="nav-mobile-fine latin">— Aperi Cor Tuum —</p>
       </div>
     </nav>
   );
@@ -585,16 +631,31 @@ function Oracle() {
   const [picked, setPicked]   = useState(null);  // index 0/1/2
   const [card, setCard]       = useState(null);  // TAROT_DECK entry
   const [flipping, setFlipping] = useState(false);
+  const flipTimer = useRef(null);
+  const lastCard = useRef(null);
+
+  // Never leave a pending flip timer running after unmount / reset
+  useEffect(() => () => clearTimeout(flipTimer.current), []);
 
   const drawCard = (idx) => {
     if (picked !== null) return;
-    const c = TAROT_DECK[Math.floor(Math.random() * TAROT_DECK.length)];
+    // Draw a different card than the previous reading so a repeat never
+    // looks like the deck didn't shuffle.
+    let c;
+    do {
+      c = TAROT_DECK[Math.floor(Math.random() * TAROT_DECK.length)];
+    } while (TAROT_DECK.length > 1 && c === lastCard.current);
+    lastCard.current = c;
+
     setPicked(idx);
     setFlipping(true);
     setCard(c);
-    setTimeout(() => setFlipping(false), 900);
+    clearTimeout(flipTimer.current);
+    flipTimer.current = setTimeout(() => setFlipping(false), 900);
   };
   const reset = () => {
+    clearTimeout(flipTimer.current);
+    setFlipping(false);
     setPicked(null);
     setCard(null);
   };
@@ -621,7 +682,8 @@ function Oracle() {
                 className={`tarot-card ${isPicked ? 'card-picked' : ''} ${isFaded ? 'card-faded' : ''} ${flipping && isPicked ? 'card-flipping' : ''}`}
                 onClick={() => drawCard(i)}
                 disabled={picked !== null}
-                aria-label={`קלף ${i + 1}`}
+                aria-label={`קלף ${['ראשון', 'שני', 'שלישי'][i]} — שליפת קלף היום`}
+                aria-pressed={isPicked}
               >
                 <div className="card-inner">
                   <div className="card-face card-face-back">
@@ -641,28 +703,30 @@ function Oracle() {
           })}
         </div>
 
-        {card && !flipping && (
-          <div className="oracle-reveal reveal">
-            <div className="reveal-eyebrow latin">— Today's Card —</div>
-            <h3 className="reveal-title display">
-              <span className="latin reveal-num">{card.num}</span>
-              <span> · </span>
-              <span>{card.name}</span>
-            </h3>
-            <div className="reveal-keys">{card.keywords}</div>
-            <p className="reveal-text">{card.reading}</p>
-            <button onClick={reset} className="btn btn-ghost btn-sm">
-              שליפת קלף נוסף ↻
-            </button>
-          </div>
-        )}
+        <div className="oracle-live" aria-live="polite" aria-atomic="true">
+          {card && !flipping && (
+            <div className="oracle-reveal reveal">
+              <div className="reveal-eyebrow latin">— Today's Card —</div>
+              <h3 className="reveal-title display">
+                <span className="latin reveal-num">{card.num}</span>
+                <span> · </span>
+                <span>{card.name}</span>
+              </h3>
+              <div className="reveal-keys">{card.keywords}</div>
+              <p className="reveal-text">{card.reading}</p>
+              <button onClick={reset} className="btn btn-ghost btn-sm">
+                שליפת קלף נוסף ↻
+              </button>
+            </div>
+          )}
 
-        {!card && (
-          <div className="oracle-prompt">
-            <EyeGlyph />
-            <p>הקלפים מחכים. סמכי על הלב שלך — הוא יודע.</p>
-          </div>
-        )}
+          {!card && (
+            <div className="oracle-prompt">
+              <EyeGlyph />
+              <p>הקלפים מחכים. סמכי על הלב שלך — הוא יודע.</p>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
@@ -716,14 +780,14 @@ function Testimonials() {
           </footer>
         </blockquote>
         <div className="voice-controls">
-          <button onClick={prev} className="voice-arrow" aria-label="קודם">‹</button>
+          <button onClick={prev} className="voice-arrow" aria-label="העדות הקודמת">›</button>
           <div className="voice-dots">
             {TESTIMONIALS.map((_, k) => (
               <button key={k} className={`dot-btn ${k === i ? 'on' : ''}`}
                       onClick={() => setI(k)} aria-label={`עדות ${k + 1}`} />
             ))}
           </div>
-          <button onClick={next} className="voice-arrow" aria-label="הבא">›</button>
+          <button onClick={next} className="voice-arrow" aria-label="העדות הבאה">‹</button>
         </div>
       </div>
     </section>
@@ -1001,4 +1065,6 @@ function shade(hex, amount) { // lighten by amount (0..1)
   return `#${hex2(ch(r))}${hex2(ch(g))}${hex2(ch(b))}`;
 }
 
+// Clear the pre-mount loader from index.html before React takes over.
+document.querySelector('#root .boot')?.remove();
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
