@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mtrm8.github.io/mystic/sitemap.xml
+Sitemap: https://kyrollll.github.io/mystic/sitemap.xml
