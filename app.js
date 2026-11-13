@@ -10,15 +10,7 @@ const {
   useRef
 } = React;
 
-// ── Brand ───────────────────────────────────────────────────────────────────
-const BRAND = {
-  he: 'אור ודרך',
-  ru: 'Свет и путь',
-  focus: 'ייעוץ רוחני · קלפי טארוט · ניקוי רוחני',
-  focusRu: 'Эзотерические консультации и духовные практики',
-  langs: 'עברית · רוסית · קווקזית',
-  langsRu: 'на русском и иврите'
-};
+// All copy lives in i18n.jsx; the brand mark itself (אור ודרך) is constant.
 
 // ── Tweak defaults (persisted by the host on disk) ───────────────────────────
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
@@ -228,6 +220,202 @@ function EyeGlyph() {
   })));
 }
 
+// ── Language switcher ────────────────────────────────────────────────────────
+// Clean SVG flags (no image files, no emoji font dependency).
+function Flag({
+  code
+}) {
+  const raw = React.useId().replace(/[^a-zA-Z0-9_-]/g, '');
+  const clip = `flag-${raw}`;
+  const stars = [[2.2, 1.8], [5.4, 1.8], [8.6, 1.8], [3.8, 4.0], [7.0, 4.0]];
+  return /*#__PURE__*/React.createElement("svg", {
+    className: "lang-flag",
+    viewBox: "0 0 20 14",
+    width: "20",
+    height: "14",
+    "aria-hidden": "true",
+    focusable: "false"
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("clipPath", {
+    id: clip
+  }, /*#__PURE__*/React.createElement("rect", {
+    width: "20",
+    height: "14",
+    rx: "2.4"
+  }))), /*#__PURE__*/React.createElement("g", {
+    clipPath: `url(#${clip})`
+  }, code === 'he' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("rect", {
+    width: "20",
+    height: "14",
+    fill: "#fff"
+  }), /*#__PURE__*/React.createElement("rect", {
+    y: "1.5",
+    width: "20",
+    height: "1.7",
+    fill: "#0038b8"
+  }), /*#__PURE__*/React.createElement("rect", {
+    y: "10.8",
+    width: "20",
+    height: "1.7",
+    fill: "#0038b8"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M10 4.1 L12.6 8.7 L7.4 8.7 Z",
+    fill: "none",
+    stroke: "#0038b8",
+    strokeWidth: "0.55"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M10 9.3 L7.4 4.7 L12.6 4.7 Z",
+    fill: "none",
+    stroke: "#0038b8",
+    strokeWidth: "0.55"
+  })), code === 'ru' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("rect", {
+    width: "20",
+    height: "4.67",
+    fill: "#fff"
+  }), /*#__PURE__*/React.createElement("rect", {
+    y: "4.67",
+    width: "20",
+    height: "4.67",
+    fill: "#0039a6"
+  }), /*#__PURE__*/React.createElement("rect", {
+    y: "9.34",
+    width: "20",
+    height: "4.66",
+    fill: "#d52b1e"
+  })), code === 'en' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("rect", {
+    width: "20",
+    height: "14",
+    fill: "#fff"
+  }), [0, 1, 2, 3, 4, 5, 6].map(i => /*#__PURE__*/React.createElement("rect", {
+    key: i,
+    y: i * 2,
+    width: "20",
+    height: "1",
+    fill: "#b31942"
+  })), /*#__PURE__*/React.createElement("rect", {
+    width: "9",
+    height: "7.6",
+    fill: "#0a3161"
+  }), stars.map(([cx, cy], i) => /*#__PURE__*/React.createElement("circle", {
+    key: i,
+    cx: cx,
+    cy: cy,
+    r: "0.42",
+    fill: "#fff"
+  }))), code === 'tr' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("rect", {
+    width: "20",
+    height: "14",
+    fill: "#e30a17"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "7.7",
+    cy: "7",
+    r: "3.1",
+    fill: "#fff"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "8.9",
+    cy: "7",
+    r: "2.5",
+    fill: "#e30a17"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M13.1 5.15 l0.55 1.68 1.77 0.01 -1.43 1.05 0.54 1.68 -1.43-1.04 -1.43 1.04 0.54-1.68 -1.43-1.05 1.77-0.01 Z",
+    fill: "#fff"
+  }))), /*#__PURE__*/React.createElement("rect", {
+    width: "20",
+    height: "14",
+    rx: "2.4",
+    fill: "none",
+    stroke: "rgba(240,230,210,0.3)",
+    strokeWidth: "0.6"
+  }));
+}
+function LanguageSwitcher() {
+  const {
+    lang,
+    setLang,
+    meta
+  } = useI18n();
+  const [open, setOpen] = useState(false);
+  const boxRef = useRef(null);
+  useEffect(() => {
+    if (!open) return undefined;
+    const onDocDown = e => {
+      if (boxRef.current && !boxRef.current.contains(e.target)) setOpen(false);
+    };
+    const onKey = e => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('mousedown', onDocDown);
+    document.addEventListener('touchstart', onDocDown, {
+      passive: true
+    });
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDocDown);
+      document.removeEventListener('touchstart', onDocDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+  const choose = code => {
+    setLang(code);
+    setOpen(false);
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: `lang ${open ? 'is-open' : ''}`,
+    ref: boxRef
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "lang-btn",
+    onClick: () => setOpen(o => !o),
+    "aria-haspopup": "listbox",
+    "aria-expanded": open,
+    "aria-label": `${meta.langLabel}: ${meta.name}`
+  }, /*#__PURE__*/React.createElement(Flag, {
+    code: lang
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "lang-btn-name"
+  }, meta.name), /*#__PURE__*/React.createElement("svg", {
+    className: "lang-caret",
+    viewBox: "0 0 10 6",
+    width: "10",
+    height: "6",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M1 1 L5 5 L9 1",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1"
+  }))), /*#__PURE__*/React.createElement("ul", {
+    className: "lang-menu",
+    role: "listbox",
+    "aria-label": meta.langLabel
+  }, LANG_ORDER.map(code => /*#__PURE__*/React.createElement("li", {
+    key: code
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    role: "option",
+    "aria-selected": code === lang,
+    className: `lang-option ${code === lang ? 'is-active' : ''}`,
+    onClick: () => choose(code)
+  }, /*#__PURE__*/React.createElement(Flag, {
+    code: code
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "lang-option-name",
+    dir: LANGS[code].dir
+  }, LANGS[code].name), /*#__PURE__*/React.createElement("span", {
+    className: "lang-option-en"
+  }, LANGS[code].english), /*#__PURE__*/React.createElement("svg", {
+    className: "lang-tick",
+    viewBox: "0 0 12 10",
+    width: "11",
+    height: "9",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M1 5 L4.4 8.4 L11 1.6",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.2"
+  })))))));
+}
+
 // ── Starfield background ─────────────────────────────────────────────────────
 function StarField({
   density,
@@ -309,21 +497,25 @@ function Nav() {
       window.removeEventListener('resize', onResize);
     };
   }, [menuOpen]);
+  const {
+    t,
+    lang
+  } = useI18n();
   const items = [{
     id: 'about',
-    label: 'אודות'
+    label: t.nav.about
   }, {
     id: 'services',
-    label: 'שירותים'
+    label: t.nav.services
   }, {
     id: 'oracle',
-    label: 'קלף היום'
+    label: t.nav.oracle
   }, {
     id: 'voices',
-    label: 'מילות לקוחות'
+    label: t.nav.voices
   }, {
     id: 'contact',
-    label: 'יצירת קשר'
+    label: t.nav.contact
   }];
   const close = () => setMenuOpen(false);
   return /*#__PURE__*/React.createElement("nav", {
@@ -334,16 +526,17 @@ function Nav() {
     href: "#top",
     className: "nav-brand display",
     onClick: close,
-    "aria-label": `${BRAND.he} — ${BRAND.ru}`
+    "aria-label": `${t.brand.name} — ${t.brand.sub}`
   }, /*#__PURE__*/React.createElement(SmallStar, {
     size: 14,
     opacity: 0.85
   }), /*#__PURE__*/React.createElement("span", {
-    className: "brand-he"
-  }, BRAND.he), /*#__PURE__*/React.createElement("span", {
-    className: "brand-ru latin",
-    dir: "ltr"
-  }, BRAND.ru)), /*#__PURE__*/React.createElement("ul", {
+    className: "brand-he",
+    dir: "rtl"
+  }, t.brand.name), /*#__PURE__*/React.createElement("span", {
+    className: `brand-ru ${lang === 'he' ? 'latin' : 'brand-sub'} `,
+    dir: lang === 'he' ? 'ltr' : LANGS[lang].dir
+  }, t.brand.sub)), /*#__PURE__*/React.createElement("ul", {
     className: "nav-links"
   }, items.map(it => /*#__PURE__*/React.createElement("li", {
     key: it.id
@@ -352,10 +545,10 @@ function Nav() {
   }, it.label)))), /*#__PURE__*/React.createElement("a", {
     href: "#contact",
     className: "nav-cta"
-  }, /*#__PURE__*/React.createElement("span", null, "\u05EA\u05D9\u05D0\u05D5\u05DD \u05D9\u05D9\u05E2\u05D5\u05E5")), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("span", null, t.nav.cta)), /*#__PURE__*/React.createElement(LanguageSwitcher, null), /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: `nav-burger ${menuOpen ? 'is-open' : ''}`,
-    "aria-label": menuOpen ? 'סגירת תפריט' : 'פתיחת תפריט',
+    "aria-label": menuOpen ? t.nav.menuClose : t.nav.menuOpen,
     "aria-expanded": menuOpen,
     "aria-controls": "mobile-menu",
     onClick: () => setMenuOpen(o => !o)
@@ -372,17 +565,22 @@ function Nav() {
     href: "#contact",
     className: "btn btn-primary btn-block",
     onClick: close
-  }, "\u05E7\u05D1\u05D9\u05E2\u05EA \u05D9\u05D9\u05E2\u05D5\u05E5 \u05D0\u05D9\u05E9\u05D9"), /*#__PURE__*/React.createElement("p", {
-    className: "nav-mobile-fine latin",
-    dir: "ltr"
-  }, BRAND.focusRu)));
+  }, t.nav.book), /*#__PURE__*/React.createElement("p", {
+    className: `nav-mobile-fine ${lang === 'he' ? 'latin' : 'brand-sub'}`,
+    dir: lang === 'he' ? 'ltr' : LANGS[lang].dir
+  }, t.brand.focusLong)));
 }
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
 function Hero({
-  tagline,
   layout
 }) {
+  const {
+    t,
+    lang,
+    dir
+  } = useI18n();
+  const latin = lang !== 'he';
   return /*#__PURE__*/React.createElement("header", {
     id: "top",
     className: `hero hero-${layout}`
@@ -394,9 +592,9 @@ function Hero({
     size: 10,
     opacity: 0.7
   }), /*#__PURE__*/React.createElement("span", {
-    className: "latin",
-    dir: "ltr"
-  }, BRAND.focusRu), /*#__PURE__*/React.createElement(SmallStar, {
+    className: latin ? 'latin' : '',
+    dir: dir
+  }, t.hero.eyebrow), /*#__PURE__*/React.createElement(SmallStar, {
     size: 10,
     opacity: 0.7
   })), /*#__PURE__*/React.createElement("h1", {
@@ -404,20 +602,23 @@ function Hero({
   }, /*#__PURE__*/React.createElement("span", {
     className: "hero-title-line latin",
     dir: "ltr"
-  }, BRAND.ru), /*#__PURE__*/React.createElement("span", {
-    className: "hero-title-emph"
-  }, BRAND.he)), /*#__PURE__*/React.createElement("p", {
-    className: "hero-name display reveal reveal-delay-2"
-  }, BRAND.focus), /*#__PURE__*/React.createElement("div", {
+  }, t.hero.titleSub), /*#__PURE__*/React.createElement("span", {
+    className: "hero-title-emph",
+    dir: "rtl"
+  }, t.brand.name)), /*#__PURE__*/React.createElement("p", {
+    className: "hero-name display reveal reveal-delay-2",
+    dir: dir
+  }, t.hero.name), /*#__PURE__*/React.createElement("div", {
     className: "hero-divider reveal reveal-delay-2"
   }, /*#__PURE__*/React.createElement(Divider, null)), /*#__PURE__*/React.createElement("p", {
-    className: "hero-sub reveal reveal-delay-3"
-  }, tagline), /*#__PURE__*/React.createElement("div", {
+    className: "hero-sub reveal reveal-delay-3",
+    dir: dir
+  }, t.hero.tagline), /*#__PURE__*/React.createElement("div", {
     className: "hero-cta reveal reveal-delay-4"
   }, /*#__PURE__*/React.createElement("a", {
     href: "#contact",
     className: "btn btn-primary"
-  }, /*#__PURE__*/React.createElement("span", null, "\u05E7\u05D1\u05D9\u05E2\u05EA \u05D9\u05D9\u05E2\u05D5\u05E5 \u05D0\u05D9\u05E9\u05D9"), /*#__PURE__*/React.createElement("svg", {
+  }, /*#__PURE__*/React.createElement("span", null, t.hero.ctaPrimary), /*#__PURE__*/React.createElement("svg", {
     viewBox: "0 0 14 10",
     width: "14",
     height: "10",
@@ -433,17 +634,18 @@ function Hero({
   }))), /*#__PURE__*/React.createElement("a", {
     href: "#oracle",
     className: "btn btn-ghost"
-  }, "\u05E9\u05DC\u05D9\u05E4\u05EA \u05E7\u05DC\u05E3 \u05D4\u05D9\u05D5\u05DD")), /*#__PURE__*/React.createElement("div", {
-    className: "hero-meta reveal reveal-delay-4"
-  }, /*#__PURE__*/React.createElement("span", null, "28 \u05E9\u05E0\u05D5\u05EA \u05E0\u05D9\u05E1\u05D9\u05D5\u05DF"), /*#__PURE__*/React.createElement("i", {
+  }, t.hero.ctaSecondary)), /*#__PURE__*/React.createElement("div", {
+    className: "hero-meta reveal reveal-delay-4",
+    dir: dir
+  }, /*#__PURE__*/React.createElement("span", null, t.hero.meta[0]), /*#__PURE__*/React.createElement("i", {
     className: "dot"
-  }), /*#__PURE__*/React.createElement("span", null, BRAND.langs), /*#__PURE__*/React.createElement("i", {
+  }), /*#__PURE__*/React.createElement("span", null, t.hero.meta[1]), /*#__PURE__*/React.createElement("i", {
     className: "dot"
-  }), /*#__PURE__*/React.createElement("span", null, "\u05DE\u05E2\u05E0\u05D4 \u05D0\u05D9\u05E9\u05D9 \u05D5\u05D3\u05D9\u05E1\u05E7\u05E8\u05D8\u05D9"))), /*#__PURE__*/React.createElement("a", {
+  }), /*#__PURE__*/React.createElement("span", null, t.hero.meta[2]))), /*#__PURE__*/React.createElement("a", {
     href: "#about",
     className: "scroll-hint",
-    "aria-label": "\u05D2\u05DC\u05D9\u05DC\u05D4"
-  }, /*#__PURE__*/React.createElement("span", null, "\u05D2\u05DC\u05D2\u05DC\u05D9 \u05DE\u05D8\u05D4"), /*#__PURE__*/React.createElement("svg", {
+    "aria-label": t.hero.scroll
+  }, /*#__PURE__*/React.createElement("span", null, t.hero.scroll), /*#__PURE__*/React.createElement("svg", {
     viewBox: "0 0 10 16",
     width: "10",
     height: "16"
@@ -646,6 +848,10 @@ function MysticOrb() {
 function About({
   name
 }) {
+  const {
+    t,
+    lang
+  } = useI18n();
   return /*#__PURE__*/React.createElement("section", {
     id: "about",
     className: "section section-about"
@@ -655,7 +861,7 @@ function About({
     className: "section-eyebrow latin"
   }, "\u2014 I \u2014"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title display"
-  }, "\u05D0\u05D5\u05D3\u05D5\u05EA\u05D9\u05D9"), /*#__PURE__*/React.createElement(Divider, null)), /*#__PURE__*/React.createElement("div", {
+  }, t.about.title), /*#__PURE__*/React.createElement(Divider, null)), /*#__PURE__*/React.createElement("div", {
     className: "about-grid"
   }, /*#__PURE__*/React.createElement("div", {
     className: "about-portrait"
@@ -668,63 +874,27 @@ function About({
   }, /*#__PURE__*/React.createElement("span", null, name), /*#__PURE__*/React.createElement("span", {
     className: "latin caption-sub",
     dir: "ltr"
-  }, "\u2014 Tarot & Spiritual Guidance \u2014"))), /*#__PURE__*/React.createElement("div", {
+  }, t.about.caption))), /*#__PURE__*/React.createElement("div", {
     className: "about-text"
   }, /*#__PURE__*/React.createElement("p", {
     className: "lede"
-  }, "\u05D0\u05D5\u05E8 \u05D5\u05D3\u05E8\u05DA \u2014 \u05D9\u05D9\u05E2\u05D5\u05E5 \u05E8\u05D5\u05D7\u05E0\u05D9, \u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8 \u05D5\u05E0\u05D9\u05E7\u05D5\u05D9 \u05E8\u05D5\u05D7\u05E0\u05D9. \u05DB\u05D1\u05E8 28 \u05E9\u05E0\u05D4 \u05D0\u05E0\u05D9 \u05DE\u05DC\u05D5\u05D5\u05D4 \u05D0\u05E0\u05E9\u05D9\u05DD \u05D1\u05DE\u05E1\u05E2 \u05D0\u05DC \u05EA\u05D5\u05DA \u05E2\u05E6\u05DE\u05DD, \u05D1\u05D3\u05E8\u05DA \u05E9\u05DC \u05D0\u05D5\u05E8, \u05D1\u05D4\u05D9\u05E8\u05D5\u05EA \u05D5\u05E8\u05D5\u05D2\u05E2."), /*#__PURE__*/React.createElement("p", null, "\u05D0\u05E0\u05D9 \u05DE\u05E2\u05E0\u05D9\u05E7\u05D4 \u05D9\u05D9\u05E2\u05D5\u05E5 \u05E8\u05D5\u05D7\u05E0\u05D9 \u05D0\u05D9\u05E9\u05D9, \u05E7\u05E8\u05D9\u05D0\u05D4 \u05D1\u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8, \u05E0\u05D9\u05E7\u05D5\u05D9 \u05E8\u05D5\u05D7\u05E0\u05D9 \u05D5\u05D4\u05D2\u05E0\u05D4 \u05DE\u05E2\u05D9\u05DF \u05D4\u05E8\u05E2, \u05D8\u05D9\u05E4\u05D5\u05DC\u05D9 \u05E8\u05D9\u05D9\u05E7\u05D9 \u05DC\u05D0\u05D9\u05D6\u05D5\u05DF \u05D0\u05E0\u05E8\u05D2\u05D8\u05D9, \u05D5\u05D4\u05DB\u05D5\u05D5\u05E0\u05D4 \u05E8\u05D5\u05D7\u05E0\u05D9\u05EA \u05D5\u05E2\u05E1\u05E7\u05D9\u05EA \u05DC\u05E4\u05EA\u05D9\u05D7\u05EA \u05E2\u05E1\u05E7 \u2014 \u05D1\u05D2\u05D9\u05E9\u05D4 \u05DE\u05D7\u05D6\u05E7\u05EA, \u05D1\u05D5\u05E0\u05D4 \u05D5\u05EA\u05D5\u05DE\u05DB\u05EA \u05E9\u05DE\u05E9\u05D9\u05D2\u05D4 \u05EA\u05D5\u05E6\u05D0\u05D5\u05EA."), /*#__PURE__*/React.createElement("p", null, "\u05D4\u05DE\u05E4\u05D2\u05E9\u05D9\u05DD \u05DE\u05EA\u05E7\u05D9\u05D9\u05DE\u05D9\u05DD \u05D1\u05DE\u05E8\u05D7\u05D1 \u05D1\u05D8\u05D5\u05D7 \u05D5\u05D0\u05D9\u05E0\u05D8\u05D9\u05DE\u05D9 \u2014 \u05D1\u05E4\u05D2\u05D9\u05E9\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA \u05D0\u05D5 \u05D1\u05E9\u05D9\u05D7\u05D4 \u05D8\u05DC\u05E4\u05D5\u05E0\u05D9\u05EA. \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA \u05E0\u05D9\u05EA\u05DF \u05D1\u05D0\u05D5\u05E4\u05DF \u05DE\u05E7\u05E6\u05D5\u05E2\u05D9 \u05D1\u05E9\u05E4\u05D5\u05EA: \u05E2\u05D1\u05E8\u05D9\u05EA, \u05E8\u05D5\u05E1\u05D9\u05EA \u05D5\u05E7\u05D5\u05D5\u05E7\u05D6\u05D9\u05EA."), /*#__PURE__*/React.createElement("p", {
-    className: "about-ru latin",
-    dir: "ltr"
-  }, "\u042D\u0437\u043E\u0442\u0435\u0440\u0438\u0447\u0435\u0441\u043A\u0438\u0435 \u043A\u043E\u043D\u0441\u0443\u043B\u044C\u0442\u0430\u0446\u0438\u0438 \u0438 \u0434\u0443\u0445\u043E\u0432\u043D\u044B\u0435 \u043F\u0440\u0430\u043A\u0442\u0438\u043A\u0438 \u2014 \u043D\u0430 \u0440\u0443\u0441\u0441\u043A\u043E\u043C \u0438 \u0438\u0432\u0440\u0438\u0442\u0435."), /*#__PURE__*/React.createElement("ul", {
+  }, t.about.lede), /*#__PURE__*/React.createElement("p", null, t.about.p1), /*#__PURE__*/React.createElement("p", null, t.about.p2), /*#__PURE__*/React.createElement("p", {
+    className: `about-ru ${lang !== 'he' ? 'latin' : ''}`,
+    dir: lang === 'he' ? 'rtl' : 'ltr'
+  }, t.about.extra), /*#__PURE__*/React.createElement("ul", {
     className: "credentials"
-  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+  }, t.about.creds.map(([num, label], i) => /*#__PURE__*/React.createElement("li", {
+    key: i
+  }, /*#__PURE__*/React.createElement("span", {
     className: "cred-num display"
-  }, "28"), /*#__PURE__*/React.createElement("span", {
+  }, num), /*#__PURE__*/React.createElement("span", {
     className: "cred-lbl"
-  }, "\u05E9\u05E0\u05D5\u05EA \u05E0\u05D9\u05E1\u05D9\u05D5\u05DF \u05D5\u05D4\u05E6\u05DC\u05D7\u05D4")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
-    className: "cred-num display"
-  }, "3"), /*#__PURE__*/React.createElement("span", {
-    className: "cred-lbl"
-  }, "\u05E9\u05E4\u05D5\u05EA: \u05E2\u05D1\u05E8\u05D9\u05EA, \u05E8\u05D5\u05E1\u05D9\u05EA \u05D5\u05E7\u05D5\u05D5\u05E7\u05D6\u05D9\u05EA")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
-    className: "cred-num display"
-  }, "\u221E"), /*#__PURE__*/React.createElement("span", {
-    className: "cred-lbl"
-  }, "\u05D2\u05D9\u05E9\u05D4 \u05DE\u05D7\u05D6\u05E7\u05EA \u05D5\u05EA\u05D5\u05DE\u05DB\u05EA"))))));
+  }, label)))))));
 }
 
 // ── Services ─────────────────────────────────────────────────────────────────
-const SERVICES = [{
-  icon: 'mystic',
-  tag: 'קריאה וראייה',
-  title: 'קלפי טארוט',
-  duration: 'קריאה אישית',
-  subtitle: 'קלפים · תמונה · כף יד וקפה',
-  price: 'מחיר בפרטי',
-  topicValue: 'קלפי טארוט — קריאה אישית בקלפים',
-  desc: 'קריאה בקלפי טארוט, פריסת קלפים עם תמונה, קריאת כף יד וקפה. חיבור מעמיק לקבלת בהירות, מענה לשאלות הלב והכוונה מדויקת.',
-  features: ['קריאה בקלפי טארוט', 'פריסת קלפים עם תמונה', 'קריאת כף היד וקפה', 'ראייה אינטואיטיבית ומענה מעמיק']
-}, {
-  icon: 'hamsa',
-  tag: 'טיהור והגנה',
-  title: 'ניקוי רוחני והגנה',
-  duration: 'טיהור וברכה',
-  subtitle: 'מים קדושים · עין הרע · רייקי',
-  price: 'מחיר בפרטי',
-  topicValue: 'ניקוי רוחני והגנה — מים קדושים, עין הרע ורייקי',
-  desc: 'ניקוי רוחני במים קדושים, הסרת עין הרע וכישופים, ברכה וליווי לפריון וילודה, וטיפולי רייקי לשחרור חסימות ואיזון אנרגטי עמוק.',
-  features: ['ניקוי רוחני ופתיחה במים קדושים', 'הגנה והסרת עין הרע וכישופים', 'ברכה וליווי לפריון וילודה', 'טיפולי רייקי ואיזון אנרגטי'],
-  featured: true
-}, {
-  icon: 'star',
-  tag: '28 שנות ניסיון',
-  title: 'ייעוץ רוחני ועסקי',
-  duration: 'ייעוץ ממוקד תוצאות',
-  subtitle: 'עברית · רוסית · קווקזית',
-  price: 'מחיר בפרטי',
-  topicValue: 'ייעוץ רוחני ועסקי (28 שנות ניסיון)',
-  desc: 'שיחת ייעוץ מקצועית ורוחנית לפתיחת עסק, ליווי אישי והכוונה בדרך — עם 28 שנות ניסיון. גישה מחזקת, בונה ותומכת, שמשיגה תוצאות.',
-  features: ['28 שנות ניסיון בליווי ובהצלחה', 'שיחת ייעוץ מקצועית ורוחנית', 'גישה מחזקת, בונה ותומכת שמשיגה תוצאות', 'דוברת עברית, רוסית וקווקזית']
-}];
+// Icons are positional; all copy comes from the active language dictionary.
+const SERVICE_ICONS = ['mystic', 'hamsa', 'star'];
 function ServiceIcon({
   type
 }) {
@@ -818,6 +988,10 @@ function ServiceIcon({
 function Services({
   onSelectService
 }) {
+  const {
+    t,
+    lang
+  } = useI18n();
   return /*#__PURE__*/React.createElement("section", {
     id: "services",
     className: "section section-services"
@@ -827,22 +1001,22 @@ function Services({
     className: "section-eyebrow latin"
   }, "\u2014 II \u2014"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title display"
-  }, "\u05D4\u05E9\u05D9\u05E8\u05D5\u05EA\u05D9\u05DD \u05E9\u05DC\u05D9"), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("p", {
+  }, t.services.title), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("p", {
     className: "section-sub"
-  }, "\u05D9\u05D9\u05E2\u05D5\u05E5 \u05E8\u05D5\u05D7\u05E0\u05D9, \u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8 \u05D5\u05E0\u05D9\u05E7\u05D5\u05D9 \u05E8\u05D5\u05D7\u05E0\u05D9 \u2014 \u05D1\u05D4\u05EA\u05D0\u05DE\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA, \u05D1\u05E2\u05D1\u05E8\u05D9\u05EA, \u05E8\u05D5\u05E1\u05D9\u05EA \u05D5\u05E7\u05D5\u05D5\u05E7\u05D6\u05D9\u05EA."), /*#__PURE__*/React.createElement("p", {
-    className: "section-sub-ru latin",
-    dir: "ltr"
-  }, BRAND.focusRu)), /*#__PURE__*/React.createElement("div", {
+  }, t.services.sub), /*#__PURE__*/React.createElement("p", {
+    className: `section-sub-ru ${lang !== 'he' ? 'latin' : ''}`,
+    dir: lang === 'he' ? 'ltr' : undefined
+  }, t.services.subExtra)), /*#__PURE__*/React.createElement("div", {
     className: "services-grid"
-  }, SERVICES.map((s, i) => /*#__PURE__*/React.createElement("article", {
+  }, t.services.items.map((s, i) => /*#__PURE__*/React.createElement("article", {
     key: i,
-    className: `service-card ${s.featured ? 'service-featured' : ''}`
+    className: `service-card ${i === 1 ? 'service-featured' : ''}`
   }, s.tag && /*#__PURE__*/React.createElement("div", {
     className: "service-tag display"
   }, s.tag), /*#__PURE__*/React.createElement("div", {
     className: "service-icon"
   }, /*#__PURE__*/React.createElement(ServiceIcon, {
-    type: s.icon
+    type: SERVICE_ICONS[i]
   })), /*#__PURE__*/React.createElement("h3", {
     className: "service-title display"
   }, s.title), /*#__PURE__*/React.createElement("div", {
@@ -873,16 +1047,20 @@ function Services({
     onClick: e => {
       if (onSelectService) {
         e.preventDefault();
-        onSelectService(s.topicValue);
+        onSelectService(i);
       }
     }
-  }, "\u05DC\u05EA\u05D9\u05D0\u05D5\u05DD \u05DE\u05E4\u05D2\u05E9 \u2190")))), /*#__PURE__*/React.createElement("p", {
+  }, s.cta)))), /*#__PURE__*/React.createElement("p", {
     className: "services-note"
-  }, "* \u05DE\u05D7\u05D9\u05E8\u05D9\u05DD \u05D1\u05E4\u05E8\u05D8\u05D9 \xB7 \u05E0\u05D9\u05EA\u05DF \u05DC\u05EA\u05D0\u05DD \u05E4\u05D2\u05D9\u05E9\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA \u05D0\u05D5 \u05E9\u05D9\u05D7\u05EA \u05D9\u05D9\u05E2\u05D5\u05E5 \u05D8\u05DC\u05E4\u05D5\u05E0\u05D9\u05EA \xB7 \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA \u05E0\u05D9\u05EA\u05DF \u05D1\u05E2\u05D1\u05E8\u05D9\u05EA, \u05E8\u05D5\u05E1\u05D9\u05EA \u05D5\u05E7\u05D5\u05D5\u05E7\u05D6\u05D9\u05EA"));
+  }, t.services.note));
 }
 
 // ── Oracle: Card of the Day ──────────────────────────────────────────────────
 function Oracle() {
+  const {
+    t,
+    lang
+  } = useI18n();
   // Three face-down cards; user picks one, it flips
   const [picked, setPicked] = useState(null); // index 0/1/2
   const [card, setCard] = useState(null); // TAROT_DECK entry
@@ -922,9 +1100,9 @@ function Oracle() {
     className: "section-eyebrow latin"
   }, "\u2014 III \u2014"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title display"
-  }, "\u05E7\u05DC\u05E3 \u05D4\u05D9\u05D5\u05DD"), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("p", {
+  }, t.oracle.title), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("p", {
     className: "section-sub"
-  }, "\u05E7\u05D7\u05D9 \u05E8\u05D2\u05E2. \u05E0\u05E9\u05DE\u05D9 \u05E2\u05DE\u05D5\u05E7. \u05D7\u05E9\u05D1\u05D9 \u05E2\u05DC \u05E9\u05D0\u05DC\u05D4 \u05D0\u05D7\u05EA \u2014 \u05D5\u05D1\u05D7\u05E8\u05D9 \u05E7\u05DC\u05E3.")), /*#__PURE__*/React.createElement("div", {
+  }, t.oracle.sub)), /*#__PURE__*/React.createElement("div", {
     className: "oracle-stage"
   }, /*#__PURE__*/React.createElement("div", {
     className: "cards-row"
@@ -936,7 +1114,7 @@ function Oracle() {
       className: `tarot-card ${isPicked ? 'card-picked' : ''} ${isFaded ? 'card-faded' : ''} ${flipping && isPicked ? 'card-flipping' : ''}`,
       onClick: () => drawCard(i),
       disabled: picked !== null,
-      "aria-label": `קלף ${['ראשון', 'שני', 'שלישי'][i]} — שליפת קלף היום`,
+      "aria-label": t.oracle.drawAria(t.oracle.cardNames[i]),
       "aria-pressed": isPicked
     }, /*#__PURE__*/React.createElement("div", {
       className: "card-inner"
@@ -946,10 +1124,10 @@ function Oracle() {
       className: "card-face card-face-front"
     }, isPicked && card && /*#__PURE__*/React.createElement(CardFaceArt, {
       num: card.num,
-      name: card.name
+      name: card.name[lang]
     }))), !isPicked && /*#__PURE__*/React.createElement("div", {
       className: "card-hint display"
-    }, /*#__PURE__*/React.createElement("span", null, "\u05E7\u05DC\u05E3 ", ['ראשון', 'שני', 'שלישי'][i])));
+    }, /*#__PURE__*/React.createElement("span", null, t.oracle.cardNames[i])));
   })), /*#__PURE__*/React.createElement("div", {
     className: "oracle-live",
     "aria-live": "polite",
@@ -958,47 +1136,38 @@ function Oracle() {
     className: "oracle-reveal reveal"
   }, /*#__PURE__*/React.createElement("div", {
     className: "reveal-eyebrow latin"
-  }, "\u2014 Today's Card \u2014"), /*#__PURE__*/React.createElement("h3", {
+  }, t.oracle.eyebrow), /*#__PURE__*/React.createElement("h3", {
     className: "reveal-title display"
   }, /*#__PURE__*/React.createElement("span", {
     className: "latin reveal-num"
-  }, card.num), /*#__PURE__*/React.createElement("span", null, " \xB7 "), /*#__PURE__*/React.createElement("span", null, card.name)), /*#__PURE__*/React.createElement("div", {
+  }, card.num), /*#__PURE__*/React.createElement("span", null, " \xB7 "), /*#__PURE__*/React.createElement("span", null, card.name[lang])), /*#__PURE__*/React.createElement("div", {
     className: "reveal-keys"
-  }, card.keywords), /*#__PURE__*/React.createElement("p", {
+  }, card.keywords[lang]), /*#__PURE__*/React.createElement("p", {
     className: "reveal-text"
-  }, card.reading), /*#__PURE__*/React.createElement("button", {
+  }, card.reading[lang]), /*#__PURE__*/React.createElement("button", {
     onClick: reset,
     className: "btn btn-ghost btn-sm"
-  }, "\u05E9\u05DC\u05D9\u05E4\u05EA \u05E7\u05DC\u05E3 \u05E0\u05D5\u05E1\u05E3 \u21BB")), !card && /*#__PURE__*/React.createElement("div", {
+  }, t.oracle.again)), !card && /*#__PURE__*/React.createElement("div", {
     className: "oracle-prompt"
-  }, /*#__PURE__*/React.createElement(EyeGlyph, null), /*#__PURE__*/React.createElement("p", null, "\u05D4\u05E7\u05DC\u05E4\u05D9\u05DD \u05DE\u05D7\u05DB\u05D9\u05DD. \u05E1\u05DE\u05DB\u05D9 \u05E2\u05DC \u05D4\u05DC\u05D1 \u05E9\u05DC\u05DA \u2014 \u05D4\u05D5\u05D0 \u05D9\u05D5\u05D3\u05E2.")))));
+  }, /*#__PURE__*/React.createElement(EyeGlyph, null), /*#__PURE__*/React.createElement("p", null, t.oracle.prompt)))));
 }
-
-// ── Testimonials ─────────────────────────────────────────────────────────────
-const TESTIMONIALS = [{
-  text: 'הגעתי במצב לב סוער ויצאתי עם בהירות שכבר חודשים חיפשתי. הקריאה הייתה מדויקת, רכה, ובדיוק במקום הנכון. אני חוזרת.',
-  name: 'דנה ק.',
-  city: 'תל אביב'
-}, {
-  text: 'הרגשתי שמישהי באמת רואה אותי — לא מנחשת. הקלפים פתחו שיחה שלא ידעתי שאני צריכה. תודה גדולה.',
-  name: 'מיכל ב.',
-  city: 'חיפה'
-}, {
-  text: 'באתי סקפטי לחלוטין. יצאתי עם תחושת ביטחון שלא הייתה לי כבר שנים. מעבר לקלפים, יש פה אדם שמקשיב לעומק.',
-  name: 'יואב ש.',
-  city: 'רעננה'
-}];
 function Testimonials() {
+  const {
+    t,
+    lang,
+    dir
+  } = useI18n();
+  const items = t.voices.items;
   const [i, setI] = useState(0);
-  const next = () => setI(p => (p + 1) % TESTIMONIALS.length);
-  const prev = () => setI(p => (p - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
-  const t = TESTIMONIALS[i];
+  const next = () => setI(p => (p + 1) % items.length);
+  const prev = () => setI(p => (p - 1 + items.length) % items.length);
+  const item = items[i % items.length];
 
   // Auto-advance
   useEffect(() => {
-    const id = setInterval(() => setI(p => (p + 1) % TESTIMONIALS.length), 8000);
+    const id = setInterval(() => setI(p => (p + 1) % items.length), 8000);
     return () => clearInterval(id);
-  }, []);
+  }, [items.length]);
   return /*#__PURE__*/React.createElement("section", {
     id: "voices",
     className: "section section-voices"
@@ -1008,71 +1177,74 @@ function Testimonials() {
     className: "section-eyebrow latin"
   }, "\u2014 IV \u2014"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title display"
-  }, "\u05DE\u05D9\u05DC\u05D9\u05DD \u05E9\u05E0\u05E9\u05D0\u05E8\u05D5\u05EA \u05D0\u05D9\u05EA\u05D9"), /*#__PURE__*/React.createElement(Divider, null)), /*#__PURE__*/React.createElement("div", {
+  }, t.voices.title), /*#__PURE__*/React.createElement(Divider, null)), /*#__PURE__*/React.createElement("div", {
     className: "voices-stage"
   }, /*#__PURE__*/React.createElement("div", {
     className: "quote-mark display",
     "aria-hidden": "true"
-  }, "\u05F4"), /*#__PURE__*/React.createElement("blockquote", {
-    key: i,
+  }, lang === 'he' ? '״' : '“'), /*#__PURE__*/React.createElement("blockquote", {
+    key: `${i}-${item.name}`,
     className: "voice-quote reveal"
   }, /*#__PURE__*/React.createElement("p", {
     className: "voice-text"
-  }, t.text), /*#__PURE__*/React.createElement("footer", {
+  }, item.text), /*#__PURE__*/React.createElement("footer", {
     className: "voice-cite"
   }, /*#__PURE__*/React.createElement("span", {
     className: "voice-name display"
-  }, t.name), /*#__PURE__*/React.createElement("span", {
+  }, item.name), /*#__PURE__*/React.createElement("span", {
     className: "voice-city"
-  }, t.city))), /*#__PURE__*/React.createElement("div", {
+  }, item.city))), /*#__PURE__*/React.createElement("div", {
     className: "voice-controls"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: prev,
     className: "voice-arrow",
-    "aria-label": "\u05D4\u05E2\u05D3\u05D5\u05EA \u05D4\u05E7\u05D5\u05D3\u05DE\u05EA"
-  }, "\u203A"), /*#__PURE__*/React.createElement("div", {
+    "aria-label": t.voices.prev
+  }, dir === 'rtl' ? '›' : '‹'), /*#__PURE__*/React.createElement("div", {
     className: "voice-dots"
-  }, TESTIMONIALS.map((_, k) => /*#__PURE__*/React.createElement("button", {
+  }, items.map((_, k) => /*#__PURE__*/React.createElement("button", {
     key: k,
     className: `dot-btn ${k === i ? 'on' : ''}`,
     onClick: () => setI(k),
-    "aria-label": `עדות ${k + 1}`
+    "aria-label": t.voices.dot(k + 1)
   }))), /*#__PURE__*/React.createElement("button", {
     onClick: next,
     className: "voice-arrow",
-    "aria-label": "\u05D4\u05E2\u05D3\u05D5\u05EA \u05D4\u05D1\u05D0\u05D4"
-  }, "\u2039"))));
+    "aria-label": t.voices.next
+  }, dir === 'rtl' ? '‹' : '›'))));
 }
 
 // ── Contact ──────────────────────────────────────────────────────────────────
 function Contact({
-  name,
   phone,
-  selectedTopic
+  topicIndex
 }) {
+  const {
+    t,
+    dir
+  } = useI18n();
+  // Topic options follow the language, so the select stores the option index
+  const options = [...t.services.items.map(s => s.topic), t.contact.topicOther];
   const [form, setForm] = useState({
     name: '',
     phone: '',
-    topic: selectedTopic || 'קלפי טארוט — קריאה אישית בקלפים',
+    topic: String(topicIndex || 0),
     message: ''
   });
 
   // Automatically sync form topic when user selects a package from services
   useEffect(() => {
-    if (selectedTopic) {
-      setForm(prev => ({
-        ...prev,
-        topic: selectedTopic
-      }));
-    }
-  }, [selectedTopic]);
+    setForm(prev => ({
+      ...prev,
+      topic: String(topicIndex || 0)
+    }));
+  }, [topicIndex]);
   const [sent, setSent] = useState(false);
   const submit = e => {
     e.preventDefault();
     if (!form.name || !form.phone) return;
-    const messageLines = [`שלום מרים, פנייה חדשה מאתר ${BRAND.he}:`, `• שם מלא: ${form.name}`, `• טלפון: ${form.phone}`, `• שירות מבוקש: ${form.topic}`];
+    const messageLines = [t.contact.waIntro, `${t.contact.waName}${form.name}`, `${t.contact.waPhone}${form.phone}`, `${t.contact.waService}${options[Number(form.topic)] || form.topic}`];
     if (form.message && form.message.trim()) {
-      messageLines.push(`• פרטים / שאלות: ${form.message.trim()}`);
+      messageLines.push(`${t.contact.waDetails}${form.message.trim()}`);
     }
     const fullMessage = messageLines.join('\n');
     const targetPhone = (phone || '053-964-6269').replace(/[^\d]/g, '').replace(/^0/, '972');
@@ -1091,9 +1263,9 @@ function Contact({
     className: "section-eyebrow latin"
   }, "\u2014 V \u2014"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title display"
-  }, "\u05EA\u05D9\u05D0\u05D5\u05DD \u05D9\u05D9\u05E2\u05D5\u05E5"), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("p", {
+  }, t.contact.title), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("p", {
     className: "section-sub"
-  }, "\u05D4\u05E9\u05D0\u05D9\u05E8\u05D9 \u05E4\u05E8\u05D8\u05D9\u05DD \u05D5\u05D0\u05D7\u05D6\u05D5\u05E8 \u05D0\u05DC\u05D9\u05D9\u05DA \u05D1\u05EA\u05D5\u05DA 24 \u05E9\u05E2\u05D5\u05EA. \u05D0\u05DD \u05D6\u05D4 \u05D3\u05D7\u05D5\u05E3 \u2014 \u05D0\u05E4\u05E9\u05E8 \u05D2\u05DD \u05D1\u05D8\u05DC\u05E4\u05D5\u05DF.")), /*#__PURE__*/React.createElement("div", {
+  }, t.contact.sub)), /*#__PURE__*/React.createElement("div", {
     className: "contact-grid"
   }, /*#__PURE__*/React.createElement("div", {
     className: "contact-info"
@@ -1105,19 +1277,19 @@ function Contact({
     className: "contact-row"
   }, /*#__PURE__*/React.createElement("div", {
     className: "contact-label latin"
-  }, "\u2014 Telephone \u2014"), phone ? /*#__PURE__*/React.createElement("a", {
+  }, t.contact.telephone), phone ? /*#__PURE__*/React.createElement("a", {
     href: `tel:${phone.replace(/[^\d+]/g, '')}`,
     className: "contact-value display"
   }, phone) : /*#__PURE__*/React.createElement("span", {
     className: "contact-value display contact-pending"
-  }, "\u2014 \u05D9\u05EA\u05E2\u05D3\u05DB\u05DF \u05D1\u05E7\u05E8\u05D5\u05D1 \u2014"), /*#__PURE__*/React.createElement("div", {
+  }, t.contact.pending), /*#__PURE__*/React.createElement("div", {
     className: "contact-hint"
-  }, "\u05D6\u05DE\u05D9\u05E0\u05D4 \u05D9\u05DE\u05D9\u05DD \u05D0\u05F3\u2013\u05D4\u05F3 \xB7 10:00\u201321:00")), phone && /*#__PURE__*/React.createElement("a", {
+  }, t.contact.hours)), phone && /*#__PURE__*/React.createElement("a", {
     href: `https://wa.me/${phone.replace(/[^\d]/g, '').replace(/^0/, '972')}`,
     target: "_blank",
     rel: "noopener",
     className: "whatsapp-cta",
-    "aria-label": "\u05E4\u05EA\u05D9\u05D7\u05EA \u05E6'\u05D0\u05D8 \u05D1\u05D5\u05D5\u05D0\u05D8\u05E1\u05D0\u05E4"
+    "aria-label": t.contact.waAria
   }, /*#__PURE__*/React.createElement("span", {
     className: "whatsapp-icon",
     "aria-hidden": "true"
@@ -1132,19 +1304,19 @@ function Contact({
     className: "whatsapp-text"
   }, /*#__PURE__*/React.createElement("span", {
     className: "whatsapp-title display"
-  }, "\u05E9\u05DC\u05D9\u05D7\u05EA \u05D4\u05D5\u05D3\u05E2\u05D4 \u05D1\u05D5\u05D5\u05D0\u05D8\u05E1\u05D0\u05E4"), /*#__PURE__*/React.createElement("span", {
+  }, t.contact.waTitle), /*#__PURE__*/React.createElement("span", {
     className: "whatsapp-sub"
-  }, "\u05DE\u05E2\u05E0\u05D4 \u05DE\u05D4\u05D9\u05E8 \xB7 \u05D9\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E6'\u05D0\u05D8")), /*#__PURE__*/React.createElement("span", {
+  }, t.contact.waSub)), /*#__PURE__*/React.createElement("span", {
     className: "whatsapp-arrow",
     "aria-hidden": "true"
-  }, "\u2190")))), /*#__PURE__*/React.createElement("form", {
+  }, dir === 'rtl' ? '←' : '→')))), /*#__PURE__*/React.createElement("form", {
     className: "contact-form",
     onSubmit: submit
   }, /*#__PURE__*/React.createElement("label", {
     className: "form-field"
   }, /*#__PURE__*/React.createElement("span", {
     className: "form-label"
-  }, "\u05E9\u05DD \u05DE\u05DC\u05D0"), /*#__PURE__*/React.createElement("input", {
+  }, t.contact.name), /*#__PURE__*/React.createElement("input", {
     type: "text",
     required: true,
     value: form.name,
@@ -1152,14 +1324,15 @@ function Contact({
       ...form,
       name: e.target.value
     }),
-    placeholder: "\u05E9\u05DE\u05DA \u05DB\u05D0\u05DF"
+    placeholder: t.contact.namePh
   })), /*#__PURE__*/React.createElement("label", {
     className: "form-field"
   }, /*#__PURE__*/React.createElement("span", {
     className: "form-label"
-  }, "\u05D8\u05DC\u05E4\u05D5\u05DF"), /*#__PURE__*/React.createElement("input", {
+  }, t.contact.phone), /*#__PURE__*/React.createElement("input", {
     type: "tel",
     required: true,
+    dir: "ltr",
     value: form.phone,
     onChange: e => setForm({
       ...form,
@@ -1170,67 +1343,101 @@ function Contact({
     className: "form-field"
   }, /*#__PURE__*/React.createElement("span", {
     className: "form-label"
-  }, "\u05E1\u05D5\u05D2 \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA"), /*#__PURE__*/React.createElement("select", {
+  }, t.contact.topic), /*#__PURE__*/React.createElement("select", {
     value: form.topic,
     onChange: e => setForm({
       ...form,
       topic: e.target.value
     })
-  }, /*#__PURE__*/React.createElement("option", null, "\u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8 \u2014 \u05E7\u05E8\u05D9\u05D0\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA \u05D1\u05E7\u05DC\u05E4\u05D9\u05DD"), /*#__PURE__*/React.createElement("option", null, "\u05E0\u05D9\u05E7\u05D5\u05D9 \u05E8\u05D5\u05D7\u05E0\u05D9 \u05D5\u05D4\u05D2\u05E0\u05D4 \u2014 \u05DE\u05D9\u05DD \u05E7\u05D3\u05D5\u05E9\u05D9\u05DD, \u05E2\u05D9\u05DF \u05D4\u05E8\u05E2 \u05D5\u05E8\u05D9\u05D9\u05E7\u05D9"), /*#__PURE__*/React.createElement("option", null, "\u05D9\u05D9\u05E2\u05D5\u05E5 \u05E8\u05D5\u05D7\u05E0\u05D9 \u05D5\u05E2\u05E1\u05E7\u05D9 (28 \u05E9\u05E0\u05D5\u05EA \u05E0\u05D9\u05E1\u05D9\u05D5\u05DF)"), /*#__PURE__*/React.createElement("option", null, "\u05D0\u05D7\u05E8 \u2014 \u05D0\u05E1\u05D1\u05D9\u05E8 \u05D1\u05D4\u05D5\u05D3\u05E2\u05D4"))), /*#__PURE__*/React.createElement("label", {
+  }, options.map((opt, k) => /*#__PURE__*/React.createElement("option", {
+    key: k,
+    value: String(k)
+  }, opt)))), /*#__PURE__*/React.createElement("label", {
     className: "form-field"
   }, /*#__PURE__*/React.createElement("span", {
     className: "form-label"
-  }, "\u05DE\u05E9\u05D4\u05D5 \u05E9\u05EA\u05E8\u05E6\u05D9 \u05DC\u05E9\u05EA\u05E3 \u05DC\u05E4\u05E0\u05D9 \u05D4\u05E4\u05D2\u05D9\u05E9\u05D4?"), /*#__PURE__*/React.createElement("textarea", {
+  }, t.contact.message), /*#__PURE__*/React.createElement("textarea", {
     rows: "4",
     value: form.message,
     onChange: e => setForm({
       ...form,
       message: e.target.value
     }),
-    placeholder: "\u05E9\u05D0\u05DC\u05D4 \u05E8\u05D0\u05E9\u05D5\u05E0\u05D9\u05EA, \u05D4\u05E2\u05D3\u05E4\u05EA \u05E9\u05E2\u05D5\u05EA, \u05D0\u05D5 \u05DB\u05DC \u05D3\u05D1\u05E8 \u05E9\u05D9\u05E8\u05D2\u05D9\u05E9 \u05DC\u05DA \u05E0\u05DB\u05D5\u05DF..."
+    placeholder: t.contact.messagePh
   })), /*#__PURE__*/React.createElement("button", {
     type: "submit",
     className: "btn btn-primary btn-block"
-  }, sent ? '✓ פותח שיחת WhatsApp לשליחה...' : 'שליחה ישירה לוואטסאפ'), /*#__PURE__*/React.createElement("p", {
+  }, sent ? t.contact.submitting : t.contact.submit), /*#__PURE__*/React.createElement("p", {
     className: "form-fine"
-  }, "\u05D1\u05DC\u05D7\u05D9\u05E6\u05D4 \u05E2\u05DC \u05E9\u05DC\u05D9\u05D7\u05D4 \u05EA\u05D9\u05E4\u05EA\u05D7 \u05E9\u05D9\u05D7\u05EA WhatsApp \u05E2\u05DD \u05DB\u05DC \u05D4\u05E4\u05E8\u05D8\u05D9\u05DD \u05E9\u05DE\u05D9\u05DC\u05D0\u05EA \u05D9\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05D8\u05DC\u05E4\u05D5\u05DF \u05E9\u05DC \u05DE\u05E8\u05D9\u05DD."))));
+  }, t.contact.fine))));
 }
 
 // ── Footer ───────────────────────────────────────────────────────────────────
 function Footer() {
+  const {
+    t,
+    lang
+  } = useI18n();
+  const latin = lang !== 'he';
   return /*#__PURE__*/React.createElement("footer", {
     className: "footer"
   }, /*#__PURE__*/React.createElement("div", {
     className: "footer-inner"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "footer-brand display"
+    className: "footer-brand display",
+    dir: "rtl"
   }, /*#__PURE__*/React.createElement(SmallStar, {
     size: 12
   }), /*#__PURE__*/React.createElement("span", {
     className: "brand-he"
-  }, BRAND.he), /*#__PURE__*/React.createElement(SmallStar, {
+  }, t.brand.name), /*#__PURE__*/React.createElement(SmallStar, {
     size: 12
   })), /*#__PURE__*/React.createElement("p", {
-    className: "footer-brand-ru latin",
+    className: `footer-brand-ru ${latin ? 'brand-sub' : 'latin'}`,
     dir: "ltr"
-  }, BRAND.ru), /*#__PURE__*/React.createElement("p", {
+  }, t.brand.sub), /*#__PURE__*/React.createElement("p", {
     className: "footer-tag"
-  }, "\u05D9\u05D9\u05E2\u05D5\u05E5 \u05E8\u05D5\u05D7\u05E0\u05D9 \xB7 \u05E7\u05DC\u05E4\u05D9 \u05D8\u05D0\u05E8\u05D5\u05D8 \xB7 \u05E0\u05D9\u05E7\u05D5\u05D9 \u05E8\u05D5\u05D7\u05E0\u05D9 \u05D5\u05D4\u05D2\u05E0\u05D4"), /*#__PURE__*/React.createElement("p", {
-    className: "footer-tag footer-tag-ru latin",
+  }, t.footer.tag), /*#__PURE__*/React.createElement("p", {
+    className: `footer-tag footer-tag-ru ${latin ? 'brand-sub' : 'latin'}`,
     dir: "ltr"
-  }, BRAND.focusRu, " \xB7 ", BRAND.langsRu), /*#__PURE__*/React.createElement(Divider, {
+  }, t.footer.tagExtra), /*#__PURE__*/React.createElement(Divider, {
     width: 180
   }), /*#__PURE__*/React.createElement("p", {
     className: "footer-fine"
-  }, "\xA9 ", new Date().getFullYear(), " \xB7 \u05DB\u05DC \u05D4\u05D6\u05DB\u05D5\u05D9\u05D5\u05EA \u05E9\u05DE\u05D5\u05E8\u05D5\u05EA \xB7 \u05E0\u05D1\u05E0\u05D4 \u05D1\u05D0\u05D4\u05D1\u05D4 \u05D1\u05DC\u05D9\u05DC\u05D4 \u05DB\u05D5\u05DB\u05D1\u05D9\u05DD")));
+  }, "\xA9 ", new Date().getFullYear(), " \xB7 ", t.footer.fine)));
 }
 
 // ── App ──────────────────────────────────────────────────────────────────────
 function App() {
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [selectedTopic, setSelectedTopic] = useState('קלפי טארוט — קריאה אישית בקלפים');
-  const handleSelectService = topic => {
-    setSelectedTopic(topic);
+  const [tw, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [lang, setLang] = useState(getInitialLang);
+  const [topicIndex, setTopicIndex] = useState(0);
+  const meta = LANGS[lang];
+  const dict = I18N[lang];
+  const ctx = useMemo(() => ({
+    lang,
+    dir: meta.dir,
+    t: dict,
+    setLang,
+    meta
+  }), [lang]);
+
+  // Mirror the language onto <html> (direction + lang), the document title and
+  // the meta description, and remember the choice in localStorage.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute('lang', lang);
+    root.setAttribute('dir', meta.dir);
+    root.setAttribute('data-lang', lang);
+    document.title = dict.meta.title;
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute('content', dict.meta.description);
+    try {
+      window.localStorage.setItem(LANG_STORAGE_KEY, lang);
+    } catch (e) {/* private mode */}
+  }, [lang, meta.dir, dict]);
+  const handleSelectService = index => {
+    setTopicIndex(index);
     const contactEl = document.getElementById('contact');
     if (contactEl) {
       contactEl.scrollIntoView({
@@ -1243,14 +1450,13 @@ function App() {
   // can be edited from the panel and survives reload
   const [details, setDetails] = useState({
     name: 'מרים',
-    tagline: 'מרחב של אור, בהירות ורוגע — ייעוץ רוחני אישי, קריאה בקלפים וניקוי אנרגטי, בעברית, רוסית וקווקזית.',
     phone: '053-964-6269'
   });
 
   // Apply palette to CSS variables
   useEffect(() => {
     const root = document.documentElement;
-    const [bg, gold, ink] = t.palette;
+    const [bg, gold, ink] = tw.palette;
     root.style.setProperty('--bg', bg);
     root.style.setProperty('--bg-2', shade(bg, 0.08));
     root.style.setProperty('--ink', ink);
@@ -1260,32 +1466,32 @@ function App() {
     root.style.setProperty('--gold-soft', hexA(gold, 0.4));
     root.style.setProperty('--gold-faint', hexA(gold, 0.15));
     root.style.setProperty('--line', hexA(gold, 0.22));
-    root.style.setProperty('--display-font', `'${t.displayFont}', serif`);
-  }, [t.palette, t.displayFont]);
-  return /*#__PURE__*/React.createElement("div", {
+    root.style.setProperty('--display-font', `'${tw.displayFont}', serif`);
+  }, [tw.palette, tw.displayFont]);
+  return /*#__PURE__*/React.createElement(LangContext.Provider, {
+    value: ctx
+  }, /*#__PURE__*/React.createElement("div", {
     className: "site"
   }, /*#__PURE__*/React.createElement(StarField, {
-    density: t.starDensity,
-    animated: t.animatedStars,
-    showMoon: t.showMoon
+    density: tw.starDensity,
+    animated: tw.animatedStars,
+    showMoon: tw.showMoon
   }), /*#__PURE__*/React.createElement(Nav, null), /*#__PURE__*/React.createElement(Hero, {
-    tagline: details.tagline,
-    layout: t.heroLayout
+    layout: tw.heroLayout
   }), /*#__PURE__*/React.createElement(About, {
     name: details.name
   }), /*#__PURE__*/React.createElement(Services, {
     onSelectService: handleSelectService
   }), /*#__PURE__*/React.createElement(Oracle, null), /*#__PURE__*/React.createElement(Testimonials, null), /*#__PURE__*/React.createElement(Contact, {
-    name: details.name,
     phone: details.phone,
-    selectedTopic: selectedTopic
+    topicIndex: topicIndex
   }), /*#__PURE__*/React.createElement(Footer, null), details.phone && /*#__PURE__*/React.createElement("a", {
     href: `https://wa.me/${details.phone.replace(/[^\d]/g, '').replace(/^0/, '972')}`,
     target: "_blank",
     rel: "noopener",
     className: "whatsapp-float",
-    "aria-label": "\u05E4\u05EA\u05D9\u05D7\u05EA \u05E6'\u05D0\u05D8 \u05D1\u05D5\u05D5\u05D0\u05D8\u05E1\u05D0\u05E4",
-    title: "\u05E9\u05DC\u05D9\u05D7\u05EA \u05D4\u05D5\u05D3\u05E2\u05D4 \u05D1\u05D5\u05D5\u05D0\u05D8\u05E1\u05D0\u05E4"
+    "aria-label": dict.contact.waAria,
+    title: dict.contact.waTitle
   }, /*#__PURE__*/React.createElement("svg", {
     viewBox: "0 0 32 32",
     width: "28",
@@ -1299,23 +1505,23 @@ function App() {
     "aria-hidden": "true"
   }), /*#__PURE__*/React.createElement("span", {
     className: "whatsapp-float-label"
-  }, "\u05E6'\u05D0\u05D8 \u05D1\u05D5\u05D5\u05D0\u05D8\u05E1\u05D0\u05E4")), /*#__PURE__*/React.createElement(TweaksPanel, {
+  }, dict.wa.float)), /*#__PURE__*/React.createElement(TweaksPanel, {
     title: "\u05D4\u05EA\u05D0\u05DE\u05D4 \u05D0\u05D9\u05E9\u05D9\u05EA"
   }, /*#__PURE__*/React.createElement(TweakSection, {
     label: "\u05E2\u05D9\u05E6\u05D5\u05D1"
   }, /*#__PURE__*/React.createElement(TweakColor, {
     label: "\u05E4\u05DC\u05D8\u05D4",
-    value: t.palette,
+    value: tw.palette,
     options: PALETTES,
     onChange: v => setTweak('palette', v)
   }), /*#__PURE__*/React.createElement(TweakRadio, {
     label: "\u05E4\u05D5\u05E0\u05D8 \u05DB\u05D5\u05EA\u05E8\u05EA",
-    value: t.displayFont,
+    value: tw.displayFont,
     options: DISPLAY_FONTS,
     onChange: v => setTweak('displayFont', v)
   }), /*#__PURE__*/React.createElement(TweakRadio, {
     label: "\u05E4\u05E8\u05D9\u05E1\u05EA \u05D4\u05D9\u05E8\u05D5",
-    value: t.heroLayout,
+    value: tw.heroLayout,
     options: [{
       value: 'centered',
       label: 'מרכזית'
@@ -1328,18 +1534,18 @@ function App() {
     label: "\u05D0\u05D5\u05D5\u05D9\u05E8\u05D4"
   }, /*#__PURE__*/React.createElement(TweakSlider, {
     label: "\u05E6\u05E4\u05D9\u05E4\u05D5\u05EA \u05DB\u05D5\u05DB\u05D1\u05D9\u05DD",
-    value: t.starDensity,
+    value: tw.starDensity,
     min: 20,
     max: 160,
     step: 5,
     onChange: v => setTweak('starDensity', v)
   }), /*#__PURE__*/React.createElement(TweakToggle, {
     label: "\u05D9\u05E8\u05D7",
-    value: t.showMoon,
+    value: tw.showMoon,
     onChange: v => setTweak('showMoon', v)
   }), /*#__PURE__*/React.createElement(TweakToggle, {
     label: "\u05DB\u05D5\u05DB\u05D1\u05D9\u05DD \u05E0\u05D5\u05E6\u05E6\u05D9\u05DD",
-    value: t.animatedStars,
+    value: tw.animatedStars,
     onChange: v => setTweak('animatedStars', v)
   })), /*#__PURE__*/React.createElement(TweakSection, {
     label: "\u05E4\u05E8\u05D8\u05D9 \u05D4\u05DE\u05E7\u05E8\u05D0/\u05D4"
@@ -1357,7 +1563,7 @@ function App() {
       ...details,
       phone: v
     })
-  }))));
+  })))));
 }
 
 // ── tiny color helpers ───────────────────────────────────────────────────────

@@ -11,7 +11,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { transformAsync } from '@babel/core';
 import presetReact from '@babel/preset-react';
 
-const FILES = ['tweaks-panel.jsx', 'card-deck.jsx', 'app.jsx'];
+const FILES = ['tweaks-panel.jsx', 'i18n.jsx', 'card-deck.jsx', 'app.jsx'];
 
 for (const file of FILES) {
   const src = await readFile(new URL(file, import.meta.url), 'utf8');

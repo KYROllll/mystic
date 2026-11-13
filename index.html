@@ -9,6 +9,26 @@
   <link rel="canonical" href="https://kyrollll.github.io/mystic/" />
   <meta name="theme-color" content="#0d0a1a" />
 
+  <!-- Apply the saved/negotiated language before first paint so the document
+       direction, lang attribute and title never flash the wrong way. -->
+  <script>
+    (function () {
+      var map = {
+        he: ['rtl', 'אור ודרך · ייעוץ רוחני, קלפי טארוט וניקוי רוחני'],
+        ru: ['ltr', 'Свет и путь · эзотерические консультации, Таро и духовная чистка'],
+        en: ['ltr', 'Light & Path · esoteric consultations, tarot and spiritual cleansing'],
+        tr: ['ltr', 'Işık ve Yol · ezoterik danışmanlık, tarot ve ruhsal arınma']
+      };
+      var lang = 'he';
+      try { lang = localStorage.getItem('or-vaderech-lang') || 'he'; } catch (e) { /* storage unavailable */ }
+      if (!map[lang]) lang = 'he';
+      document.documentElement.setAttribute('lang', lang);
+      document.documentElement.setAttribute('dir', map[lang][0]);
+      document.documentElement.setAttribute('data-lang', lang);
+      document.title = map[lang][1];
+    })();
+  </script>
+
   <!-- Open Graph / social -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="אור ודרך · Свет и путь" />
@@ -155,6 +175,7 @@
   <!-- Precompiled from the .jsx sources by `npm run build`.
        Plain scripts (not modules) so the page also works when opened directly from disk. -->
   <script src="tweaks-panel.js"></script>
+  <script src="i18n.js"></script>
   <script src="card-deck.js"></script>
   <script src="app.js"></script>
 </body>

@@ -4,15 +4,7 @@
 
 const { useState, useEffect, useMemo, useRef } = React;
 
-// ── Brand ───────────────────────────────────────────────────────────────────
-const BRAND = {
-  he: 'אור ודרך',
-  ru: 'Свет и путь',
-  focus: 'ייעוץ רוחני · קלפי טארוט · ניקוי רוחני',
-  focusRu: 'Эзотерические консультации и духовные практики',
-  langs: 'עברית · רוסית · קווקזית',
-  langsRu: 'на русском и иврите',
-};
+// All copy lives in i18n.jsx; the brand mark itself (אור ודרך) is constant.
 
 // ── Tweak defaults (persisted by the host on disk) ───────────────────────────
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
@@ -108,6 +100,130 @@ function EyeGlyph() {
   );
 }
 
+// ── Language switcher ────────────────────────────────────────────────────────
+// Clean SVG flags (no image files, no emoji font dependency).
+function Flag({ code }) {
+  const raw = React.useId().replace(/[^a-zA-Z0-9_-]/g, '');
+  const clip = `flag-${raw}`;
+  const stars = [
+    [2.2, 1.8], [5.4, 1.8], [8.6, 1.8],
+    [3.8, 4.0], [7.0, 4.0],
+  ];
+  return (
+    <svg className="lang-flag" viewBox="0 0 20 14" width="20" height="14"
+         aria-hidden="true" focusable="false">
+      <defs>
+        <clipPath id={clip}><rect width="20" height="14" rx="2.4" /></clipPath>
+      </defs>
+      <g clipPath={`url(#${clip})`}>
+        {code === 'he' && (
+          <>
+            <rect width="20" height="14" fill="#fff" />
+            <rect y="1.5" width="20" height="1.7" fill="#0038b8" />
+            <rect y="10.8" width="20" height="1.7" fill="#0038b8" />
+            <path d="M10 4.1 L12.6 8.7 L7.4 8.7 Z" fill="none" stroke="#0038b8" strokeWidth="0.55" />
+            <path d="M10 9.3 L7.4 4.7 L12.6 4.7 Z" fill="none" stroke="#0038b8" strokeWidth="0.55" />
+          </>
+        )}
+        {code === 'ru' && (
+          <>
+            <rect width="20" height="4.67" fill="#fff" />
+            <rect y="4.67" width="20" height="4.67" fill="#0039a6" />
+            <rect y="9.34" width="20" height="4.66" fill="#d52b1e" />
+          </>
+        )}
+        {code === 'en' && (
+          <>
+            <rect width="20" height="14" fill="#fff" />
+            {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+              <rect key={i} y={i * 2} width="20" height="1" fill="#b31942" />
+            ))}
+            <rect width="9" height="7.6" fill="#0a3161" />
+            {stars.map(([cx, cy], i) => (
+              <circle key={i} cx={cx} cy={cy} r="0.42" fill="#fff" />
+            ))}
+          </>
+        )}
+        {code === 'tr' && (
+          <>
+            <rect width="20" height="14" fill="#e30a17" />
+            <circle cx="7.7" cy="7" r="3.1" fill="#fff" />
+            <circle cx="8.9" cy="7" r="2.5" fill="#e30a17" />
+            <path d="M13.1 5.15 l0.55 1.68 1.77 0.01 -1.43 1.05 0.54 1.68 -1.43-1.04 -1.43 1.04 0.54-1.68 -1.43-1.05 1.77-0.01 Z"
+                  fill="#fff" />
+          </>
+        )}
+      </g>
+      <rect width="20" height="14" rx="2.4" fill="none"
+            stroke="rgba(240,230,210,0.3)" strokeWidth="0.6" />
+    </svg>
+  );
+}
+
+function LanguageSwitcher() {
+  const { lang, setLang, meta } = useI18n();
+  const [open, setOpen] = useState(false);
+  const boxRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const onDocDown = (e) => {
+      if (boxRef.current && !boxRef.current.contains(e.target)) setOpen(false);
+    };
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('mousedown', onDocDown);
+    document.addEventListener('touchstart', onDocDown, { passive: true });
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDocDown);
+      document.removeEventListener('touchstart', onDocDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  const choose = (code) => { setLang(code); setOpen(false); };
+
+  return (
+    <div className={`lang ${open ? 'is-open' : ''}`} ref={boxRef}>
+      <button
+        type="button"
+        className="lang-btn"
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label={`${meta.langLabel}: ${meta.name}`}
+      >
+        <Flag code={lang} />
+        <span className="lang-btn-name">{meta.name}</span>
+        <svg className="lang-caret" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true">
+          <path d="M1 1 L5 5 L9 1" fill="none" stroke="currentColor" strokeWidth="1" />
+        </svg>
+      </button>
+
+      <ul className="lang-menu" role="listbox" aria-label={meta.langLabel}>
+        {LANG_ORDER.map((code) => (
+          <li key={code}>
+            <button
+              type="button"
+              role="option"
+              aria-selected={code === lang}
+              className={`lang-option ${code === lang ? 'is-active' : ''}`}
+              onClick={() => choose(code)}
+            >
+              <Flag code={code} />
+              <span className="lang-option-name" dir={LANGS[code].dir}>{LANGS[code].name}</span>
+              <span className="lang-option-en">{LANGS[code].english}</span>
+              <svg className="lang-tick" viewBox="0 0 12 10" width="11" height="9" aria-hidden="true">
+                <path d="M1 5 L4.4 8.4 L11 1.6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+              </svg>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 // ── Starfield background ─────────────────────────────────────────────────────
 function StarField({ density, animated, showMoon }) {
   const stars = useMemo(() => {
@@ -178,12 +294,13 @@ function Nav() {
     };
   }, [menuOpen]);
 
+  const { t, lang } = useI18n();
   const items = [
-    { id: 'about',    label: 'אודות' },
-    { id: 'services', label: 'שירותים' },
-    { id: 'oracle',   label: 'קלף היום' },
-    { id: 'voices',   label: 'מילות לקוחות' },
-    { id: 'contact',  label: 'יצירת קשר' },
+    { id: 'about',    label: t.nav.about },
+    { id: 'services', label: t.nav.services },
+    { id: 'oracle',   label: t.nav.oracle },
+    { id: 'voices',   label: t.nav.voices },
+    { id: 'contact',  label: t.nav.contact },
   ];
   const close = () => setMenuOpen(false);
 
@@ -191,10 +308,11 @@ function Nav() {
     <nav className={`nav ${scrolled || menuOpen ? 'nav-scrolled' : ''}`}>
       <div className="nav-inner">
         <a href="#top" className="nav-brand display" onClick={close}
-           aria-label={`${BRAND.he} — ${BRAND.ru}`}>
+           aria-label={`${t.brand.name} — ${t.brand.sub}`}>
           <SmallStar size={14} opacity={0.85} />
-          <span className="brand-he">{BRAND.he}</span>
-          <span className="brand-ru latin" dir="ltr">{BRAND.ru}</span>
+          <span className="brand-he" dir="rtl">{t.brand.name}</span>
+          <span className={`brand-ru ${lang === 'he' ? 'latin' : 'brand-sub'} `}
+                dir={lang === 'he' ? 'ltr' : LANGS[lang].dir}>{t.brand.sub}</span>
         </a>
         <ul className="nav-links">
           {items.map((it) => (
@@ -202,12 +320,13 @@ function Nav() {
           ))}
         </ul>
         <a href="#contact" className="nav-cta">
-          <span>תיאום ייעוץ</span>
+          <span>{t.nav.cta}</span>
         </a>
+        <LanguageSwitcher />
         <button
           type="button"
           className={`nav-burger ${menuOpen ? 'is-open' : ''}`}
-          aria-label={menuOpen ? 'סגירת תפריט' : 'פתיחת תפריט'}
+          aria-label={menuOpen ? t.nav.menuClose : t.nav.menuOpen}
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           onClick={() => setMenuOpen((o) => !o)}
@@ -225,61 +344,64 @@ function Nav() {
           ))}
         </ul>
         <a href="#contact" className="btn btn-primary btn-block" onClick={close}>
-          קביעת ייעוץ אישי
+          {t.nav.book}
         </a>
-        <p className="nav-mobile-fine latin" dir="ltr">{BRAND.focusRu}</p>
+        <p className={`nav-mobile-fine ${lang === 'he' ? 'latin' : 'brand-sub'}`}
+           dir={lang === 'he' ? 'ltr' : LANGS[lang].dir}>{t.brand.focusLong}</p>
       </div>
     </nav>
   );
 }
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
-function Hero({ tagline, layout }) {
+function Hero({ layout }) {
+  const { t, lang, dir } = useI18n();
+  const latin = lang !== 'he';
   return (
     <header id="top" className={`hero hero-${layout}`}>
       <div className="hero-content">
         <div className="hero-eyebrow reveal">
           <SmallStar size={10} opacity={0.7} />
-          <span className="latin" dir="ltr">{BRAND.focusRu}</span>
+          <span className={latin ? 'latin' : ''} dir={dir}>{t.hero.eyebrow}</span>
           <SmallStar size={10} opacity={0.7} />
         </div>
 
         <h1 className="hero-title display reveal reveal-delay-1">
-          <span className="hero-title-line latin" dir="ltr">{BRAND.ru}</span>
-          <span className="hero-title-emph">{BRAND.he}</span>
+          <span className="hero-title-line latin" dir="ltr">{t.hero.titleSub}</span>
+          <span className="hero-title-emph" dir="rtl">{t.brand.name}</span>
         </h1>
 
-        <p className="hero-name display reveal reveal-delay-2">{BRAND.focus}</p>
+        <p className="hero-name display reveal reveal-delay-2" dir={dir}>{t.hero.name}</p>
 
         <div className="hero-divider reveal reveal-delay-2">
           <Divider />
         </div>
 
-        <p className="hero-sub reveal reveal-delay-3">{tagline}</p>
+        <p className="hero-sub reveal reveal-delay-3" dir={dir}>{t.hero.tagline}</p>
 
         <div className="hero-cta reveal reveal-delay-4">
           <a href="#contact" className="btn btn-primary">
-            <span>קביעת ייעוץ אישי</span>
+            <span>{t.hero.ctaPrimary}</span>
             <svg viewBox="0 0 14 10" width="14" height="10" aria-hidden="true"
                  style={{ marginInlineStart: 8 }}>
               <path d="M 14 5 L 8 0 M 14 5 L 8 10 M 14 5 L 0 5" fill="none"
                     stroke="currentColor" strokeWidth="1" />
             </svg>
           </a>
-          <a href="#oracle" className="btn btn-ghost">שליפת קלף היום</a>
+          <a href="#oracle" className="btn btn-ghost">{t.hero.ctaSecondary}</a>
         </div>
 
-        <div className="hero-meta reveal reveal-delay-4">
-          <span>28 שנות ניסיון</span>
+        <div className="hero-meta reveal reveal-delay-4" dir={dir}>
+          <span>{t.hero.meta[0]}</span>
           <i className="dot" />
-          <span>{BRAND.langs}</span>
+          <span>{t.hero.meta[1]}</span>
           <i className="dot" />
-          <span>מענה אישי ודיסקרטי</span>
+          <span>{t.hero.meta[2]}</span>
         </div>
       </div>
 
-      <a href="#about" className="scroll-hint" aria-label="גלילה">
-        <span>גלגלי מטה</span>
+      <a href="#about" className="scroll-hint" aria-label={t.hero.scroll}>
+        <span>{t.hero.scroll}</span>
         <svg viewBox="0 0 10 16" width="10" height="16">
           <path d="M5 0 L5 14 M1 10 L5 14 L9 10" fill="none"
                 stroke="currentColor" strokeWidth="1" />
@@ -434,11 +556,12 @@ function MysticOrb() {
 
 // ── About ────────────────────────────────────────────────────────────────────
 function About({ name }) {
+  const { t, lang } = useI18n();
   return (
     <section id="about" className="section section-about">
       <div className="section-head">
         <div className="section-eyebrow latin">— I —</div>
-        <h2 className="section-title display">אודותיי</h2>
+        <h2 className="section-title display">{t.about.title}</h2>
         <Divider />
       </div>
       <div className="about-grid">
@@ -449,39 +572,23 @@ function About({ name }) {
           </div>
           <div className="portrait-caption display">
             <span>{name}</span>
-            <span className="latin caption-sub" dir="ltr">— Tarot &amp; Spiritual Guidance —</span>
+            <span className="latin caption-sub" dir="ltr">{t.about.caption}</span>
           </div>
         </div>
         <div className="about-text">
-          <p className="lede">
-            אור ודרך — ייעוץ רוחני, קלפי טארוט וניקוי רוחני.
-            כבר 28 שנה אני מלווה אנשים במסע אל תוך עצמם, בדרך של אור, בהירות ורוגע.
-          </p>
-          <p>
-            אני מעניקה ייעוץ רוחני אישי, קריאה בקלפי טארוט, ניקוי רוחני והגנה מעין הרע,
-            טיפולי רייקי לאיזון אנרגטי, והכוונה רוחנית ועסקית לפתיחת עסק —
-            בגישה מחזקת, בונה ותומכת שמשיגה תוצאות.
-          </p>
-          <p>
-            המפגשים מתקיימים במרחב בטוח ואינטימי — בפגישה אישית או בשיחה טלפונית.
-            השירות ניתן באופן מקצועי בשפות: עברית, רוסית וקווקזית.
-          </p>
-          <p className="about-ru latin" dir="ltr">
-            Эзотерические консультации и духовные практики — на русском и иврите.
+          <p className="lede">{t.about.lede}</p>
+          <p>{t.about.p1}</p>
+          <p>{t.about.p2}</p>
+          <p className={`about-ru ${lang !== 'he' ? 'latin' : ''}`} dir={lang === 'he' ? 'rtl' : 'ltr'}>
+            {t.about.extra}
           </p>
           <ul className="credentials">
-            <li>
-              <span className="cred-num display">28</span>
-              <span className="cred-lbl">שנות ניסיון והצלחה</span>
-            </li>
-            <li>
-              <span className="cred-num display">3</span>
-              <span className="cred-lbl">שפות: עברית, רוסית וקווקזית</span>
-            </li>
-            <li>
-              <span className="cred-num display">∞</span>
-              <span className="cred-lbl">גישה מחזקת ותומכת</span>
-            </li>
+            {t.about.creds.map(([num, label], i) => (
+              <li key={i}>
+                <span className="cred-num display">{num}</span>
+                <span className="cred-lbl">{label}</span>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -490,57 +597,8 @@ function About({ name }) {
 }
 
 // ── Services ─────────────────────────────────────────────────────────────────
-const SERVICES = [
-  {
-    icon: 'mystic',
-    tag: 'קריאה וראייה',
-    title: 'קלפי טארוט',
-    duration: 'קריאה אישית',
-    subtitle: 'קלפים · תמונה · כף יד וקפה',
-    price: 'מחיר בפרטי',
-    topicValue: 'קלפי טארוט — קריאה אישית בקלפים',
-    desc: 'קריאה בקלפי טארוט, פריסת קלפים עם תמונה, קריאת כף יד וקפה. חיבור מעמיק לקבלת בהירות, מענה לשאלות הלב והכוונה מדויקת.',
-    features: [
-      'קריאה בקלפי טארוט',
-      'פריסת קלפים עם תמונה',
-      'קריאת כף היד וקפה',
-      'ראייה אינטואיטיבית ומענה מעמיק',
-    ],
-  },
-  {
-    icon: 'hamsa',
-    tag: 'טיהור והגנה',
-    title: 'ניקוי רוחני והגנה',
-    duration: 'טיהור וברכה',
-    subtitle: 'מים קדושים · עין הרע · רייקי',
-    price: 'מחיר בפרטי',
-    topicValue: 'ניקוי רוחני והגנה — מים קדושים, עין הרע ורייקי',
-    desc: 'ניקוי רוחני במים קדושים, הסרת עין הרע וכישופים, ברכה וליווי לפריון וילודה, וטיפולי רייקי לשחרור חסימות ואיזון אנרגטי עמוק.',
-    features: [
-      'ניקוי רוחני ופתיחה במים קדושים',
-      'הגנה והסרת עין הרע וכישופים',
-      'ברכה וליווי לפריון וילודה',
-      'טיפולי רייקי ואיזון אנרגטי',
-    ],
-    featured: true,
-  },
-  {
-    icon: 'star',
-    tag: '28 שנות ניסיון',
-    title: 'ייעוץ רוחני ועסקי',
-    duration: 'ייעוץ ממוקד תוצאות',
-    subtitle: 'עברית · רוסית · קווקזית',
-    price: 'מחיר בפרטי',
-    topicValue: 'ייעוץ רוחני ועסקי (28 שנות ניסיון)',
-    desc: 'שיחת ייעוץ מקצועית ורוחנית לפתיחת עסק, ליווי אישי והכוונה בדרך — עם 28 שנות ניסיון. גישה מחזקת, בונה ותומכת, שמשיגה תוצאות.',
-    features: [
-      '28 שנות ניסיון בליווי ובהצלחה',
-      'שיחת ייעוץ מקצועית ורוחנית',
-      'גישה מחזקת, בונה ותומכת שמשיגה תוצאות',
-      'דוברת עברית, רוסית וקווקזית',
-    ],
-  },
-];
+// Icons are positional; all copy comes from the active language dictionary.
+const SERVICE_ICONS = ['mystic', 'hamsa', 'star'];
 
 function ServiceIcon({ type }) {
   if (type === 'mystic' || type === 'crescent') return (
@@ -576,22 +634,22 @@ function ServiceIcon({ type }) {
 }
 
 function Services({ onSelectService }) {
+  const { t, lang } = useI18n();
   return (
     <section id="services" className="section section-services">
       <div className="section-head">
         <div className="section-eyebrow latin">— II —</div>
-        <h2 className="section-title display">השירותים שלי</h2>
+        <h2 className="section-title display">{t.services.title}</h2>
         <Divider />
-        <p className="section-sub">
-          ייעוץ רוחני, קלפי טארוט וניקוי רוחני — בהתאמה אישית, בעברית, רוסית וקווקזית.
-        </p>
-        <p className="section-sub-ru latin" dir="ltr">{BRAND.focusRu}</p>
+        <p className="section-sub">{t.services.sub}</p>
+        <p className={`section-sub-ru ${lang !== 'he' ? 'latin' : ''}`}
+           dir={lang === 'he' ? 'ltr' : undefined}>{t.services.subExtra}</p>
       </div>
       <div className="services-grid">
-        {SERVICES.map((s, i) => (
-          <article key={i} className={`service-card ${s.featured ? 'service-featured' : ''}`}>
+        {t.services.items.map((s, i) => (
+          <article key={i} className={`service-card ${i === 1 ? 'service-featured' : ''}`}>
             {s.tag && <div className="service-tag display">{s.tag}</div>}
-            <div className="service-icon"><ServiceIcon type={s.icon} /></div>
+            <div className="service-icon"><ServiceIcon type={SERVICE_ICONS[i]} /></div>
             <h3 className="service-title display">{s.title}</h3>
             <div className="service-meta">
               <span>{s.duration}</span>
@@ -626,24 +684,23 @@ function Services({ onSelectService }) {
               onClick={(e) => {
                 if (onSelectService) {
                   e.preventDefault();
-                  onSelectService(s.topicValue);
+                  onSelectService(i);
                 }
               }}
             >
-              לתיאום מפגש ←
+              {s.cta}
             </a>
           </article>
         ))}
       </div>
-      <p className="services-note">
-        * מחירים בפרטי · ניתן לתאם פגישה אישית או שיחת ייעוץ טלפונית · השירות ניתן בעברית, רוסית וקווקזית
-      </p>
+      <p className="services-note">{t.services.note}</p>
     </section>
   );
 }
 
 // ── Oracle: Card of the Day ──────────────────────────────────────────────────
 function Oracle() {
+  const { t, lang } = useI18n();
   // Three face-down cards; user picks one, it flips
   const [picked, setPicked]   = useState(null);  // index 0/1/2
   const [card, setCard]       = useState(null);  // TAROT_DECK entry
@@ -681,11 +738,9 @@ function Oracle() {
     <section id="oracle" className="section section-oracle">
       <div className="section-head">
         <div className="section-eyebrow latin">— III —</div>
-        <h2 className="section-title display">קלף היום</h2>
+        <h2 className="section-title display">{t.oracle.title}</h2>
         <Divider />
-        <p className="section-sub">
-          קחי רגע. נשמי עמוק. חשבי על שאלה אחת — ובחרי קלף.
-        </p>
+        <p className="section-sub">{t.oracle.sub}</p>
       </div>
 
       <div className="oracle-stage">
@@ -699,7 +754,7 @@ function Oracle() {
                 className={`tarot-card ${isPicked ? 'card-picked' : ''} ${isFaded ? 'card-faded' : ''} ${flipping && isPicked ? 'card-flipping' : ''}`}
                 onClick={() => drawCard(i)}
                 disabled={picked !== null}
-                aria-label={`קלף ${['ראשון', 'שני', 'שלישי'][i]} — שליפת קלף היום`}
+                aria-label={t.oracle.drawAria(t.oracle.cardNames[i])}
                 aria-pressed={isPicked}
               >
                 <div className="card-inner">
@@ -707,12 +762,12 @@ function Oracle() {
                     <CardBackArt />
                   </div>
                   <div className="card-face card-face-front">
-                    {isPicked && card && <CardFaceArt num={card.num} name={card.name} />}
+                    {isPicked && card && <CardFaceArt num={card.num} name={card.name[lang]} />}
                   </div>
                 </div>
                 {!isPicked && (
                   <div className="card-hint display">
-                    <span>קלף {['ראשון', 'שני', 'שלישי'][i]}</span>
+                    <span>{t.oracle.cardNames[i]}</span>
                   </div>
                 )}
               </button>
@@ -723,16 +778,16 @@ function Oracle() {
         <div className="oracle-live" aria-live="polite" aria-atomic="true">
           {card && !flipping && (
             <div className="oracle-reveal reveal">
-              <div className="reveal-eyebrow latin">— Today's Card —</div>
+              <div className="reveal-eyebrow latin">{t.oracle.eyebrow}</div>
               <h3 className="reveal-title display">
                 <span className="latin reveal-num">{card.num}</span>
                 <span> · </span>
-                <span>{card.name}</span>
+                <span>{card.name[lang]}</span>
               </h3>
-              <div className="reveal-keys">{card.keywords}</div>
-              <p className="reveal-text">{card.reading}</p>
+              <div className="reveal-keys">{card.keywords[lang]}</div>
+              <p className="reveal-text">{card.reading[lang]}</p>
               <button onClick={reset} className="btn btn-ghost btn-sm">
-                שליפת קלף נוסף ↻
+                {t.oracle.again}
               </button>
             </div>
           )}
@@ -740,7 +795,7 @@ function Oracle() {
           {!card && (
             <div className="oracle-prompt">
               <EyeGlyph />
-              <p>הקלפים מחכים. סמכי על הלב שלך — הוא יודע.</p>
+              <p>{t.oracle.prompt}</p>
             </div>
           )}
         </div>
@@ -749,62 +804,45 @@ function Oracle() {
   );
 }
 
-// ── Testimonials ─────────────────────────────────────────────────────────────
-const TESTIMONIALS = [
-  {
-    text: 'הגעתי במצב לב סוער ויצאתי עם בהירות שכבר חודשים חיפשתי. הקריאה הייתה מדויקת, רכה, ובדיוק במקום הנכון. אני חוזרת.',
-    name: 'דנה ק.',
-    city: 'תל אביב',
-  },
-  {
-    text: 'הרגשתי שמישהי באמת רואה אותי — לא מנחשת. הקלפים פתחו שיחה שלא ידעתי שאני צריכה. תודה גדולה.',
-    name: 'מיכל ב.',
-    city: 'חיפה',
-  },
-  {
-    text: 'באתי סקפטי לחלוטין. יצאתי עם תחושת ביטחון שלא הייתה לי כבר שנים. מעבר לקלפים, יש פה אדם שמקשיב לעומק.',
-    name: 'יואב ש.',
-    city: 'רעננה',
-  },
-];
-
 function Testimonials() {
+  const { t, lang, dir } = useI18n();
+  const items = t.voices.items;
   const [i, setI] = useState(0);
-  const next = () => setI((p) => (p + 1) % TESTIMONIALS.length);
-  const prev = () => setI((p) => (p - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
-  const t = TESTIMONIALS[i];
+  const next = () => setI((p) => (p + 1) % items.length);
+  const prev = () => setI((p) => (p - 1 + items.length) % items.length);
+  const item = items[i % items.length];
 
   // Auto-advance
   useEffect(() => {
-    const id = setInterval(() => setI((p) => (p + 1) % TESTIMONIALS.length), 8000);
+    const id = setInterval(() => setI((p) => (p + 1) % items.length), 8000);
     return () => clearInterval(id);
-  }, []);
+  }, [items.length]);
 
   return (
     <section id="voices" className="section section-voices">
       <div className="section-head">
         <div className="section-eyebrow latin">— IV —</div>
-        <h2 className="section-title display">מילים שנשארות איתי</h2>
+        <h2 className="section-title display">{t.voices.title}</h2>
         <Divider />
       </div>
       <div className="voices-stage">
-        <div className="quote-mark display" aria-hidden="true">״</div>
-        <blockquote key={i} className="voice-quote reveal">
-          <p className="voice-text">{t.text}</p>
+        <div className="quote-mark display" aria-hidden="true">{lang === 'he' ? '״' : '“'}</div>
+        <blockquote key={`${i}-${item.name}`} className="voice-quote reveal">
+          <p className="voice-text">{item.text}</p>
           <footer className="voice-cite">
-            <span className="voice-name display">{t.name}</span>
-            <span className="voice-city">{t.city}</span>
+            <span className="voice-name display">{item.name}</span>
+            <span className="voice-city">{item.city}</span>
           </footer>
         </blockquote>
         <div className="voice-controls">
-          <button onClick={prev} className="voice-arrow" aria-label="העדות הקודמת">›</button>
+          <button onClick={prev} className="voice-arrow" aria-label={t.voices.prev}>{dir === 'rtl' ? '›' : '‹'}</button>
           <div className="voice-dots">
-            {TESTIMONIALS.map((_, k) => (
+            {items.map((_, k) => (
               <button key={k} className={`dot-btn ${k === i ? 'on' : ''}`}
-                      onClick={() => setI(k)} aria-label={`עדות ${k + 1}`} />
+                      onClick={() => setI(k)} aria-label={t.voices.dot(k + 1)} />
             ))}
           </div>
-          <button onClick={next} className="voice-arrow" aria-label="העדות הבאה">‹</button>
+          <button onClick={next} className="voice-arrow" aria-label={t.voices.next}>{dir === 'rtl' ? '‹' : '›'}</button>
         </div>
       </div>
     </section>
@@ -812,33 +850,34 @@ function Testimonials() {
 }
 
 // ── Contact ──────────────────────────────────────────────────────────────────
-function Contact({ name, phone, selectedTopic }) {
+function Contact({ phone, topicIndex }) {
+  const { t, dir } = useI18n();
+  // Topic options follow the language, so the select stores the option index
+  const options = [...t.services.items.map((s) => s.topic), t.contact.topicOther];
   const [form, setForm] = useState({
     name: '',
     phone: '',
-    topic: selectedTopic || 'קלפי טארוט — קריאה אישית בקלפים',
+    topic: String(topicIndex || 0),
     message: '',
   });
 
   // Automatically sync form topic when user selects a package from services
   useEffect(() => {
-    if (selectedTopic) {
-      setForm((prev) => ({ ...prev, topic: selectedTopic }));
-    }
-  }, [selectedTopic]);
+    setForm((prev) => ({ ...prev, topic: String(topicIndex || 0) }));
+  }, [topicIndex]);
   const [sent, setSent] = useState(false);
   const submit = (e) => {
     e.preventDefault();
     if (!form.name || !form.phone) return;
 
     const messageLines = [
-      `שלום מרים, פנייה חדשה מאתר ${BRAND.he}:`,
-      `• שם מלא: ${form.name}`,
-      `• טלפון: ${form.phone}`,
-      `• שירות מבוקש: ${form.topic}`,
+      t.contact.waIntro,
+      `${t.contact.waName}${form.name}`,
+      `${t.contact.waPhone}${form.phone}`,
+      `${t.contact.waService}${options[Number(form.topic)] || form.topic}`,
     ];
     if (form.message && form.message.trim()) {
-      messageLines.push(`• פרטים / שאלות: ${form.message.trim()}`);
+      messageLines.push(`${t.contact.waDetails}${form.message.trim()}`);
     }
 
     const fullMessage = messageLines.join('\n');
@@ -854,11 +893,9 @@ function Contact({ name, phone, selectedTopic }) {
     <section id="contact" className="section section-contact">
       <div className="section-head">
         <div className="section-eyebrow latin">— V —</div>
-        <h2 className="section-title display">תיאום ייעוץ</h2>
+        <h2 className="section-title display">{t.contact.title}</h2>
         <Divider />
-        <p className="section-sub">
-          השאירי פרטים ואחזור אלייך בתוך 24 שעות. אם זה דחוף — אפשר גם בטלפון.
-        </p>
+        <p className="section-sub">{t.contact.sub}</p>
       </div>
 
       <div className="contact-grid">
@@ -866,32 +903,32 @@ function Contact({ name, phone, selectedTopic }) {
           <div className="contact-card">
             <div className="contact-card-glow" />
             <div className="contact-row">
-              <div className="contact-label latin">— Telephone —</div>
+              <div className="contact-label latin">{t.contact.telephone}</div>
               {phone ? (
                 <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="contact-value display">
                   {phone}
                 </a>
               ) : (
-                <span className="contact-value display contact-pending">— יתעדכן בקרוב —</span>
+                <span className="contact-value display contact-pending">{t.contact.pending}</span>
               )}
-              <div className="contact-hint">זמינה ימים א׳–ה׳ · 10:00–21:00</div>
+              <div className="contact-hint">{t.contact.hours}</div>
             </div>
 
             {phone && (
               <a href={`https://wa.me/${phone.replace(/[^\d]/g, '').replace(/^0/, '972')}`}
                  target="_blank" rel="noopener"
                  className="whatsapp-cta"
-                 aria-label="פתיחת צ'אט בוואטסאפ">
+                 aria-label={t.contact.waAria}>
                 <span className="whatsapp-icon" aria-hidden="true">
                   <svg viewBox="0 0 32 32" width="22" height="22">
                     <path fill="currentColor" d="M16 3C9.4 3 4 8.4 4 15c0 2.4.7 4.6 1.9 6.5L4 29l7.7-2c1.8 1 3.9 1.5 6.3 1.5 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 22c-2 0-3.9-.5-5.5-1.5l-.4-.2-4.6 1.2 1.2-4.5-.3-.4C5.4 18 5 16.5 5 15c0-6.1 4.9-11 11-11s11 4.9 11 11-4.9 11-11 11zm6.1-8.2c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-2-1.8-2.3-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.7.4-.3.3-1 1-1 2.5s1 2.9 1.1 3.1c.1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4 0-.1-.3-.2-.6-.4z" />
                   </svg>
                 </span>
                 <span className="whatsapp-text">
-                  <span className="whatsapp-title display">שליחת הודעה בוואטסאפ</span>
-                  <span className="whatsapp-sub">מענה מהיר · ישירות לצ'אט</span>
+                  <span className="whatsapp-title display">{t.contact.waTitle}</span>
+                  <span className="whatsapp-sub">{t.contact.waSub}</span>
                 </span>
-                <span className="whatsapp-arrow" aria-hidden="true">←</span>
+                <span className="whatsapp-arrow" aria-hidden="true">{dir === 'rtl' ? '←' : '→'}</span>
               </a>
             )}
           </div>
@@ -899,44 +936,41 @@ function Contact({ name, phone, selectedTopic }) {
 
         <form className="contact-form" onSubmit={submit}>
           <label className="form-field">
-            <span className="form-label">שם מלא</span>
+            <span className="form-label">{t.contact.name}</span>
             <input
               type="text" required
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="שמך כאן" />
+              placeholder={t.contact.namePh} />
           </label>
           <label className="form-field">
-            <span className="form-label">טלפון</span>
+            <span className="form-label">{t.contact.phone}</span>
             <input
-              type="tel" required
+              type="tel" required dir="ltr"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
               placeholder="053-964-6269" />
           </label>
           <label className="form-field">
-            <span className="form-label">סוג השירות</span>
+            <span className="form-label">{t.contact.topic}</span>
             <select value={form.topic} onChange={(e) => setForm({ ...form, topic: e.target.value })}>
-              <option>קלפי טארוט — קריאה אישית בקלפים</option>
-              <option>ניקוי רוחני והגנה — מים קדושים, עין הרע ורייקי</option>
-              <option>ייעוץ רוחני ועסקי (28 שנות ניסיון)</option>
-              <option>אחר — אסביר בהודעה</option>
+              {options.map((opt, k) => (
+                <option key={k} value={String(k)}>{opt}</option>
+              ))}
             </select>
           </label>
           <label className="form-field">
-            <span className="form-label">משהו שתרצי לשתף לפני הפגישה?</span>
+            <span className="form-label">{t.contact.message}</span>
             <textarea
               rows="4"
               value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
-              placeholder="שאלה ראשונית, העדפת שעות, או כל דבר שירגיש לך נכון..." />
+              placeholder={t.contact.messagePh} />
           </label>
           <button type="submit" className="btn btn-primary btn-block">
-            {sent ? '✓ פותח שיחת WhatsApp לשליחה...' : 'שליחה ישירה לוואטסאפ'}
+            {sent ? t.contact.submitting : t.contact.submit}
           </button>
-          <p className="form-fine">
-            בלחיצה על שליחה תיפתח שיחת WhatsApp עם כל הפרטים שמילאת ישירות לטלפון של מרים.
-          </p>
+          <p className="form-fine">{t.contact.fine}</p>
         </form>
       </div>
     </section>
@@ -945,24 +979,24 @@ function Contact({ name, phone, selectedTopic }) {
 
 // ── Footer ───────────────────────────────────────────────────────────────────
 function Footer() {
+  const { t, lang } = useI18n();
+  const latin = lang !== 'he';
   return (
     <footer className="footer">
       <div className="footer-inner">
-        <div className="footer-brand display">
+        <div className="footer-brand display" dir="rtl">
           <SmallStar size={12} />
-          <span className="brand-he">{BRAND.he}</span>
+          <span className="brand-he">{t.brand.name}</span>
           <SmallStar size={12} />
         </div>
-        <p className="footer-brand-ru latin" dir="ltr">{BRAND.ru}</p>
-        <p className="footer-tag">
-          ייעוץ רוחני · קלפי טארוט · ניקוי רוחני והגנה
-        </p>
-        <p className="footer-tag footer-tag-ru latin" dir="ltr">
-          {BRAND.focusRu} · {BRAND.langsRu}
+        <p className={`footer-brand-ru ${latin ? 'brand-sub' : 'latin'}`} dir="ltr">{t.brand.sub}</p>
+        <p className="footer-tag">{t.footer.tag}</p>
+        <p className={`footer-tag footer-tag-ru ${latin ? 'brand-sub' : 'latin'}`} dir="ltr">
+          {t.footer.tagExtra}
         </p>
         <Divider width={180} />
         <p className="footer-fine">
-          © {new Date().getFullYear()} · כל הזכויות שמורות · נבנה באהבה בלילה כוכבים
+          © {new Date().getFullYear()} · {t.footer.fine}
         </p>
       </div>
     </footer>
@@ -971,11 +1005,29 @@ function Footer() {
 
 // ── App ──────────────────────────────────────────────────────────────────────
 function App() {
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [selectedTopic, setSelectedTopic] = useState('קלפי טארוט — קריאה אישית בקלפים');
+  const [tw, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [lang, setLang] = useState(getInitialLang);
+  const [topicIndex, setTopicIndex] = useState(0);
 
-  const handleSelectService = (topic) => {
-    setSelectedTopic(topic);
+  const meta = LANGS[lang];
+  const dict = I18N[lang];
+  const ctx = useMemo(() => ({ lang, dir: meta.dir, t: dict, setLang, meta }), [lang]);
+
+  // Mirror the language onto <html> (direction + lang), the document title and
+  // the meta description, and remember the choice in localStorage.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute('lang', lang);
+    root.setAttribute('dir', meta.dir);
+    root.setAttribute('data-lang', lang);
+    document.title = dict.meta.title;
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute('content', dict.meta.description);
+    try { window.localStorage.setItem(LANG_STORAGE_KEY, lang); } catch (e) { /* private mode */ }
+  }, [lang, meta.dir, dict]);
+
+  const handleSelectService = (index) => {
+    setTopicIndex(index);
     const contactEl = document.getElementById('contact');
     if (contactEl) {
       contactEl.scrollIntoView({ behavior: 'smooth' });
@@ -986,14 +1038,13 @@ function App() {
   // can be edited from the panel and survives reload
   const [details, setDetails] = useState({
     name: 'מרים',
-    tagline: 'מרחב של אור, בהירות ורוגע — ייעוץ רוחני אישי, קריאה בקלפים וניקוי אנרגטי, בעברית, רוסית וקווקזית.',
     phone: '053-964-6269',
   });
 
   // Apply palette to CSS variables
   useEffect(() => {
     const root = document.documentElement;
-    const [bg, gold, ink] = t.palette;
+    const [bg, gold, ink] = tw.palette;
     root.style.setProperty('--bg', bg);
     root.style.setProperty('--bg-2', shade(bg, 0.08));
     root.style.setProperty('--ink', ink);
@@ -1003,20 +1054,20 @@ function App() {
     root.style.setProperty('--gold-soft', hexA(gold, 0.4));
     root.style.setProperty('--gold-faint', hexA(gold, 0.15));
     root.style.setProperty('--line', hexA(gold, 0.22));
-    root.style.setProperty('--display-font', `'${t.displayFont}', serif`);
-  }, [t.palette, t.displayFont]);
+    root.style.setProperty('--display-font', `'${tw.displayFont}', serif`);
+  }, [tw.palette, tw.displayFont]);
 
   return (
+    <LangContext.Provider value={ctx}>
     <div className="site">
-      <StarField density={t.starDensity} animated={t.animatedStars} showMoon={t.showMoon} />
+      <StarField density={tw.starDensity} animated={tw.animatedStars} showMoon={tw.showMoon} />
       <Nav />
-      <Hero tagline={details.tagline} layout={t.heroLayout} />
+      <Hero layout={tw.heroLayout} />
       <About name={details.name} />
       <Services onSelectService={handleSelectService} />
       <Oracle />
       <Testimonials />
-      <Contact name={details.name} phone={details.phone}
-               selectedTopic={selectedTopic} />
+      <Contact phone={details.phone} topicIndex={topicIndex} />
       <Footer />
 
       {details.phone && (
@@ -1025,25 +1076,25 @@ function App() {
           target="_blank"
           rel="noopener"
           className="whatsapp-float"
-          aria-label="פתיחת צ'אט בוואטסאפ"
-          title="שליחת הודעה בוואטסאפ"
+          aria-label={dict.contact.waAria}
+          title={dict.contact.waTitle}
         >
           <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
             <path fill="currentColor" d="M16 3C9.4 3 4 8.4 4 15c0 2.4.7 4.6 1.9 6.5L4 29l7.7-2c1.8 1 3.9 1.5 6.3 1.5 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 22c-2 0-3.9-.5-5.5-1.5l-.4-.2-4.6 1.2 1.2-4.5-.3-.4C5.4 18 5 16.5 5 15c0-6.1 4.9-11 11-11s11 4.9 11 11-4.9 11-11 11zm6.1-8.2c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-2-1.8-2.3-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.7.4-.3.3-1 1-1 2.5s1 2.9 1.1 3.1c.1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4 0-.1-.3-.2-.6-.4z" />
           </svg>
           <span className="whatsapp-float-pulse" aria-hidden="true" />
-          <span className="whatsapp-float-label">צ'אט בוואטסאפ</span>
+          <span className="whatsapp-float-label">{dict.wa.float}</span>
         </a>
       )}
 
       <TweaksPanel title="התאמה אישית">
         <TweakSection label="עיצוב">
-          <TweakColor label="פלטה" value={t.palette} options={PALETTES}
+          <TweakColor label="פלטה" value={tw.palette} options={PALETTES}
                       onChange={(v) => setTweak('palette', v)} />
-          <TweakRadio label="פונט כותרת" value={t.displayFont}
+          <TweakRadio label="פונט כותרת" value={tw.displayFont}
                       options={DISPLAY_FONTS}
                       onChange={(v) => setTweak('displayFont', v)} />
-          <TweakRadio label="פריסת הירו" value={t.heroLayout}
+          <TweakRadio label="פריסת הירו" value={tw.heroLayout}
                       options={[
                         { value: 'centered', label: 'מרכזית' },
                         { value: 'split',    label: 'מפוצלת' },
@@ -1051,12 +1102,12 @@ function App() {
                       onChange={(v) => setTweak('heroLayout', v)} />
         </TweakSection>
         <TweakSection label="אווירה">
-          <TweakSlider label="צפיפות כוכבים" value={t.starDensity}
+          <TweakSlider label="צפיפות כוכבים" value={tw.starDensity}
                        min={20} max={160} step={5}
                        onChange={(v) => setTweak('starDensity', v)} />
-          <TweakToggle label="ירח" value={t.showMoon}
+          <TweakToggle label="ירח" value={tw.showMoon}
                        onChange={(v) => setTweak('showMoon', v)} />
-          <TweakToggle label="כוכבים נוצצים" value={t.animatedStars}
+          <TweakToggle label="כוכבים נוצצים" value={tw.animatedStars}
                        onChange={(v) => setTweak('animatedStars', v)} />
         </TweakSection>
         <TweakSection label="פרטי המקרא/ה">
@@ -1067,6 +1118,7 @@ function App() {
         </TweakSection>
       </TweaksPanel>
     </div>
+    </LangContext.Provider>
   );
 }
 
