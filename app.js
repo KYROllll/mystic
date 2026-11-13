@@ -227,7 +227,6 @@ function Flag({
 }) {
   const raw = React.useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const clip = `flag-${raw}`;
-  const stars = [[2.2, 1.8], [5.4, 1.8], [8.6, 1.8], [3.8, 4.0], [7.0, 4.0]];
   return /*#__PURE__*/React.createElement("svg", {
     className: "lang-flag",
     viewBox: "0 0 20 14",
@@ -281,27 +280,34 @@ function Flag({
     width: "20",
     height: "4.66",
     fill: "#d52b1e"
-  })), code === 'en' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("rect", {
+  })), code === 'az' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("rect", {
     width: "20",
-    height: "14",
-    fill: "#fff"
-  }), [0, 1, 2, 3, 4, 5, 6].map(i => /*#__PURE__*/React.createElement("rect", {
-    key: i,
-    y: i * 2,
+    height: "4.67",
+    fill: "#00b5e2"
+  }), /*#__PURE__*/React.createElement("rect", {
+    y: "4.67",
     width: "20",
-    height: "1",
-    fill: "#b31942"
-  })), /*#__PURE__*/React.createElement("rect", {
-    width: "9",
-    height: "7.6",
-    fill: "#0a3161"
-  }), stars.map(([cx, cy], i) => /*#__PURE__*/React.createElement("circle", {
-    key: i,
-    cx: cx,
-    cy: cy,
-    r: "0.42",
+    height: "4.67",
+    fill: "#ef3340"
+  }), /*#__PURE__*/React.createElement("rect", {
+    y: "9.34",
+    width: "20",
+    height: "4.66",
+    fill: "#509e2f"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "6.3",
+    cy: "7",
+    r: "2.7",
     fill: "#fff"
-  }))), code === 'tr' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("rect", {
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "7.45",
+    cy: "7",
+    r: "2.25",
+    fill: "#ef3340"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M11.1 5.5 L11.34 6.43 L12.16 5.94 L11.67 6.76 L12.6 7 L11.67 7.24 L12.16 8.06 L11.34 7.57 L11.1 8.5 L10.86 7.57 L10.04 8.06 L10.53 7.24 L9.6 7 L10.53 6.76 L10.04 5.94 L10.86 6.43 Z",
+    fill: "#fff"
+  })), code === 'tr' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("rect", {
     width: "20",
     height: "14",
     fill: "#e30a17"
@@ -499,7 +505,8 @@ function Nav() {
   }, [menuOpen]);
   const {
     t,
-    lang
+    lang,
+    dir
   } = useI18n();
   const items = [{
     id: 'about',
@@ -526,17 +533,14 @@ function Nav() {
     href: "#top",
     className: "nav-brand display",
     onClick: close,
-    "aria-label": `${t.brand.name} — ${t.brand.sub}`
+    "aria-label": t.brand.name
   }, /*#__PURE__*/React.createElement(SmallStar, {
     size: 14,
     opacity: 0.85
   }), /*#__PURE__*/React.createElement("span", {
-    className: "brand-he",
-    dir: "rtl"
-  }, t.brand.name), /*#__PURE__*/React.createElement("span", {
-    className: `brand-ru ${lang === 'he' ? 'latin' : 'brand-sub'} `,
-    dir: lang === 'he' ? 'ltr' : LANGS[lang].dir
-  }, t.brand.sub)), /*#__PURE__*/React.createElement("ul", {
+    className: lang !== 'he' ? 'latin' : '',
+    dir: dir
+  }, t.brand.name)), /*#__PURE__*/React.createElement("ul", {
     className: "nav-links"
   }, items.map(it => /*#__PURE__*/React.createElement("li", {
     key: it.id
@@ -566,8 +570,8 @@ function Nav() {
     className: "btn btn-primary btn-block",
     onClick: close
   }, t.nav.book), /*#__PURE__*/React.createElement("p", {
-    className: `nav-mobile-fine ${lang === 'he' ? 'latin' : 'brand-sub'}`,
-    dir: lang === 'he' ? 'ltr' : LANGS[lang].dir
+    className: `nav-mobile-fine ${lang !== 'he' ? 'latin' : ''}`,
+    dir: dir
   }, t.brand.focusLong)));
 }
 
@@ -600,11 +604,8 @@ function Hero({
   })), /*#__PURE__*/React.createElement("h1", {
     className: "hero-title display reveal reveal-delay-1"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "hero-title-line latin",
-    dir: "ltr"
-  }, t.hero.titleSub), /*#__PURE__*/React.createElement("span", {
-    className: "hero-title-emph",
-    dir: "rtl"
+    className: `hero-title-emph ${latin ? 'latin' : ''}`,
+    dir: dir
   }, t.brand.name)), /*#__PURE__*/React.createElement("p", {
     className: "hero-name display reveal reveal-delay-2",
     dir: dir
@@ -845,12 +846,11 @@ function MysticOrb() {
 }
 
 // ── About ────────────────────────────────────────────────────────────────────
-function About({
-  name
-}) {
+function About() {
   const {
     t,
-    lang
+    lang,
+    dir
   } = useI18n();
   return /*#__PURE__*/React.createElement("section", {
     id: "about",
@@ -871,7 +871,10 @@ function About({
     className: "portrait-glow"
   })), /*#__PURE__*/React.createElement("div", {
     className: "portrait-caption display"
-  }, /*#__PURE__*/React.createElement("span", null, name), /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("span", {
+    className: lang !== 'he' ? 'latin' : '',
+    dir: dir
+  }, t.about.name), /*#__PURE__*/React.createElement("span", {
     className: "latin caption-sub",
     dir: "ltr"
   }, t.about.caption))), /*#__PURE__*/React.createElement("div", {
@@ -1376,7 +1379,8 @@ function Contact({
 function Footer() {
   const {
     t,
-    lang
+    lang,
+    dir
   } = useI18n();
   const latin = lang !== 'he';
   return /*#__PURE__*/React.createElement("footer", {
@@ -1384,21 +1388,16 @@ function Footer() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "footer-inner"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "footer-brand display",
-    dir: "rtl"
+    className: `footer-brand display ${latin ? 'latin' : ''}`,
+    dir: dir
   }, /*#__PURE__*/React.createElement(SmallStar, {
     size: 12
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "brand-he"
-  }, t.brand.name), /*#__PURE__*/React.createElement(SmallStar, {
+  }), /*#__PURE__*/React.createElement("span", null, t.brand.name), /*#__PURE__*/React.createElement(SmallStar, {
     size: 12
   })), /*#__PURE__*/React.createElement("p", {
-    className: `footer-brand-ru ${latin ? 'brand-sub' : 'latin'}`,
-    dir: "ltr"
-  }, t.brand.sub), /*#__PURE__*/React.createElement("p", {
     className: "footer-tag"
   }, t.footer.tag), /*#__PURE__*/React.createElement("p", {
-    className: `footer-tag footer-tag-ru ${latin ? 'brand-sub' : 'latin'}`,
+    className: "footer-tag footer-tag-ru latin",
     dir: "ltr"
   }, t.footer.tagExtra), /*#__PURE__*/React.createElement(Divider, {
     width: 180
@@ -1478,9 +1477,7 @@ function App() {
     showMoon: tw.showMoon
   }), /*#__PURE__*/React.createElement(Nav, null), /*#__PURE__*/React.createElement(Hero, {
     layout: tw.heroLayout
-  }), /*#__PURE__*/React.createElement(About, {
-    name: details.name
-  }), /*#__PURE__*/React.createElement(Services, {
+  }), /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement(Services, {
     onSelectService: handleSelectService
   }), /*#__PURE__*/React.createElement(Oracle, null), /*#__PURE__*/React.createElement(Testimonials, null), /*#__PURE__*/React.createElement(Contact, {
     phone: details.phone,

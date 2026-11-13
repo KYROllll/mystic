@@ -105,10 +105,6 @@ function EyeGlyph() {
 function Flag({ code }) {
   const raw = React.useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const clip = `flag-${raw}`;
-  const stars = [
-    [2.2, 1.8], [5.4, 1.8], [8.6, 1.8],
-    [3.8, 4.0], [7.0, 4.0],
-  ];
   return (
     <svg className="lang-flag" viewBox="0 0 20 14" width="20" height="14"
          aria-hidden="true" focusable="false">
@@ -132,16 +128,18 @@ function Flag({ code }) {
             <rect y="9.34" width="20" height="4.66" fill="#d52b1e" />
           </>
         )}
-        {code === 'en' && (
+        {code === 'az' && (
           <>
-            <rect width="20" height="14" fill="#fff" />
-            {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-              <rect key={i} y={i * 2} width="20" height="1" fill="#b31942" />
-            ))}
-            <rect width="9" height="7.6" fill="#0a3161" />
-            {stars.map(([cx, cy], i) => (
-              <circle key={i} cx={cx} cy={cy} r="0.42" fill="#fff" />
-            ))}
+            <rect width="20" height="4.67" fill="#00b5e2" />
+            <rect y="4.67" width="20" height="4.67" fill="#ef3340" />
+            <rect y="9.34" width="20" height="4.66" fill="#509e2f" />
+            {/* White crescent opening to the right */}
+            <circle cx="6.3" cy="7" r="2.7" fill="#fff" />
+            <circle cx="7.45" cy="7" r="2.25" fill="#ef3340" />
+            {/* Eight-pointed star */}
+            <path
+              d="M11.1 5.5 L11.34 6.43 L12.16 5.94 L11.67 6.76 L12.6 7 L11.67 7.24 L12.16 8.06 L11.34 7.57 L11.1 8.5 L10.86 7.57 L10.04 8.06 L10.53 7.24 L9.6 7 L10.53 6.76 L10.04 5.94 L10.86 6.43 Z"
+              fill="#fff" />
           </>
         )}
         {code === 'tr' && (
@@ -294,7 +292,7 @@ function Nav() {
     };
   }, [menuOpen]);
 
-  const { t, lang } = useI18n();
+  const { t, lang, dir } = useI18n();
   const items = [
     { id: 'about',    label: t.nav.about },
     { id: 'services', label: t.nav.services },
@@ -308,11 +306,9 @@ function Nav() {
     <nav className={`nav ${scrolled || menuOpen ? 'nav-scrolled' : ''}`}>
       <div className="nav-inner">
         <a href="#top" className="nav-brand display" onClick={close}
-           aria-label={`${t.brand.name} — ${t.brand.sub}`}>
+           aria-label={t.brand.name}>
           <SmallStar size={14} opacity={0.85} />
-          <span className="brand-he" dir="rtl">{t.brand.name}</span>
-          <span className={`brand-ru ${lang === 'he' ? 'latin' : 'brand-sub'} `}
-                dir={lang === 'he' ? 'ltr' : LANGS[lang].dir}>{t.brand.sub}</span>
+          <span className={lang !== 'he' ? 'latin' : ''} dir={dir}>{t.brand.name}</span>
         </a>
         <ul className="nav-links">
           {items.map((it) => (
@@ -346,8 +342,8 @@ function Nav() {
         <a href="#contact" className="btn btn-primary btn-block" onClick={close}>
           {t.nav.book}
         </a>
-        <p className={`nav-mobile-fine ${lang === 'he' ? 'latin' : 'brand-sub'}`}
-           dir={lang === 'he' ? 'ltr' : LANGS[lang].dir}>{t.brand.focusLong}</p>
+        <p className={`nav-mobile-fine ${lang !== 'he' ? 'latin' : ''}`}
+           dir={dir}>{t.brand.focusLong}</p>
       </div>
     </nav>
   );
@@ -367,8 +363,7 @@ function Hero({ layout }) {
         </div>
 
         <h1 className="hero-title display reveal reveal-delay-1">
-          <span className="hero-title-line latin" dir="ltr">{t.hero.titleSub}</span>
-          <span className="hero-title-emph" dir="rtl">{t.brand.name}</span>
+          <span className={`hero-title-emph ${latin ? 'latin' : ''}`} dir={dir}>{t.brand.name}</span>
         </h1>
 
         <p className="hero-name display reveal reveal-delay-2" dir={dir}>{t.hero.name}</p>
@@ -555,8 +550,8 @@ function MysticOrb() {
 }
 
 // ── About ────────────────────────────────────────────────────────────────────
-function About({ name }) {
-  const { t, lang } = useI18n();
+function About() {
+  const { t, lang, dir } = useI18n();
   return (
     <section id="about" className="section section-about">
       <div className="section-head">
@@ -571,7 +566,7 @@ function About({ name }) {
             <div className="portrait-glow" />
           </div>
           <div className="portrait-caption display">
-            <span>{name}</span>
+            <span className={lang !== 'he' ? 'latin' : ''} dir={dir}>{t.about.name}</span>
             <span className="latin caption-sub" dir="ltr">{t.about.caption}</span>
           </div>
         </div>
@@ -979,19 +974,18 @@ function Contact({ phone, topicIndex }) {
 
 // ── Footer ───────────────────────────────────────────────────────────────────
 function Footer() {
-  const { t, lang } = useI18n();
+  const { t, lang, dir } = useI18n();
   const latin = lang !== 'he';
   return (
     <footer className="footer">
       <div className="footer-inner">
-        <div className="footer-brand display" dir="rtl">
+        <div className={`footer-brand display ${latin ? 'latin' : ''}`} dir={dir}>
           <SmallStar size={12} />
-          <span className="brand-he">{t.brand.name}</span>
+          <span>{t.brand.name}</span>
           <SmallStar size={12} />
         </div>
-        <p className={`footer-brand-ru ${latin ? 'brand-sub' : 'latin'}`} dir="ltr">{t.brand.sub}</p>
         <p className="footer-tag">{t.footer.tag}</p>
-        <p className={`footer-tag footer-tag-ru ${latin ? 'brand-sub' : 'latin'}`} dir="ltr">
+        <p className="footer-tag footer-tag-ru latin" dir="ltr">
           {t.footer.tagExtra}
         </p>
         <Divider width={180} />
@@ -1063,7 +1057,7 @@ function App() {
       <StarField density={tw.starDensity} animated={tw.animatedStars} showMoon={tw.showMoon} />
       <Nav />
       <Hero layout={tw.heroLayout} />
-      <About name={details.name} />
+      <About />
       <Services onSelectService={handleSelectService} />
       <Oracle />
       <Testimonials />

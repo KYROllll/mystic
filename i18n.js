@@ -1,11 +1,11 @@
 /* Generated from i18n.jsx by `npm run build` — edit the .jsx source, not this file. */
 // i18n.jsx
 // Language metadata + all site copy for Hebrew (he), Russian (ru),
-// English (en) and Turkish (tr). The selected language lives in App state and
-// is mirrored to <html lang/dir> and localStorage.
+// Azerbaijani (az) and Turkish (tr). The selected language lives in App state
+// and is mirrored to <html lang/dir> and localStorage.
 //
-// The brand mark itself ("אור ודרך") stays the same in every language; only the
-// localized sub-brand and the surrounding copy change.
+// The brand is shown as a single localized title in every language — never as a
+// Hebrew mark with a Cyrillic/Latin sub-line next to it.
 
 const LANG_STORAGE_KEY = 'or-vaderech-lang';
 const LANGS = {
@@ -23,12 +23,12 @@ const LANGS = {
     english: 'Russian',
     title: 'Свет и путь · эзотерические консультации, Таро и духовная чистка'
   },
-  en: {
-    code: 'en',
+  az: {
+    code: 'az',
     dir: 'ltr',
-    name: 'English',
-    english: 'English',
-    title: 'Light & Path · esoteric consultations, tarot and spiritual cleansing'
+    name: 'Azərbaycanca',
+    english: 'Azerbaijani',
+    title: 'İşıq və Yol · ezoterik məsləhətlər, tarot və ruhi təmizlənmə'
   },
   tr: {
     code: 'tr',
@@ -38,7 +38,7 @@ const LANGS = {
     title: 'Işık ve Yol · ezoterik danışmanlık, tarot ve ruhsal arınma'
   }
 };
-const LANG_ORDER = ['he', 'ru', 'en', 'tr'];
+const LANG_ORDER = ['he', 'ru', 'az', 'tr'];
 
 // Only a saved choice overrides the Hebrew default — never guess from the
 // browser locale, so everyone lands on the brand's primary language.
@@ -58,7 +58,6 @@ const I18N = {
     },
     brand: {
       name: 'אור ודרך',
-      sub: 'Свет и путь',
       focus: 'ייעוץ רוחני · קלפי טארוט · ניקוי רוחני',
       focusLong: 'ייעוץ רוחני, קלפי טארוט וניקוי רוחני'
     },
@@ -76,7 +75,6 @@ const I18N = {
     },
     hero: {
       eyebrow: 'ייעוץ רוחני, קלפי טארוט וניקוי רוחני',
-      titleSub: 'Свет и путь',
       name: 'ייעוץ רוחני · קלפי טארוט · ניקוי רוחני',
       tagline: 'מרחב של אור, בהירות ורוגע — ייעוץ רוחני אישי, קריאה בקלפים וניקוי אנרגטי, בעברית, רוסית וקווקזית.',
       ctaPrimary: 'קביעת ייעוץ אישי',
@@ -85,6 +83,7 @@ const I18N = {
       scroll: 'גלגלי מטה'
     },
     about: {
+      name: 'מרים',
       title: 'אודותיי',
       lede: 'אור ודרך — ייעוץ רוחני, קלפי טארוט וניקוי רוחני. כבר 28 שנה אני מלווה אנשים במסע אל תוך עצמם, בדרך של אור, בהירות ורוגע.',
       p1: 'אני מעניקה ייעוץ רוחני אישי, קריאה בקלפי טארוט, ניקוי רוחני והגנה מעין הרע, טיפולי רייקי לאיזון אנרגטי, והכוונה רוחנית ועסקית לפתיחת עסק — בגישה מחזקת, בונה ותומכת שמשיגה תוצאות.',
@@ -199,8 +198,7 @@ const I18N = {
       description: 'Свет и путь — эзотерические консультации, расклады Таро и духовная чистка. Снятие сглаза и защита, сеансы рейки, духовное и деловое наставничество. 28 лет практики, личный и конфиденциальный подход.'
     },
     brand: {
-      name: 'אור ודרך',
-      sub: 'Свет и путь',
+      name: 'Свет и путь',
       focus: 'Эзотерические консультации · Таро · духовная чистка',
       focusLong: 'Эзотерические консультации и духовные практики'
     },
@@ -218,7 +216,6 @@ const I18N = {
     },
     hero: {
       eyebrow: 'Эзотерические консультации · Таро · духовная чистка',
-      titleSub: 'Свет и путь',
       name: 'Эзотерические консультации · Таро · духовная чистка',
       tagline: 'Пространство света, ясности и покоя — личные эзотерические консультации, расклады Таро и энергетическая чистка. 28 лет практики, внимательный и конфиденциальный подход.',
       ctaPrimary: 'Записаться на консультацию',
@@ -227,6 +224,7 @@ const I18N = {
       scroll: 'Прокрутить вниз'
     },
     about: {
+      name: 'Мирьям',
       title: 'Обо мне',
       lede: '«Свет и путь» — эзотерические консультации, карты Таро и духовные практики. Уже 28 лет я сопровождаю людей в пути к самим себе — путём света, ясности и покоя.',
       p1: 'Я провожу личные эзотерические консультации, чтение карт Таро, духовную чистку и защиту от сглаза, сеансы рейки для энергетического баланса, а также духовное и деловое наставничество для открытия своего дела — в поддерживающем, созидательном подходе, который приносит результат.',
@@ -334,146 +332,145 @@ const I18N = {
       float: 'Чат в WhatsApp'
     }
   },
-  // ── English ───────────────────────────────────────────────────────────────
-  en: {
+  // ── Azerbaijani ───────────────────────────────────────────────────────────
+  az: {
     meta: {
-      title: 'Light & Path · esoteric consultations, tarot and spiritual cleansing',
-      description: 'Light & Path — esoteric consultations, tarot readings and spiritual cleansing. Protection and removal of the evil eye, reiki sessions, spiritual and business guidance. 28 years of practice, personal and discreet.'
+      title: 'İşıq və Yol · ezoterik məsləhətlər, tarot və ruhi təmizlənmə',
+      description: 'İşıq və Yol — ezoterik məsləhətlər, tarot oxumaları və ruhi təmizlənmə. Nəzərdən qorunma, reyki seansları, ruhi və biznes məsləhətləri. 28 illik təcrübə, fərdi və məxfi yanaşma.'
     },
     brand: {
-      name: 'אור ודרך',
-      sub: 'Light & Path',
-      focus: 'Esoteric consultations · Tarot · Spiritual cleansing',
-      focusLong: 'Esoteric consultations and spiritual practice'
+      name: 'İşıq və Yol',
+      focus: 'Ezoterik məsləhətlər · Tarot · Ruhi təmizlənmə',
+      focusLong: 'Ezoterik məsləhətlər və ruhi təcrübələr'
     },
     nav: {
-      about: 'About',
-      services: 'Services',
-      oracle: 'Card of the Day',
-      voices: 'Testimonials',
-      contact: 'Contact',
-      cta: 'Book',
-      book: 'Book a personal session',
-      menuOpen: 'Open menu',
-      menuClose: 'Close menu',
-      langLabel: 'Choose language'
+      about: 'Haqqımda',
+      services: 'Xidmətlər',
+      oracle: 'Günün kartı',
+      voices: 'Rəylər',
+      contact: 'Əlaqə',
+      cta: 'Randevu',
+      book: 'Şəxsi randevu al',
+      menuOpen: 'Menyunu aç',
+      menuClose: 'Menyunu bağla',
+      langLabel: 'Dil seçimi'
     },
     hero: {
-      eyebrow: 'Esoteric consultations · Tarot · Spiritual cleansing',
-      titleSub: 'Light & Path',
-      name: 'Esoteric consultations · Tarot · Spiritual cleansing',
-      tagline: 'A space of light, clarity and calm — personal esoteric consultations, tarot readings and energy cleansing. 28 years of practice, with a warm and discreet approach.',
-      ctaPrimary: 'Book a personal session',
-      ctaSecondary: 'Draw today’s card',
-      meta: ['28 years of practice', 'Hebrew · Russian · Caucasian', 'personal & discreet'],
-      scroll: 'Scroll down'
+      eyebrow: 'Ezoterik məsləhətlər · Tarot · Ruhi təmizlənmə',
+      name: 'Ezoterik məsləhətlər · Tarot · Ruhi təmizlənmə',
+      tagline: 'İşıq, aydınlıq və sakitlik məkanı — fərdi ezoterik məsləhətlər, tarot oxumaları və enerji təmizlənməsi. 28 illik təcrübə, səmimi və məxfi yanaşma ilə.',
+      ctaPrimary: 'Şəxsi randevu al',
+      ctaSecondary: 'Günün kartını çək',
+      meta: ['28 illik təcrübə', 'ivrit · rus · Qafqaz dilləri', 'fərdi və məxfi'],
+      scroll: 'Aşağı sürüşdür'
     },
     about: {
-      title: 'About me',
-      lede: 'Light & Path — esoteric consultations, tarot cards and spiritual practice. For 28 years I have walked beside people on the journey back to themselves, along a path of light, clarity and calm.',
-      p1: 'I offer personal esoteric consultations, tarot readings, spiritual cleansing and protection from the evil eye, reiki sessions for energetic balance, and spiritual and business guidance for opening a business — with a strengthening, constructive approach that gets results.',
-      p2: 'Sessions take place in a safe, intimate space — in person or over the phone. Services are provided professionally in Hebrew, Russian and the Caucasian languages.',
-      extra: 'Sessions are also available in English — warm, personal and without judgement.',
-      creds: [['28', 'years of experience and results'], ['3', 'languages: Hebrew, Russian, Caucasian'], ['∞', 'a strengthening, supportive approach']],
-      caption: '— Tarot & Spiritual Guidance —'
+      name: 'Miriam',
+      title: 'Haqqımda',
+      lede: '«İşıq və Yol» — ezoterik məsləhətlər, tarot kartları və ruhi təcrübələr. 28 ildir insanlara özlərinə qayıdış yolunda işıq, aydınlıq və sakitlik yolu ilə yoldaşlıq edirəm.',
+      p1: 'Fərdi ezoterik məsləhətlər, tarot oxumaları, ruhi təmizlənmə və nəzərdən qorunma, enerji balansı üçün reyki seansları, həmçinin iş qurmaq üçün ruhi və biznes məsləhətləri təqdim edirəm — nəticə verən, gücləndirən və dəstəkləyən yanaşma ilə.',
+      p2: 'Görüşlər təhlükəsiz və intim məkanda — şəxsi görüş və ya telefon söhbəti ilə keçir. Xidmətlər ivrit, rus və Qafqaz dillərində peşəkar şəkildə göstərilir.',
+      extra: 'Konsultasiyalar rus dilində də keçirilir — səmimi, fərdi və mühakiməsiz yanaşma ilə.',
+      creds: [['28', 'illik təcrübə və nəticələr'], ['3', 'dil: ivrit, rus, Qafqaz dilləri'], ['∞', 'gücləndirən və dəstəkləyən yanaşma']],
+      caption: '— Tarot və ruhi bələdçilik —'
     },
     services: {
-      title: 'My services',
-      sub: 'Esoteric consultations, tarot and spiritual cleansing — tailored to you, in Hebrew, Russian and the Caucasian languages.',
-      subExtra: 'Personal approach · 28 years of practice',
-      note: '* Prices on request · in-person meeting or phone consultation · available in Hebrew, Russian and the Caucasian languages',
+      title: 'Xidmətlərim',
+      sub: 'Ezoterik məsləhətlər, tarot və ruhi təmizlənmə — sizə uyğun, ivrit, rus və Qafqaz dillərində.',
+      subExtra: 'Fərdi yanaşma · 28 illik təcrübə',
+      note: '* Qiymətlər fərdi qaydada · şəxsi görüş və ya telefonla konsultasiya · ivrit, rus və Qafqaz dillərində',
       items: [{
-        tag: 'Insight and sight',
-        title: 'Tarot Cards',
-        duration: 'Personal reading',
-        subtitle: 'Cards · photo · palm and coffee',
-        price: 'Price on request',
-        desc: 'Tarot reading, a spread from a photograph, palmistry and coffee reading. A deep connection for clarity, answers to the questions of the heart and precise guidance.',
-        features: ['Tarot card reading', 'Spread from a photograph', 'Palm and coffee reading', 'Intuitive sight and deep answers'],
-        cta: 'Book a session →',
-        topic: 'Tarot — a personal card reading'
+        tag: 'Aydınlıq və baxış',
+        title: 'Tarot kartları',
+        duration: 'Fərdi oxuma',
+        subtitle: 'Kartlar · foto · əl və qəhvə',
+        price: 'Qiymət fərdi',
+        desc: 'Tarot oxuması, foto ilə kart açımı, əl falı və qəhvə falı. Aydınlıq üçün dərin bağ, qəlbin suallarına cavablar və dəqiq yönləndirmə.',
+        features: ['Tarot kartı oxuması', 'Foto ilə kart açımı', 'Əl falı və qəhvə falı', 'İntuitiv baxış və dərin cavablar'],
+        cta: 'Görüş üçün randevu →',
+        topic: 'Tarot — fərdi kart oxuması'
       }, {
-        tag: 'Cleansing and protection',
-        title: 'Spiritual Cleansing & Protection',
-        duration: 'Cleansing and blessing',
-        subtitle: 'Holy water · evil eye · reiki',
-        price: 'Price on request',
-        desc: 'Spiritual cleansing with holy water, removal of the evil eye and curses, blessing and support for fertility, and reiki sessions to release blocks and restore deep energetic balance.',
-        features: ['Cleansing and opening with holy water', 'Protection and removal of the evil eye', 'Blessing and support for fertility', 'Reiki and energetic balance'],
-        cta: 'Book a session →',
-        topic: 'Spiritual cleansing & protection — holy water, evil eye and reiki'
+        tag: 'Təmizlənmə və qorunma',
+        title: 'Ruhi təmizlənmə və qorunma',
+        duration: 'Təmizlənmə və xeyir-dua',
+        subtitle: 'Müqəddəs su · nəzər · reyki',
+        price: 'Qiymət fərdi',
+        desc: 'Müqəddəs su ilə ruhi təmizlənmə, nəzərin və büyünün aradan qaldırılması, bərəkət və nəsil üçün xeyir-dua və dəstək, blokları açmaq və dərin enerji balansı üçün reyki seansları.',
+        features: ['Müqəddəs su ilə təmizlənmə və açılış', 'Qorunma, nəzər və büyünün aradan qaldırılması', 'Bərəkət və nəsil üçün xeyir-dua', 'Reyki və enerji balansı'],
+        cta: 'Görüş üçün randevu →',
+        topic: 'Ruhi təmizlənmə və qorunma — müqəddəs su, nəzər və reyki'
       }, {
-        tag: '28 years of practice',
-        title: 'Spiritual & Business Guidance',
-        duration: 'Results-focused guidance',
-        subtitle: 'Hebrew · Russian · Caucasian',
-        price: 'Price on request',
-        desc: 'A professional and spiritual consultation for opening a business, personal accompaniment and guidance along the way — backed by 28 years of experience. A strengthening, constructive approach that gets results.',
-        features: ['28 years of guidance and results', 'Professional spiritual consultation', 'A strengthening approach that delivers', 'Fluent in Hebrew, Russian and Caucasian'],
-        cta: 'Book a session →',
-        topic: 'Spiritual & business guidance (28 years of practice)'
+        tag: '28 illik təcrübə',
+        title: 'Ruhi və biznes məsləhətləri',
+        duration: 'Nəticəyə yönəlmiş konsultasiya',
+        subtitle: 'İvrit · rus · Qafqaz dilləri',
+        price: 'Qiymət fərdi',
+        desc: 'İş qurmaq üçün peşəkar və ruhi konsultasiya, fərdi müşayiət və yolda yönləndirmə — 28 illik təcrübə ilə. Nəticə verən, gücləndirən və dəstəkləyən yanaşma.',
+        features: ['28 illik müşayiət və nəticə', 'Peşəkar ruhi konsultasiya', 'Nəticə verən dəstəkləyici yanaşma', 'İvrit, rus və Qafqaz dillərində'],
+        cta: 'Görüş üçün randevu →',
+        topic: 'Ruhi və biznes məsləhətləri (28 illik təcrübə)'
       }]
     },
     oracle: {
-      title: 'Card of the Day',
-      sub: 'Take a moment. Breathe deeply. Hold one question in mind — and choose a card.',
-      cardNames: ['first card', 'second card', 'third card'],
-      drawAria: n => `${n} — draw today’s card`,
-      prompt: 'The cards are waiting. Trust your heart — it knows.',
-      eyebrow: '— Your card for today —',
-      again: 'Draw another card ↻'
+      title: 'Günün kartı',
+      sub: 'Bir an dayanın. Dərin nəfəs alın. Bir sual düşünün — və bir kart seçin.',
+      cardNames: ['birinci kart', 'ikinci kart', 'üçüncü kart'],
+      drawAria: n => `${n} — günün kartını çək`,
+      prompt: 'Kartlar gözləyir. Qəlbinizə güvənin — o bilir.',
+      eyebrow: '— Bugünkü kartınız —',
+      again: 'Başqa kart çək ↻'
     },
     voices: {
-      title: 'Words that stay with me',
-      prev: 'Previous testimonial',
-      next: 'Next testimonial',
-      dot: n => `Testimonial ${n}`,
+      title: 'Məndə qalan sözlər',
+      prev: 'Əvvəlki rəy',
+      next: 'Növbəti rəy',
+      dot: n => `Rəy ${n}`,
       items: [{
-        text: 'I arrived with a storm in my heart and left with the clarity I had been looking for for months. The reading was precise, gentle, and exactly in the right place. I keep coming back.',
+        text: 'Qəlbimdə fırtına ilə gəldim, aylarla axtardığım aydınlıqla ayrıldım. Oxuma dəqiq, yumşaq və tam yerində idi. Yenə gəlirəm.',
         name: 'Dana K.',
-        city: 'Tel Aviv'
+        city: 'Tel-Əviv'
       }, {
-        text: 'I felt that someone truly saw me — not guessing. The cards opened a conversation I did not know I needed. Deep gratitude.',
-        name: 'Michal B.',
-        city: 'Haifa'
+        text: 'Birinin məni həqiqətən gördüyünü hiss etdim — təxmin etmədiyini. Kartlar ehtiyacım olduğunu bilmədiyim bir söhbət açdı. Çox sağ olun.',
+        name: 'Mixal B.',
+        city: 'Xayfa'
       }, {
-        text: 'I came a complete sceptic. I left with a sense of confidence I had not felt in years. Beyond the cards, there is a person here who listens deeply.',
-        name: 'Yoav S.',
-        city: 'Ra’anana'
+        text: 'Tam skeptik kimi gəldim. İllərlə hiss etmədiyim bir inamla ayrıldım. Kartlardan başqa, burada dərindən dinləyən bir insan var.',
+        name: 'Yoav Ş.',
+        city: 'Raanana'
       }]
     },
     contact: {
-      title: 'Book a Consultation',
-      sub: 'Leave your details and I will get back to you within 24 hours. If it is urgent, you can also call.',
-      telephone: '— Telephone —',
-      pending: '— coming soon —',
-      hours: 'Sunday–Thursday · 10:00–21:00',
-      waTitle: 'Send a WhatsApp message',
-      waSub: 'Quick reply · straight to chat',
-      waAria: 'Open WhatsApp chat',
-      name: 'Full name',
-      namePh: 'Your name',
-      phone: 'Phone',
-      topic: 'Service',
-      topicOther: 'Other — I’ll explain in the message',
-      message: 'Anything you would like to share before the session?',
-      messagePh: 'An initial question, preferred hours, or anything that feels right to you…',
-      submit: 'Send directly to WhatsApp',
-      submitting: '✓ Opening WhatsApp to send…',
-      fine: 'Sending opens a WhatsApp chat with everything you filled in, straight to Miriam’s phone.',
-      waIntro: 'Hello Miriam, a new enquiry from the Light & Path website:',
-      waName: '• Full name: ',
-      waPhone: '• Phone: ',
-      waService: '• Requested service: ',
-      waDetails: '• Details / questions: '
+      title: 'Randevu alın',
+      sub: 'Məlumatlarınızı buraxın, 24 saat ərzində sizə qayıdacağam. Təcili olarsa, telefonla da əlaqə saxlaya bilərsiniz.',
+      telephone: '— Telefon —',
+      pending: '— tezliklə —',
+      hours: 'Bazar – cümə axşamı · 10:00–21:00',
+      waTitle: 'WhatsApp mesajı göndər',
+      waSub: 'Sürətli cavab · birbaşa çata',
+      waAria: 'WhatsApp çatını aç',
+      name: 'Ad və soyad',
+      namePh: 'Adınız',
+      phone: 'Telefon',
+      topic: 'Xidmət',
+      topicOther: 'Digər — mesajda izah edəcəyəm',
+      message: 'Görüşdən əvvəl paylaşmaq istədiyiniz nəsə?',
+      messagePh: 'İlk sualınız, uyğun saatlar və ya sizə doğru gələn hər şey…',
+      submit: 'Birbaşa WhatsApp-a göndər',
+      submitting: '✓ Göndərmək üçün WhatsApp açılır…',
+      fine: 'Göndər düyməsinə basdıqda doldurduğunuz bütün məlumatlarla WhatsApp çatı açılır və birbaşa Miriamın telefonuna gedir.',
+      waIntro: 'Salam Miriam, İşıq və Yol saytından yeni müraciət:',
+      waName: '• Ad və soyad: ',
+      waPhone: '• Telefon: ',
+      waService: '• İstənilən xidmət: ',
+      waDetails: '• Təfərrüatlar / suallar: '
     },
     footer: {
-      tag: 'Esoteric consultations · Tarot · Cleansing and protection',
-      tagExtra: 'in Hebrew and Russian',
-      fine: 'All rights reserved · built with love under a starry sky'
+      tag: 'Ezoterik məsləhətlər · Tarot · Təmizlənmə və qorunma',
+      tagExtra: 'ivrit və rus dillərində',
+      fine: 'Bütün hüquqlar qorunur · ulduzlu səma altında sevgi ilə hazırlanıb'
     },
     wa: {
-      float: 'WhatsApp chat'
+      float: 'WhatsApp çatı'
     }
   },
   // ── Turkish ───────────────────────────────────────────────────────────────
@@ -483,8 +480,7 @@ const I18N = {
       description: 'Işık ve Yol — ezoterik danışmanlık, tarot okumaları ve ruhsal arınma. Nazardan korunma, reiki seansları, ruhsal ve iş danışmanlığı. 28 yıllık deneyim, kişiye özel ve gizli.'
     },
     brand: {
-      name: 'אור ודרך',
-      sub: 'Işık ve Yol',
+      name: 'Işık ve Yol',
       focus: 'Ezoterik danışmanlık · Tarot · Ruhsal arınma',
       focusLong: 'Ezoterik danışmanlık ve ruhsal uygulamalar'
     },
@@ -502,7 +498,6 @@ const I18N = {
     },
     hero: {
       eyebrow: 'Ezoterik danışmanlık · Tarot · Ruhsal arınma',
-      titleSub: 'Işık ve Yol',
       name: 'Ezoterik danışmanlık · Tarot · Ruhsal arınma',
       tagline: 'Işık, berraklık ve huzur alanı — kişisel ezoterik danışmanlık, tarot okumaları ve enerji temizliği. 28 yıllık deneyim, sıcak ve gizliliğe saygılı bir yaklaşımla.',
       ctaPrimary: 'Kişisel randevu al',
@@ -511,6 +506,7 @@ const I18N = {
       scroll: 'Aşağı kaydır'
     },
     about: {
+      name: 'Miriam',
       title: 'Hakkımda',
       lede: 'Işık ve Yol — ezoterik danışmanlık, tarot kartları ve ruhsal uygulamalar. 28 yıldır insanlara kendilerine dönüş yolculuklarında eşlik ediyorum; ışık, berraklık ve huzur yolunda.',
       p1: 'Kişisel ezoterik danışmanlık, tarot okumaları, ruhsal arınma ve nazardan korunma, enerji dengesi için reiki seansları ve iş kurmaya yönelik ruhsal ve iş danışmanlığı sunuyorum — sonuç getiren, güçlendiren ve yapıcı bir yaklaşımla.',

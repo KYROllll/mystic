@@ -9,19 +9,19 @@ const TAROT_DECK = [{
   name: {
     he: 'השוטה',
     ru: 'Шут',
-    en: 'The Fool',
+    az: 'Axmaq',
     tr: 'Soytarı'
   },
   keywords: {
     he: 'התחלות · תמימות · קפיצת אמונה',
     ru: 'Начала · наивность · прыжок веры',
-    en: 'Beginnings · innocence · leap of faith',
+    az: 'Başlanğıclar · sadəlik · inam sıçrayışı',
     tr: 'Başlangıçlar · masumiyet · inanç sıçraması'
   },
   reading: {
     he: 'הדרך פתוחה לפנייך. צעדי בלי לדעת את הסוף — הסוד הוא לבטוח שהיקום אוחז אותך.',
     ru: 'Дорога открыта перед вами. Шагните, не зная финала — секрет в доверии: вселенная держит вас.',
-    en: 'The road is open before you. Step forward without knowing the ending — the secret is trusting that the universe holds you.',
+    az: 'Yol qarşında açıqdır. Sonunu bilmədən addım at — sirr, kainatın səni tutduğuna inanmaqdır.',
     tr: 'Yol önünde açık. Sonunu bilmeden bir adım at — sır, evrenin seni tuttuğuna güvenmekte.'
   }
 }, {
@@ -29,19 +29,19 @@ const TAROT_DECK = [{
   name: {
     he: 'הקוסם',
     ru: 'Маг',
-    en: 'The Magician',
+    az: 'Sehrbaz',
     tr: 'Büyücü'
   },
   keywords: {
     he: 'מימוש · יצירה · רצון',
     ru: 'Воплощение · творение · воля',
-    en: 'Manifestation · creation · will',
+    az: 'Təzahür · yaradıcılıq · iradə',
     tr: 'Tezahür · yaratım · irade'
   },
   reading: {
     he: 'כל הכלים נמצאים בידייך. זה הרגע לפעול ולתרגם את הרעיון למציאות מוחשית.',
     ru: 'Все инструменты уже в ваших руках. Сейчас время действовать и превратить идею в осязаемую реальность.',
-    en: 'Every tool is already in your hands. This is the moment to act and turn the idea into something tangible.',
+    az: 'Bütün alətlər artıq sənin əlindədir. İdeyanı maddi reallığa çevirmək üçün hərəkətə keçmək vaxtıdır.',
     tr: 'Tüm araçlar zaten elinde. Fikri somut bir gerçeğe dönüştürmek için tam zamanı.'
   }
 }, {
@@ -49,19 +49,19 @@ const TAROT_DECK = [{
   name: {
     he: 'הכוהנת הגדולה',
     ru: 'Верховная Жрица',
-    en: 'The High Priestess',
+    az: 'Baş kahinə',
     tr: 'Baş Rahibe'
   },
   keywords: {
     he: 'אינטואיציה · סוד · ירח',
     ru: 'Интуиция · тайна · луна',
-    en: 'Intuition · mystery · moon',
+    az: 'İntuisiya · sirr · ay',
     tr: 'Sezgi · gizem · ay'
   },
   reading: {
     he: 'הקולות השקטים מדברים אלייך. הקשיבי לבטן, לא רק לראש — שם נמצאת התשובה.',
     ru: 'Тихие голоса говорят с вами. Слушайте живот, а не только голову — ответ там.',
-    en: 'The quiet voices are speaking to you. Listen to your gut, not only your head — the answer lives there.',
+    az: 'Səssiz səslər sənə danışır. Yalnız başına deyil, batinə də qulaq as — cavab oradadır.',
     tr: 'Sessiz sesler sana konuşuyor. Sadece aklını değil, içgüdünü dinle — cevap orada.'
   }
 }, {
@@ -69,19 +69,19 @@ const TAROT_DECK = [{
   name: {
     he: 'הקיסרית',
     ru: 'Императрица',
-    en: 'The Empress',
+    az: 'İmperatriça',
     tr: 'İmparatoriçe'
   },
   keywords: {
     he: 'שפע · נשיות · יצירתיות',
     ru: 'Изобилие · женственность · творчество',
-    en: 'Abundance · femininity · creativity',
+    az: 'Bolluq · qadınlıq · yaradıcılıq',
     tr: 'Bolluk · dişilik · yaratıcılık'
   },
   reading: {
     he: 'תקופה של פריחה ופוריות, פנימית או חיצונית. טפחי את מה שצומח בתוכך.',
     ru: 'Время расцвета и плодородия — внутреннего или внешнего. Ухаживайте за тем, что растёт внутри вас.',
-    en: 'A season of blossoming and fertility, inward or outward. Tend to what is growing inside you.',
+    az: 'İçdə və ya zahirdə çiçəklənmə və bərəkət dövrü. İçində böyüyən şeyə qayğı göstər.',
     tr: 'İçte ya da dışta bir çiçeklenme ve bereket dönemi. İçinde büyüyen şeye özen göster.'
   }
 }, {
@@ -89,19 +89,19 @@ const TAROT_DECK = [{
   name: {
     he: 'הקיסר',
     ru: 'Император',
-    en: 'The Emperor',
+    az: 'İmperator',
     tr: 'İmparator'
   },
   keywords: {
     he: 'יציבות · מבנה · גבולות',
     ru: 'Стабильность · структура · границы',
-    en: 'Stability · structure · boundaries',
+    az: 'Sabitlik · struktur · sərhədlər',
     tr: 'İstikrar · yapı · sınırlar'
   },
   reading: {
     he: 'הגיע הזמן לבסס. שרטטי את הגבולות, בני את היסודות — מהם תצמח חירות אמיתית.',
     ru: 'Пришло время заложить основу. Очертите границы, постройте фундамент — из него вырастет настоящая свобода.',
-    en: 'It is time to build a foundation. Set your boundaries, lay the ground — real freedom grows from there.',
+    az: 'Təməl qurmaq vaxtıdır. Sərhədlərini müəyyən et, zəmini hazırla — əsl azadlıq oradan böyüyür.',
     tr: 'Temel atmanın zamanı. Sınırlarını çiz, zemini hazırla — gerçek özgürlük oradan büyür.'
   }
 }, {
@@ -109,19 +109,19 @@ const TAROT_DECK = [{
   name: {
     he: 'הכוהן',
     ru: 'Иерофант',
-    en: 'The Hierophant',
+    az: 'Baş kahin',
     tr: 'Başrahip'
   },
   keywords: {
     he: 'מסורת · מורה · אמונה',
     ru: 'Традиция · учитель · вера',
-    en: 'Tradition · teacher · faith',
+    az: 'Ənənə · müəllim · iman',
     tr: 'Gelenek · öğretmen · inanç'
   },
   reading: {
     he: 'מורה או חוכמה עתיקה צפויים לחצות את דרכך. הקשיבי בלב פתוח.',
     ru: 'На вашем пути, возможно, появится учитель или древняя мудрость. Слушайте с открытым сердцем.',
-    en: 'A teacher or an old wisdom may cross your path. Listen with an open heart.',
+    az: 'Yolunda bir müəllim və ya qədim hikmət çıxa bilər. Açıq qəlblə dinlə.',
     tr: 'Yoluna bir öğretmen ya da kadim bir bilgelik çıkabilir. Açık bir kalple dinle.'
   }
 }, {
@@ -129,19 +129,19 @@ const TAROT_DECK = [{
   name: {
     he: 'האוהבים',
     ru: 'Влюблённые',
-    en: 'The Lovers',
+    az: 'Aşiqlər',
     tr: 'Aşıklar'
   },
   keywords: {
     he: 'בחירה · אהבה · איחוד',
     ru: 'Выбор · любовь · союз',
-    en: 'Choice · love · union',
+    az: 'Seçim · sevgi · birləşmə',
     tr: 'Seçim · aşk · birleşme'
   },
   reading: {
     he: 'עומדת בפנייך בחירה של לב. שתי הדרכים יפות — חשוב לבחור מתוך אמת ולא מתוך פחד.',
     ru: 'Перед вами выбор сердца. Оба пути прекрасны — важно выбрать из правды, а не из страха.',
-    en: 'A choice of the heart stands before you. Both roads are beautiful — choose from truth, not from fear.',
+    az: 'Qarşında qəlbin seçimi durur. Hər iki yol gözəldir — qorxudan deyil, həqiqətdən seç.',
     tr: 'Önünde kalbin bir seçimi var. İki yol da güzel — korkudan değil, gerçekten seç.'
   }
 }, {
@@ -149,19 +149,19 @@ const TAROT_DECK = [{
   name: {
     he: 'המרכבה',
     ru: 'Колесница',
-    en: 'The Chariot',
+    az: 'Araba',
     tr: 'Savaş Arabası'
   },
   keywords: {
     he: 'התקדמות · ניצחון · שליטה',
     ru: 'Движение · победа · контроль',
-    en: 'Progress · victory · control',
+    az: 'İrəliləyiş · qələbə · nəzarət',
     tr: 'İlerleme · zafer · kontrol'
   },
   reading: {
     he: 'הכוחות הפנימיים שלך מתאחדים. החזיקי במושכות, כווני קדימה — הניצחון קרוב.',
     ru: 'Внутренние силы объединяются. Держите вожжи, двигайтесь вперёд — победа близко.',
-    en: 'Your inner forces are coming together. Take the reins and move forward — victory is close.',
+    az: 'Daxili güclərin birləşir. Cılovu tut, irəli get — qələbə yaxındır.',
     tr: 'İç güçlerin birleşiyor. Dizginleri tut, ileri git — zafer yakın.'
   }
 }, {
@@ -169,19 +169,19 @@ const TAROT_DECK = [{
   name: {
     he: 'הכוח',
     ru: 'Сила',
-    en: 'Strength',
+    az: 'Güc',
     tr: 'Güç'
   },
   keywords: {
     he: 'אומץ · עדינות · ריסון',
     ru: 'Смелость · нежность · сдержанность',
-    en: 'Courage · gentleness · restraint',
+    az: 'Cəsarət · nəzakət · təmkin',
     tr: 'Cesaret · nezaket · ölçülülük'
   },
   reading: {
     he: 'הכוח האמיתי הוא רך. כשאת מאלפת את הלביאה הפנימית באהבה — הכול נפתח.',
     ru: 'Настоящая сила мягка. Когда вы приручаете внутреннюю львицу с любовью, всё открывается.',
-    en: 'True strength is gentle. When you tame the inner lioness with love, everything opens.',
+    az: 'Əsl güc yumşaqdır. İçindəki aslanı sevgi ilə ram etdikdə hər şey açılır.',
     tr: 'Gerçek güç yumuşaktır. İçindeki aslanı sevgiyle evcilleştirdiğinde her şey açılır.'
   }
 }, {
@@ -189,19 +189,19 @@ const TAROT_DECK = [{
   name: {
     he: 'הנזיר',
     ru: 'Отшельник',
-    en: 'The Hermit',
+    az: 'Zahid',
     tr: 'Münzevi'
   },
   keywords: {
     he: 'התבוננות · אור פנימי · שתיקה',
     ru: 'Созерцание · внутренний свет · тишина',
-    en: 'Reflection · inner light · silence',
+    az: 'Təfəkkür · daxili işıq · sükut',
     tr: 'Tefekkür · içsel ışık · sessizlik'
   },
   reading: {
     he: 'הגיעה עת ההתבודדות. רק בשקט תמצאי את הנר שיאיר את הדרך הבאה.',
     ru: 'Пришло время уединения. Только в тишине вы найдёте свечу, которая осветит следующий шаг.',
-    en: 'The time for solitude has come. Only in silence will you find the candle that lights the next step.',
+    az: 'Təklik vaxtı gəldi. Növbəti addımı işıqlandıran şamı yalnız sükutda taparsan.',
     tr: 'Yalnızlık vakti geldi. Bir sonraki adımı aydınlatan mumu ancak sessizlikte bulursun.'
   }
 }, {
@@ -209,19 +209,19 @@ const TAROT_DECK = [{
   name: {
     he: 'גלגל המזל',
     ru: 'Колесо Фортуны',
-    en: 'Wheel of Fortune',
+    az: 'Tale çarxı',
     tr: 'Kader Çarkı'
   },
   keywords: {
     he: 'גורל · מחזורים · שינוי',
     ru: 'Судьба · циклы · перемены',
-    en: 'Fate · cycles · change',
+    az: 'Qədər · dövrlər · dəyişim',
     tr: 'Kader · döngüler · değişim'
   },
   reading: {
     he: 'הגלגל מסתובב לטובתך. שחררי שליטה — היקום עובד עבורך, גם אם לא תמיד גלוי לעין.',
     ru: 'Колесо вращается в вашу пользу. Отпустите контроль — вселенная работает на вас, даже если это не всегда видно.',
-    en: 'The wheel is turning in your favour. Release control — the universe is working for you, even when it is not visible.',
+    az: 'Çarx sənin xeyrinə fırlanır. Nəzarəti burax — kainat sənin üçün çalışır, hətta görünməsə də.',
     tr: 'Çark senin lehine dönüyor. Kontrolü bırak — evren senin için çalışıyor, görünmese bile.'
   }
 }, {
@@ -229,19 +229,19 @@ const TAROT_DECK = [{
   name: {
     he: 'הצדק',
     ru: 'Справедливость',
-    en: 'Justice',
+    az: 'Ədalət',
     tr: 'Adalet'
   },
   keywords: {
     he: 'איזון · אמת · בהירות',
     ru: 'Равновесие · истина · ясность',
-    en: 'Balance · truth · clarity',
+    az: 'Tarazlıq · həqiqət · aydınlıq',
     tr: 'Denge · gerçek · berraklık'
   },
   reading: {
     he: 'האמת תצא לאור. פעלי מתוך יושרה, והשפה תמיד תיטה לכיוונך.',
     ru: 'Правда выйдет наружу. Действуйте честно — и чаша всегда склонится в вашу сторону.',
-    en: 'The truth will come to light. Act with integrity, and the scales will always tip your way.',
+    az: 'Həqiqət üzə çıxacaq. Vicdanla hərəkət et, tərəzi həmişə sənin tərəfinə dönəcək.',
     tr: 'Gerçek gün yüzüne çıkacak. Dürüst davran, terazi her zaman senin tarafına döner.'
   }
 }, {
@@ -249,19 +249,19 @@ const TAROT_DECK = [{
   name: {
     he: 'התלוי',
     ru: 'Повешенный',
-    en: 'The Hanged Man',
+    az: 'Asılmış adam',
     tr: 'Asılmış Adam'
   },
   keywords: {
     he: 'נקודת מבט · ויתור · המתנה',
     ru: 'Точка зрения · отпускание · ожидание',
-    en: 'Perspective · surrender · waiting',
+    az: 'Baxış bucağı · təslimiyyət · gözləmə',
     tr: 'Bakış açısı · teslimiyet · bekleme'
   },
   reading: {
     he: 'הפכי את התמונה. מה שנראה תקוע יפתח כשתסכימי להסתכל מזווית שונה לגמרי.',
     ru: 'Переверните картинку. То, что кажется застрявшим, откроется, если согласитесь взглянуть совсем под другим углом.',
-    en: 'Turn the picture upside down. What looks stuck will open the moment you agree to see it from a completely different angle.',
+    az: 'Şəkli tərs çevir. Tıxanmış görünən şey, tamamilə fərqli bucaqdan baxmağa razı olduğun an açılır.',
     tr: 'Resmi ters çevir. Tıkanmış görünen şey, tamamen farklı bir açıdan bakmayı kabul ettiğinde açılır.'
   }
 }, {
@@ -269,19 +269,19 @@ const TAROT_DECK = [{
   name: {
     he: 'המוות',
     ru: 'Смерть',
-    en: 'Death',
+    az: 'Ölüm',
     tr: 'Ölüm'
   },
   keywords: {
     he: 'סיום · התחדשות · שינוי',
     ru: 'Завершение · обновление · перемена',
-    en: 'Ending · renewal · transformation',
+    az: 'Son · yenilənmə · dönüşüm',
     tr: 'Son · yenilenme · dönüşüm'
   },
   reading: {
     he: 'משהו חייב להסתיים כדי שמשהו חדש ייוולד. אל תפחדי — זו לידה, לא קץ.',
     ru: 'Что-то должно закончиться, чтобы родилось новое. Не бойтесь — это рождение, а не конец.',
-    en: 'Something must end so that something new can be born. Do not be afraid — this is a birth, not an end.',
+    az: 'Yenisinin doğulması üçün nəyinsə bitməsi lazımdır. Qorxma — bu son deyil, doğumdur.',
     tr: 'Yeni bir şey doğsun diye bir şeyin bitmesi gerek. Korkma — bu bir son değil, doğum.'
   }
 }, {
@@ -289,19 +289,19 @@ const TAROT_DECK = [{
   name: {
     he: 'המתינות',
     ru: 'Умеренность',
-    en: 'Temperance',
+    az: 'Təmkin',
     tr: 'Denge'
   },
   keywords: {
     he: 'מיזוג · אלכימיה · סבלנות',
     ru: 'Слияние · алхимия · терпение',
-    en: 'Blending · alchemy · patience',
+    az: 'Qarışım · kimya · səbir',
     tr: 'Karışım · simya · sabır'
   },
   reading: {
     he: 'התקופה דורשת מזיגה עדינה. אל תמהרי — הניסים מתבשלים בקצב שלהם.',
     ru: 'Период требует бережного смешения. Не спешите — чудеса зреют в своём ритме.',
-    en: 'This season asks for a gentle blending. Do not rush — miracles ripen at their own pace.',
+    az: 'Bu dövr incə bir qarışım tələb edir. Tələsmə — möcüzələr öz ritmində yetişir.',
     tr: 'Bu dönem özenli bir karışım istiyor. Acele etme — mucizeler kendi ritminde olgunlaşır.'
   }
 }, {
@@ -309,19 +309,19 @@ const TAROT_DECK = [{
   name: {
     he: 'השטן',
     ru: 'Дьявол',
-    en: 'The Devil',
+    az: 'Şeytan',
     tr: 'Şeytan'
   },
   keywords: {
     he: 'כבלים · התמכרות · צל',
     ru: 'Цепи · зависимость · тень',
-    en: 'Chains · attachment · shadow',
+    az: 'Zəncirlər · asılılıq · kölgə',
     tr: 'Zincirler · bağımlılık · gölge'
   },
   reading: {
     he: 'הביטי במה שכובל אותך באמת. הכבלים פתוחים — נשאר רק להחליט לקום וללכת.',
     ru: 'Посмотрите, что на самом деле вас держит. Цепи открыты — осталось решить встать и уйти.',
-    en: 'Look at what truly holds you. The chains are loose — all that remains is deciding to stand up and walk.',
+    az: 'Səni həqiqətən nəyin saxladığına bax. Zəncirlər boşdur — yalnız qalxıb getməyə qərar vermək qalır.',
     tr: 'Seni gerçekten neyin tuttuğuna bak. Zincirler gevşek — geriye sadece kalkıp gitmeye karar vermek kalıyor.'
   }
 }, {
@@ -329,19 +329,19 @@ const TAROT_DECK = [{
   name: {
     he: 'המגדל',
     ru: 'Башня',
-    en: 'The Tower',
+    az: 'Qüllə',
     tr: 'Kule'
   },
   keywords: {
     he: 'התפרצות · אמת · שחרור',
     ru: 'Взрыв · истина · освобождение',
-    en: 'Upheaval · truth · release',
+    az: 'Dağılma · həqiqət · azadlıq',
     tr: 'Yıkım · gerçek · özgürleşme'
   },
   reading: {
     he: 'ההריסה היא טהרה. מה שייפול היה ממילא רעוע — מקומך עכשיו על אדמה אמיתית.',
     ru: 'Разрушение — это очищение. То, что упадёт, и так было непрочным — теперь вы на настоящей земле.',
-    en: 'Collapse is a cleansing. What falls was already unsteady — your ground is real now.',
+    az: 'Dağılma bir təmizlənmədir. Düşən artıq kövrək idi — indi əsl zəmindəsən.',
     tr: 'Yıkım bir arınmadır. Düşen zaten çürüktü — artık gerçek zemindesin.'
   }
 }, {
@@ -349,19 +349,19 @@ const TAROT_DECK = [{
   name: {
     he: 'הכוכב',
     ru: 'Звезда',
-    en: 'The Star',
+    az: 'Ulduz',
     tr: 'Yıldız'
   },
   keywords: {
     he: 'תקווה · השראה · שמיים פתוחים',
     ru: 'Надежда · вдохновение · открытое небо',
-    en: 'Hope · inspiration · open sky',
+    az: 'Ümid · ilham · açıq səma',
     tr: 'Umut · ilham · açık gökyüzü'
   },
   reading: {
     he: 'אור עדין חוזר. הקלף הזה מבטיח: התפילות שלך נשמעו, התשובה כבר בדרך.',
     ru: 'Мягкий свет возвращается. Эта карта обещает: ваши молитвы услышаны, ответ уже в пути.',
-    en: 'A gentle light returns. This card promises: your prayers were heard, the answer is already on its way.',
+    az: 'Yumşaq bir işıq qayıdır. Bu kart söz verir: duaların eşidildi, cavab artıq yoldadır.',
     tr: 'Yumuşak bir ışık geri dönüyor. Bu kart söz veriyor: duaların duyuldu, cevap yolda.'
   }
 }, {
@@ -369,19 +369,19 @@ const TAROT_DECK = [{
   name: {
     he: 'הירח',
     ru: 'Луна',
-    en: 'The Moon',
+    az: 'Ay',
     tr: 'Ay'
   },
   keywords: {
     he: 'חלום · אינטואיציה · מסתורין',
     ru: 'Сон · интуиция · тайна',
-    en: 'Dream · intuition · mystery',
+    az: 'Yuxu · intuisiya · sirr',
     tr: 'Rüya · sezgi · gizem'
   },
   reading: {
     he: 'לא הכול ברור — וזה בסדר. סמכי על האינטואיציה, גם כשהשכל מתעקש לדעת.',
     ru: 'Не всё ясно — и это нормально. Доверьтесь интуиции, даже когда ум настаивает знать.',
-    en: 'Not everything is clear — and that is fine. Trust your intuition, even when your mind insists on knowing.',
+    az: 'Hər şey aydın deyil — və bu normaldır. Ağıl bilməkdə israr etsə də, intuisiyana güvən.',
     tr: 'Her şey net değil — ve bu sorun değil. Aklın bilmekte ısrar etse de sezgine güven.'
   }
 }, {
@@ -389,19 +389,19 @@ const TAROT_DECK = [{
   name: {
     he: 'השמש',
     ru: 'Солнце',
-    en: 'The Sun',
+    az: 'Günəş',
     tr: 'Güneş'
   },
   keywords: {
     he: 'שמחה · בהירות · חיוּת',
     ru: 'Радость · ясность · жизненность',
-    en: 'Joy · clarity · vitality',
+    az: 'Sevinc · aydınlıq · canlılıq',
     tr: 'Sevinç · berraklık · canlılık'
   },
   reading: {
     he: 'הקלף הזוהר ביותר. תקופה של חיוך, אהבה והצלחה — הרשי לעצמך להיות מאושרת.',
     ru: 'Самая сияющая карта. Период улыбок, любви и успеха — разрешите себе быть счастливой.',
-    en: 'The brightest card of the deck. A season of smiles, love and success — allow yourself to be happy.',
+    az: 'Dəstənin ən parlaq kartı. Gülüş, sevgi və uğur dövrü — özünə xoşbəxt olmağa icazə ver.',
     tr: 'Destenin en parlak kartı. Gülümseme, aşk ve başarı dönemi — mutlu olmaya izin ver.'
   }
 }, {
@@ -409,19 +409,19 @@ const TAROT_DECK = [{
   name: {
     he: 'המשפט',
     ru: 'Суд',
-    en: 'Judgement',
+    az: 'Mühakimə',
     tr: 'Yargı'
   },
   keywords: {
     he: 'התעוררות · קריאה · חידוש',
     ru: 'Пробуждение · зов · обновление',
-    en: 'Awakening · calling · renewal',
+    az: 'Oyanış · çağırış · yenilənmə',
     tr: 'Uyanış · çağrı · yenilenme'
   },
   reading: {
     he: 'קריאה גדולה מהדהדת בלבך. הקשיבי — הנשמה שלך זוכרת למה היא כאן.',
     ru: 'Великий зов звучит в вашем сердце. Слушайте — ваша душа помнит, зачем она здесь.',
-    en: 'A great calling echoes in your heart. Listen — your soul remembers why it is here.',
+    az: 'Qəlbində böyük bir çağırış əks-səda verir. Dinlə — ruhun burada nə üçün olduğunu xatırlayır.',
     tr: 'Kalpinde büyük bir çağrı yankılanıyor. Dinle — ruhun burada neden olduğunu hatırlıyor.'
   }
 }, {
@@ -429,19 +429,19 @@ const TAROT_DECK = [{
   name: {
     he: 'העולם',
     ru: 'Мир',
-    en: 'The World',
+    az: 'Dünya',
     tr: 'Dünya'
   },
   keywords: {
     he: 'סיום · שלמות · גמר',
     ru: 'Завершение · целостность · финал',
-    en: 'Completion · wholeness · finale',
+    az: 'Tamamlanma · bütövlük · final',
     tr: 'Tamamlanma · bütünlük · final'
   },
   reading: {
     he: 'מעגל נסגר בשלום. גאה במסע — ומיד בעקבותיו מעגל חדש ורחב יותר ייפתח.',
     ru: 'Круг завершается в мире. Гордитесь путём — и сразу за ним откроется новый, более широкий круг.',
-    en: 'A circle closes in peace. Be proud of the journey — and right behind it, a new and wider circle opens.',
+    az: 'Bir dairə sülhlə bağlanır. Yolçuluğunla qürur duy — və dərhal ardınca yeni, daha geniş bir dairə açılacaq.',
     tr: 'Bir çember huzurla kapanıyor. Yolculuğunla gurur duy — hemen ardından yeni ve daha geniş bir çember açılacak.'
   }
 }];
